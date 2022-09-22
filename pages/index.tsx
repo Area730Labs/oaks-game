@@ -2,8 +2,19 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-
+import {TxHandler,CurrentTx} from "solana-starter-pack"
 const Home: NextPage = () => {
+
+  const x: CurrentTx = {
+    CreatedAt: 0,
+    Signature: '',
+    Type: 'other',
+    label: ''
+  }; 
+
+
+  console.log('current tx info : ',x)
+
   return (
     <div className={styles.container}>
       <Head>

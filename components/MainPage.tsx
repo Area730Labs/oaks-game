@@ -1,45 +1,52 @@
-import { Box, GridItem, Grid, Button } from '@chakra-ui/react'
-import {useEffect} from 'react'
+import { Box, GridItem, Grid, Button, Flex } from '@chakra-ui/react'
+import { Chat } from './Chat';
 import { useStyle } from './StyleContext'
 
 export function MainPage() {
 
     const { styles, toggleTheme } = useStyle()
 
-    const toggleHandler = () => {
-        alert("toggle handler")
-        toggleTheme();
-    }
-    useEffect(() => {
-        console.log('style props',styles.header)
-    },[styles]);
+    return (<Box position="relative" backgroundColor={styles.bg}>
+        <Button
+            position="absolute"
+            top="20px"
+            right="20px"
+            onClick={toggleTheme}
+            zIndex="11"
+        >Toggle theme</Button>
 
-    return (<Box position="relative">
-        <Button position="absolute" top="20px" right="20px" onClick={toggleHandler}>Toggle theme</Button>
-        <Grid
-            templateAreas={`
-          "header header header"
-          "chat main history"
-          "footer footer footer"
-          `}
-            gap='1'
-            color='blackAlpha.700'
+        <Flex
+            zIndex="10"
+            bg={styles.header}
+            style={{ boxShadow: "0px -5px 30px rgba(0, 0, 0, 0.5)" }}
+            height="70px">
+        </Flex>
+        <Box
+            zIndex="5"
+            color={styles.color}
             fontWeight='bold'
+            display="flex"
         >
-            <GridItem bg={styles.header} height="70px" area={'header'}>
-            </GridItem>
-            <GridItem bg='pink.300' area={'chat'}>
-                chat
-            </GridItem>
-            <GridItem bg='green.300' area={'main'}>
-                Main
-            </GridItem>
-            <GridItem bg='blue.300' area={'history'}>
+
+            <Box
+                alignSelf="flex-end"
+                bg={styles.chat}
+                width="290px"
+                height={"100vh"}
+                overflowY="scroll"
+            >
+                <Chat/>
+            </Box>
+            <Box
+                flexGrow="1"
+            >
+            </Box>
+            <Box
+                bg={styles.chat_even}
+                width="300px"
+            >
                 history
-            </GridItem>
-            <GridItem bg='blue.300' area={'footer'}>
-                footer
-            </GridItem>
-        </Grid>
+            </Box>
+        </Box>
     </Box >)
 }

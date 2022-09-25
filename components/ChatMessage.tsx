@@ -9,7 +9,8 @@ export function ChatMessage(props: {message: ChatMessageObject}) {
     return <Box
             padding="15px 10px"
             gap="10px"
-            fontFamily="Golos UI"
+            fontFamily="GolosUi"
+            fontWeight="400"
             _even={{
                 backgroundColor: styles.chat_even
             }}
@@ -22,6 +23,7 @@ export function ChatMessage(props: {message: ChatMessageObject}) {
         </Box>
         <Box
             fontSize="10px"
+            width="95%"
         >
             {props.message.body}
         </Box>

@@ -1,5 +1,6 @@
 import { Box, GridItem, Grid, Button, Flex } from '@chakra-ui/react'
 import { Chat } from './Chat';
+import { History } from './History';
 import { useStyle } from './StyleContext'
 
 export function MainPage() {
@@ -31,9 +32,8 @@ export function MainPage() {
             <Box
                 alignSelf="flex-end"
                 bg={styles.chat}
-                width="290px"
-                height={"100vh"}
-                overflowY="scroll"
+                width="226px"
+                boxShadow={styles.shadowRight}
             >
                 <Chat/>
             </Box>
@@ -45,7 +45,7 @@ export function MainPage() {
                 bg={styles.chat_even}
                 width="300px"
             >
-                history
+                <History/>
             </Box>
         </Box>
     </Box >)

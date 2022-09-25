@@ -10,6 +10,12 @@ export interface StylesType {
     chat_label: string
     color: string
     username : string
+    shadowRight: string
+    shadowLeft: string
+    chatInput : string
+    shadowTop: string
+    chatSendBtn: string
+    chatInputBg: string
 }
 
 export interface StyleContextType {
@@ -25,7 +31,14 @@ const whiteTheme: StylesType = {
     chat : "rgba(195, 207, 231, 1)",
     chat_even: "rgba(214, 224, 244, 1)",
     chat_label: "rgba(23, 101, 136, 1)",
-    username: "#176588"
+    username: "#176588",
+    shadowRight: "5px 0px 15px rgba(0, 0, 0, 0.15)",
+    shadowLeft : "-5px 0px 15px rgba(0, 0, 0, 0.15)",
+    chatInput : "#DAEEF8",
+    shadowTop: "0px -5px 20px rgba(0, 0, 0, 0.4)",
+    chatSendBtn: "rgba(14, 165, 233, 1)",
+    chatInputBg : "rgba(214, 224, 244, 1)"
+    
 }
 
 const blackTheme: StylesType = {
@@ -35,7 +48,13 @@ const blackTheme: StylesType = {
     chat : "rgba(56, 44, 89, 1)",
     chat_even : "rgba(62, 50, 98, 1)",
     chat_label : "rgba(180, 75, 255, 1)",
-    username: "#B44BFF"
+    username: "#B44BFF",
+    shadowRight: "5px 0px 15px rgba(0, 0, 0, 0.15)",
+    shadowLeft : "-5px 0px 15px rgba(0, 0, 0, 0.15)",
+    chatInput : "#2E0F40",
+    shadowTop: "0px -5px 20px rgba(0, 0, 0, 0.4)",
+    chatSendBtn: "rgba(202, 19, 149, 1)",
+    chatInputBg : "rgba(66, 27, 89, 1)"
 }
 
 const current_theme_storage_key = "current_theme";

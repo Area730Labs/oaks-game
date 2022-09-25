@@ -24,3 +24,8 @@ a {
     background: black;
   }
 }
+
+@font-face {
+  font-family: 'GolosUi';
+  src: url(/fonts/golosui.woff) format('woff');
+} 

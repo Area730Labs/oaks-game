@@ -1,9 +1,16 @@
-import { Box, Button, Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, ChakraProps, Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 import { useStyle } from "./StyleContext";
 
-export function MenuButton(props: { label: any, children: JSX.Element }) {
+
+export interface MenuButtonProps extends ChakraProps {
+    label: any,
+    children: React.ReactNode
+}
+
+export function MenuButton(props: MenuButtonProps) {
 
     const { styles } = useStyle();
+    const { children, label, ...rest } = props;
 
     return (<Box
         color={styles.menuColor}
@@ -16,17 +23,18 @@ export function MenuButton(props: { label: any, children: JSX.Element }) {
         borderRadius="99px"
         transition=".2s all ease"
         role="group"
+        {...rest}
     >
         <Flex>
             <Box
                 color={styles.menuIcon}
-                _groupHover={{color:styles.menuIconHover}}
+                _groupHover={{ color: styles.menuIconHover }}
                 fontSize="22px"
             >
-                {props.children} {/* icon? */}
+                {children} {/* icon? */}
             </Box>
             <Text paddingLeft="10px">
-                {props.label}
+                {label}
             </Text>
         </Flex>
     </Box >)

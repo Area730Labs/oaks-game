@@ -1,8 +1,10 @@
 import { Box, Button, Flex, List, ButtonGroup, Img } from '@chakra-ui/react'
 import { Chat } from './Chat';
+import { ChatContextProvider } from './ChatContext';
 import { History } from './History';
 import { FaqImg, StatsImg, TopImg, WalletImg } from './Icons';
 import { MenuButton } from './MenuButton';
+import { Navigation } from './Navigation';
 import { useStyle } from './StyleContext'
 
 export function MainPage() {
@@ -26,24 +28,7 @@ export function MainPage() {
             flexDirection="column"
             justifyContent="center"
         >
-            <Flex
-                gap="30"
-                alignSelf="flex-end"
-                marginRight="20px"
-            >
-                <MenuButton label="top 30" >
-                    <TopImg />
-                </MenuButton>
-                <MenuButton label="faq" >
-                    <FaqImg />
-                </MenuButton>
-                <MenuButton label="statistics" >
-                    <StatsImg />
-                </MenuButton>
-                <MenuButton label="connect wallet" >
-                    <WalletImg />
-                </MenuButton>
-            </Flex>
+            <Navigation />
         </Flex>
         <Box
             zIndex="5"
@@ -51,14 +36,15 @@ export function MainPage() {
             fontWeight='bold'
             display="flex"
         >
-
             <Box
                 alignSelf="flex-end"
                 bg={styles.chat}
                 width="226px"
                 boxShadow={styles.shadowRight}
             >
-                <Chat />
+                <ChatContextProvider>
+                    <Chat />
+                </ChatContextProvider>
             </Box>
             <Box
                 flexGrow="1"

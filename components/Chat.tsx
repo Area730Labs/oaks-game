@@ -1,11 +1,10 @@
-import { Box, Button, Img, Input } from "@chakra-ui/react";
+import { Box, Input } from "@chakra-ui/react";
 import { useState } from "react";
-import { ChatMessageObject } from "../interfaces/ChatMessage";
 import { ChatMessage } from "./ChatMessage";
 import { useStyle } from "./StyleContext";
 
-import sendBtnImage from "../public/icons/send-btn.png";
 import { SendImg } from "./Icons";
+import {useChat } from "./ChatContext";
 
 const sendBtnSize = "30px";
 
@@ -72,7 +71,7 @@ function ChatInput() {
             }}
             position="relative"
         >
-            <SendImg position="absolute" top="7px" left="8px"/>
+            <SendImg position="absolute" top="7px" left="8px" />
         </Box>
     </Box>)
 }
@@ -80,69 +79,26 @@ function ChatInput() {
 export function Chat() {
 
     const { styles } = useStyle();
-
-    const chatItems: ChatMessageObject[] = [
-        {
-            body: "Hendrerit gravida rutrum quisque non",
-            username: "Elon2022"
-        },
-        {
-            body: "tincidunt augue interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt",
-            username: "Rogoz2007"
-        },
-        {
-            body: ":)",
-            username: "Lelon2015"
-        },
-        {
-            body: "id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus",
-            username: "Roz2007"
-        },
-        {
-            body: "tincidunt augue interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt",
-            username: "Rogoz2007"
-        },
-        {
-            body: ":)",
-            username: "Lelon2015"
-        },
-        {
-            body: "id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus",
-            username: "Roz2007"
-        },
-        {
-            body: "tincidunt augue interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt",
-            username: "Rogoz2007"
-        },
-        {
-            body: "Hello",
-            username: "Lelon2015"
-        },
-        {
-            body: "id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus",
-            username: "Roz2007"
-        },
-
-    ];
+    const { history } = useChat();
 
     return <>
-        <Box
-            display="flex"
-            flexDirection="column"
-        >
             <Box
-                flexGrow="1"
                 display="flex"
                 flexDirection="column"
-                // height={"100vh"}
-                height="calc(100vh - 130px)"
-                overflowY="scroll"
             >
-                {chatItems.map((it) => {
-                    return <ChatMessage message={it} />
-                })}
+                <Box
+                    flexGrow="1"
+                    display="flex"
+                    flexDirection="column"
+                    // height={"100vh"}
+                    height="calc(100vh - 130px)"
+                    overflowY="scroll"
+                >
+                    {history ? history.map((it) => {
+                        return <ChatMessage message={it} />
+                    }) : null}
+                </Box>
+                <ChatInput />
             </Box>
-            <ChatInput />
-        </Box>
     </>
 }

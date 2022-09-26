@@ -1,8 +1,13 @@
 import React from "react";
+import { Bet } from "../interfaces/Bet";
 
 export interface AppContextType {
-
+    bets : Bet[],
 }
+
+const fakeBets = [{
+
+}];
 
 const ContextValue = React.createContext<AppContextType>({} as AppContextType);
 
@@ -11,7 +16,9 @@ export function AppContextProvider(props: { children: any }) {
 
     const memoed: AppContextType = React.useMemo(function () {
 
-        return {};
+        return {
+            bets: fakeBets
+        };
     }, []);
 
     return <ContextValue.Provider value={memoed}>

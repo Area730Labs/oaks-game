@@ -1,11 +1,13 @@
 import { Box } from "@chakra-ui/react";
 import { useApp } from "./AppContext";
 import { Bet } from "./Bet";
+import { useStyle } from "./StyleContext";
 
 export function BetsHistory() {
 
     const { bets } = useApp();
-
+    const {styles} = useStyle();
+    
     return <Box
         display="flex"
         flexDirection="column"
@@ -14,8 +16,6 @@ export function BetsHistory() {
             flexGrow="1"
             display="flex"
             flexDirection="column"
-            // height={"100vh"}
-            height="calc(100vh - 130px)"
             overflowY="scroll"
         >
             {bets.map(it => {

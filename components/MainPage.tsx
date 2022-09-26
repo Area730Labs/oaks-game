@@ -53,6 +53,7 @@ export function MainPage() {
             <Box
                 bg={styles.chat_even}
                 width="300px"
+                boxShadow={styles.shadowLeft}
             >
                 <BetsHistory />
             </Box>

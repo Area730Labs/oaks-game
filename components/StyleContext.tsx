@@ -19,6 +19,7 @@ export interface StylesType {
     menuColor: string
     menuIcon: string
     menuIconHover: string
+    betInfoValue: string
 }
 
 export interface StyleContextType {
@@ -43,7 +44,8 @@ const whiteTheme: StylesType = {
     chatInputBg : "rgba(214, 224, 244, 1)",
     menuColor : "#E5F7FF",
     menuIcon: "#386496",
-    menuIconHover: "#386496"
+    menuIconHover: "#386496",
+    betInfoValue: "#641E8F"
 }
 
 const blackTheme: StylesType = {
@@ -62,7 +64,8 @@ const blackTheme: StylesType = {
     chatInputBg : "rgba(66, 27, 89, 1)",
     menuColor : "#CCCCFF",
     menuIcon: "#CA1395",
-    menuIconHover : "#386496"
+    menuIconHover : "#386496",
+    betInfoValue: "#B44BFF"
 }
 
 const current_theme_storage_key = "current_theme";

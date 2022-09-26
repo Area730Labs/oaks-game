@@ -1,7 +1,7 @@
 import { Box, Button, Flex, List, ButtonGroup, Img } from '@chakra-ui/react'
 import { Chat } from './Chat';
 import { ChatContextProvider } from './ChatContext';
-import { History } from './History';
+import { BetsHistory, History } from './BetsHistory';
 import { FaqImg, StatsImg, TopImg, WalletImg } from './Icons';
 import { MenuButton } from './MenuButton';
 import { Navigation } from './Navigation';
@@ -54,7 +54,7 @@ export function MainPage() {
                 bg={styles.chat_even}
                 width="300px"
             >
-                <History />
+                <BetsHistory />
             </Box>
         </Box>
     </Box >)

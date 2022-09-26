@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { ChatMessageObject } from "../interfaces/ChatMessage";
 import { useStyle } from "./StyleContext";
+import { Username } from "./Username";
 
 export function ChatMessage(props: {message: ChatMessageObject}) {
 
@@ -15,12 +16,7 @@ export function ChatMessage(props: {message: ChatMessageObject}) {
                 backgroundColor: styles.chat_even
             }}
         >
-        <Box 
-            fontSize="12px"
-            color={styles.username}
-        >
-            {props.message.username}
-        </Box>
+        <Username>{props.message.username}</Username>
         <Box
             fontSize="10px"
             width="95%"

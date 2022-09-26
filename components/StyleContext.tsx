@@ -16,6 +16,9 @@ export interface StylesType {
     shadowTop: string
     chatSendBtn: string
     chatInputBg: string
+    menuColor: string
+    menuIcon: string
+    menuIconHover: string
 }
 
 export interface StyleContextType {
@@ -37,8 +40,10 @@ const whiteTheme: StylesType = {
     chatInput : "#DAEEF8",
     shadowTop: "0px -5px 20px rgba(0, 0, 0, 0.4)",
     chatSendBtn: "rgba(14, 165, 233, 1)",
-    chatInputBg : "rgba(214, 224, 244, 1)"
-    
+    chatInputBg : "rgba(214, 224, 244, 1)",
+    menuColor : "#E5F7FF",
+    menuIcon: "#386496",
+    menuIconHover: "#386496"
 }
 
 const blackTheme: StylesType = {
@@ -54,7 +59,10 @@ const blackTheme: StylesType = {
     chatInput : "#2E0F40",
     shadowTop: "0px -5px 20px rgba(0, 0, 0, 0.4)",
     chatSendBtn: "rgba(202, 19, 149, 1)",
-    chatInputBg : "rgba(66, 27, 89, 1)"
+    chatInputBg : "rgba(66, 27, 89, 1)",
+    menuColor : "#CCCCFF",
+    menuIcon: "#CA1395",
+    menuIconHover : "#386496"
 }
 
 const current_theme_storage_key = "current_theme";

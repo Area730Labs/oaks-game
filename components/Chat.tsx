@@ -1,8 +1,11 @@
-import { Box, Button, Input } from "@chakra-ui/react";
+import { Box, Button, Img, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import { ChatMessageObject } from "../interfaces/ChatMessage";
 import { ChatMessage } from "./ChatMessage";
 import { useStyle } from "./StyleContext";
+
+import sendBtnImage from "../public/icons/send-btn.png";
+import { SendImg } from "./Icons";
 
 const sendBtnSize = "30px";
 
@@ -10,24 +13,24 @@ function ChatInput() {
 
     const { styles } = useStyle();
 
-    const [message,setMessage] = useState("");
+    const [message, setMessage] = useState("");
 
     const inputTextHandler = (e: any) => {
         setMessage(e.target.value);
     }
 
     function sendMessageHandler(msg: string) {
-        alert("sending a message "+ message)
+        alert("sending a message " + message)
     }
 
-    const inputHandler  = (e: any) => {
+    const inputHandler = (e: any) => {
         if (e.key == "Enter") {
             sendMessageHandler(message);
             setMessage("")
         }
     }
 
-    const outlineConfig = {outline:"none!important", border: "none!important"};
+    const outlineConfig = { outline: "none!important", border: "none!important" };
 
 
     return (<Box
@@ -56,19 +59,20 @@ function ChatInput() {
                 value={message}
             />
         </Box>
-        <Box>
-            <Button
-                marginLeft="10px"
-                width={sendBtnSize}
-                boxSizing="border-box"
-                height={sendBtnSize}
-                fontFamily="GolosUI"
-                borderRadius="99px"
-                backgroundColor={styles.chatSendBtn}
-                onClick={() => {
-                    sendMessageHandler(message);
-                }}
-            ></Button>
+        <Box
+            marginLeft="10px"
+            width={sendBtnSize}
+            boxSizing="border-box"
+            height={sendBtnSize}
+            fontFamily="GolosUI"
+            borderRadius="99px"
+            backgroundColor={styles.chatSendBtn}
+            onClick={() => {
+                sendMessageHandler(message);
+            }}
+            position="relative"
+        >
+            <SendImg position="absolute" top="7px" left="8px"/>
         </Box>
     </Box>)
 }

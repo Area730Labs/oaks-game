@@ -1,8 +1,13 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { FaqImg, StatsImg, TopImg, WalletImg } from "./Icons";
 import { MenuButton } from "./MenuButton";
-
+import { ConnectButton } from "./override/ConnectButton";
+import { useWallet } from '@solana/wallet-adapter-react';
 export function Navigation() {
+
+    const walletCtx = useWallet();
+    console.log(walletCtx.publicKey?.toBase58());
+
     return (<Flex
         gap="1px"
         alignSelf="flex-end"
@@ -17,11 +22,7 @@ export function Navigation() {
         <MenuButton label="statistics" >
             <StatsImg />
         </MenuButton>
-        <MenuButton
-            marginLeft="30px"
-            label="connect wallet"
-        >
-            <WalletImg />
-        </MenuButton>
+        <ConnectButton>connect wallet</ConnectButton>
+        {/* <Text>{wallet?.publicKey?.toBase58()}</Text> */}
     </Flex>)
 }

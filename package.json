@@ -12,11 +12,14 @@
     "@chakra-ui/react": "^2.3.4",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@solana/wallet-adapter-react": "^0.15.19",
+    "@solana/wallet-adapter-react-ui": "^0.9.17",
+    "@solana/wallet-adapter-wallets": "^0.19.0",
+    "bn.js": "^5.2.1",
     "framer-motion": "^7.3.6",
     "next": "12.3.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "solana-starter-pack": "file:../solana-starter-pack"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@next/swc-darwin-arm64": "^11.1.2",

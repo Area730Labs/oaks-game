@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
 import { PublicKey } from "@solana/web3.js"
-import { useWallet, WalletContextState } from "@solana/wallet-adapter-react"
+import { useWallet, Wallet, WalletContextState } from "@solana/wallet-adapter-react"
 import Api, { handleApiError } from "../api";
 import { AuthArgs } from "../interfaces/auth";
 import { v4 as uuidv4 } from 'uuid';
@@ -15,6 +15,7 @@ export interface AppContextType {
     betsTotalSol: number
     authToken: string | null
     currentWallet: PublicKey | null
+    wallet: Wallet,
     api: Api
     user: UserType | null
     setUser(u: UserType): void
@@ -204,7 +205,8 @@ export function AppContextProvider(props: { children: any }) {
             api: apiHandler,
             user, setUser,
             currentModal,
-            setCurrentModal
+            setCurrentModal,
+            wallet: {} as Wallet 
         };
     }, [
         publicKey, connected, authToken,

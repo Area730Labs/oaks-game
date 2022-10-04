@@ -4,7 +4,7 @@ import GlobalConfig from "./config";
 import { AuthArgs } from "./interfaces/auth";
 import { UserType } from "./interfaces/user";
 
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 import { ChatInfo, MsgType } from "./interfaces/msg";
 
 export type Method = "post" | "get";
@@ -30,21 +30,28 @@ export interface SdkProject {
 }
 
 export function handleApiError(e: any, handler: any) {
+
+    console.log('api error is ', e)
+
     const errorStatus = e.response.status;
     if (errorStatus != 400) {
+        try {
+            const errorCode = e.response.data.code;
+            const msg = e.response.data.msg
 
-        const errorCode = e.response.data.code;
-        const msg = e.response.data.msg
-
-        handler(errorCode, msg);
+            handler(errorCode, msg);
+        } catch (ee) {
+            toast.warn("looks like api server is down. try again later")
+        }
     } else {
-        console.log("got an error ",e)
+        console.log("got an error ", e)
         toast.warn("something goes wrong, reload page")
     }
 }
 
 
 class Api {
+
 
     private host: string = GlobalConfig.apiBaseUrl;
     private authToken: string | null

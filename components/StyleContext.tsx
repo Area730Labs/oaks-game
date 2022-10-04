@@ -31,8 +31,10 @@ export interface StylesType {
     menuIcon: string
     menuIconHover: string
     betInfoValue: string
-    makeBetBtnColor: string,
+    makeBetBtnColor: string
     buttons: StyledButtons 
+    borderRadiusPx: number
+    transition: string
 }
 
 export interface StyleContextType {
@@ -70,7 +72,9 @@ const whiteTheme: StylesType = {
             bg: "#0EA5E9",
             color: "#E5F7FF"
         }
-    }
+    },
+    borderRadiusPx: 8,
+    transition: "all .2s ease"
 }
 
 const blackTheme: StylesType = {
@@ -102,7 +106,9 @@ const blackTheme: StylesType = {
             bg: "rgba(202, 19, 149, 1)",
             color: "rgb(229 247 255)"
         }
-    }
+    },
+    borderRadiusPx : 8,
+    transition: "all .2s ease"
 }
 
 const current_theme_storage_key = "current_theme";

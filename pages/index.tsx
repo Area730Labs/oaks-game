@@ -14,11 +14,11 @@ import { ToastContainer, toast } from 'react-toastify';
 require('@solana/wallet-adapter-react-ui/styles.css');
 import 'react-toastify/dist/ReactToastify.css';
 import { WsContextProvider } from '../components/WsContext'
+import GlobalConfig from '../config'
 
 const Home: NextPage = () => {
 
-  const network = 'mainnet-beta';
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const endpoint = GlobalConfig.rpc
 
   const wallets = useMemo(() => {
     return [

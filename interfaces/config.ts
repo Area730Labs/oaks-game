@@ -3,4 +3,6 @@ export interface Config {
     pusherAppKey: string
     pusherMainChannel : string
     chatChannel: string
+    selector_max_nft_per_row: number
+    rpc: string 
 }

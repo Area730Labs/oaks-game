@@ -80,8 +80,6 @@ export function ChatContextProvider(props: { children: any }) {
             // setChatUsers(chatUsers)
         }
 
-        console.warn('chat history is ', state.history);
-
         return {
             history: state.history,
 

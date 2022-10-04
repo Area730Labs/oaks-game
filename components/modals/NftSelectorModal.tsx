@@ -1,10 +1,15 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
 import { UserType } from "../../interfaces/user"
+import { useStyle } from "../StyleContext"
+import { Button } from "../override/Button"
 
 export default function NftSelectorModal() {
+
+    const { styles } = useStyle();
+
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { currentModal, api, setCurrentModal, user, setUser } = useApp();
@@ -45,12 +50,17 @@ export default function NftSelectorModal() {
             <Modal
                 initialFocusRef={initialRef}
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={() => {
+                    setCurrentModal("")
+                }}
                 isCentered
                 size="3xl"
             >
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent
+                    backgroundColor={styles.chat_even}
+                    color={styles.color}
+                >
                     <ModalHeader>Your NFTS</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={12}>
@@ -58,10 +68,11 @@ export default function NftSelectorModal() {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' onClick={saveUser} mr={3}>
+                        <Button
+                            onClick={saveUser}>
                             Deposit
                         </Button>
-                        <Button onClick={() => {
+                        <Button variant="info" onClick={() => {
                             setCurrentModal("");
                         }}>Cancel</Button>
                     </ModalFooter>

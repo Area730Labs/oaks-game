@@ -2,6 +2,16 @@ import React, { useEffect } from "react";
 
 export type ThemeType = "white" | "black";
 
+export interface StyledButton {
+    bg : string
+    color: string
+}
+
+export interface StyledButtons {
+    info : StyledButton
+    success: StyledButton
+}
+
 export interface StylesType {
     bg : string,
     header: string
@@ -21,7 +31,8 @@ export interface StylesType {
     menuIcon: string
     menuIconHover: string
     betInfoValue: string
-    makeBetBtnColor: string
+    makeBetBtnColor: string,
+    buttons: StyledButtons 
 }
 
 export interface StyleContextType {
@@ -49,7 +60,17 @@ const whiteTheme: StylesType = {
     menuIconHover: "#386496",
     betInfoValue: "#641E8F",
     makeBetBtnColor: "#E5F7FF",
-    meUsername : "#1D1D1F"
+    meUsername : "#1D1D1F",
+    buttons: {
+        info: {
+            bg: "#E5F7FF",
+            color: "#343D34"
+        }, 
+        success: {
+            bg: "#0EA5E9",
+            color: "#E5F7FF"
+        }
+    }
 }
 
 const blackTheme: StylesType = {
@@ -71,7 +92,17 @@ const blackTheme: StylesType = {
     menuIconHover : "#386496",
     betInfoValue: "#B44BFF",
     makeBetBtnColor: "#E5F7FF",
-    meUsername : "white"
+    meUsername : "white",
+    buttons: {
+        info: {
+            bg: "#E5F7FF",
+            color: "#343D34"
+        }, 
+        success: {
+            bg: "rgba(202, 19, 149, 1)",
+            color: "rgb(229 247 255)"
+        }
+    }
 }
 
 const current_theme_storage_key = "current_theme";

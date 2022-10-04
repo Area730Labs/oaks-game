@@ -1,10 +1,15 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
+import { FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
 import { UserType } from "../../interfaces/user"
+import { useStyle } from "../StyleContext"
+import { Button } from "../override/Button"
 
 export default function UserModal() {
+
+    const { styles } = useStyle();
+
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { currentModal, api, setCurrentModal, user, setUser } = useApp();
@@ -49,10 +54,15 @@ export default function UserModal() {
                 isCentered
             >
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent
+                    backgroundColor={styles.chat_even}
+                    color={styles.color}
+                >
                     <ModalHeader>Create your account</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody pb={6}>
+                    <ModalBody
+                        pb={6}
+                    >
                         <FormControl>
                             <FormLabel>Username</FormLabel>
                             <Input value={username} onChange={(e: any) => {
@@ -62,12 +72,14 @@ export default function UserModal() {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' onClick={saveUser} mr={3}>
+                        <Button onClick={saveUser} mr={3}>
                             Save
                         </Button>
-                        <Button onClick={() => {
-                            setCurrentModal("");
-                        }}>Cancel</Button>
+                        <Button
+                            variant={'info'}
+                            onClick={() => {
+                                setCurrentModal("");
+                            }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

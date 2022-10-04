@@ -6,7 +6,7 @@ import { useApp } from "./AppContext";
 import { useStyle } from "./StyleContext";
 import { Username } from "./Username";
 
-function BetNftImage(props: { item: NftInfo }) {
+function BetNftImage(props: { item: NftInfo, key: any}) {
 
     return <Box
         width="70px"
@@ -81,8 +81,8 @@ export function Bet(props: { item: BetObject }) {
                     gap="6px"
                     flexWrap="nowrap"
                 > {/* nfts */}
-                    {props.item.nfts.map(nftit => {
-                        return <BetNftImage item={nftit} />
+                    {props.item.nfts.map((nftit, index) => {
+                        return <BetNftImage key={index} item={nftit} />
                     })}
                 </Flex>
             </Flex>

@@ -1,28 +1,51 @@
 import { GridItem } from "@chakra-ui/layout";
+import { StyleProps } from "@chakra-ui/react";
 import GlobalConfig from "../../config";
 import { useStyle } from "../StyleContext";
 import NftSelectorGrid from "./selectorgrid";
 
-export default function EmptyRow() {
+import { Image, keyframes, usePrefersReducedMotion } from '@chakra-ui/react'
+const spin = keyframes`
+    100% {
+    transform: translateX(100%);
+  }
+`
+
+export interface EmptyRowProps extends StyleProps {
+    skeleton?: boolean
+}
+
+export default function EmptyRow(props: EmptyRowProps) {
 
     const maxPerRow = GlobalConfig.selector_max_nft_per_row;
     const nftsPlaceholders = [];
 
-    const {styles} = useStyle();
+    const { styles } = useStyle();
+
+    const animation = (props.skeleton ?? false) ? `${spin} infinite 1s linear` : undefined;
 
     // @todo use nft layout 
     for (var i = 0; i < maxPerRow; i++) {
         nftsPlaceholders.push(<GridItem
+            _after={{
+                transform: "translateX(-100%)",
+                backgrounImage: `linear-gradient(
+                90deg,
+                rgba(#fff, 0) 0,
+                rgba(#fff, 0.2) 20%,
+                rgba(#fff, 0.5) 60%,
+                rgba(#fff, 0)
+              )`, animation: animation}}
             key={i}
             cursor="pointer"
             w="100%"
             maxH='280px'
             minH='230px'
-            borderRadius={styles.borderRadiusPx+"px"}
+            borderRadius={styles.borderRadiusPx + "px"}
             transition={styles.transition}
-            backgroundColor={"whiteAlpha.100"}></GridItem>)
+            backgroundColor={styles.chat}></GridItem>)
     }
 
-    return <NftSelectorGrid>{nftsPlaceholders}</NftSelectorGrid>
+    return <NftSelectorGrid {...props}>{nftsPlaceholders}</NftSelectorGrid>
 
 }

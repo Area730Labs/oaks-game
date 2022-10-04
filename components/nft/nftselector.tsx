@@ -99,7 +99,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
                 maxH='280px'
                 borderRadius={styles.borderRadiusPx + "px"}
                 transition={styles.transition}
-                backgroundColor={"whiteAlpha.100"}>
+                backgroundColor={styles.chat}>
             </GridItem>)
         }
     }

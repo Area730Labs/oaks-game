@@ -1,42 +1,50 @@
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
-import React, { useEffect, useMemo, useState } from "react"
+import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box } from "@chakra-ui/react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
 import { UserType } from "../../interfaces/user"
 import { useStyle } from "../StyleContext"
 import { Button } from "../override/Button"
 import EmptyRow from "../nft/emptyrow"
-import {WalletAdapter} from "@solana/wallet-adapter-base"
+import { WalletAdapter } from "@solana/wallet-adapter-base"
 import NftsSelector from "../nft/nftselector"
 import Nft from "../../interfaces/nft"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { getNftsByUser } from "../../utils"
+import { RepeatIcon } from "@chakra-ui/icons"
 
 export default function NftSelectorModal() {
 
     const maxSelection = 5;
 
-
     const { styles } = useStyle();
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const {connected} = useWallet();
-    const { currentModal, api, setCurrentModal, user, setUser,currentWallet } = useApp();
+    const { connected } = useWallet();
+    const { currentModal, api, setCurrentModal, user, setUser, currentWallet } = useApp();
     const initialRef = React.useRef(null)
-    const [username, setUsername] = useState<string>("");
-    const [nfts,setNfts] = useState<Nft[]>([]);
+    const [nfts, setNfts] = useState<Nft[]>([]);
 
-    useEffect(() => {
+    const [loading, setLoading] = useState(false);
+
+    const forceReloadNfts = useCallback(() => {
         if (connected) {
+
+            setLoading(true);
             getNftsByUser(currentWallet).then((nftList) => {
                 setNfts(nftList);
             }).catch(e => {
                 toast.warn("unable to load your nfts")
+            }).finally(() => {
+                setLoading(false);
             })
         } else {
             setNfts([]);
         }
+    }, [currentWallet, connected])
 
-    },[currentWallet,connected])
+    useEffect(() => {
+        forceReloadNfts();
+    }, [forceReloadNfts])
 
     useEffect(() => {
         if (currentModal == "betmodal") {
@@ -45,24 +53,6 @@ export default function NftSelectorModal() {
             onClose();
         }
     }, [currentModal])
-
-    function saveUser() {
-
-        if (user != null) {
-
-            user.username = username
-
-            api.update(user as UserType).then((newUser) => {
-                setUser(newUser)
-                toast.success('Profile updated')
-            }).catch((e) => {
-                toast.error("unable to update user data: ", e.message)
-            })
-            setCurrentModal("");
-        } else {
-            toast.warn("something goes wrong, reload page")
-        }
-    }
 
     const nftSelectorContent = useMemo(() => {
         if (nfts.length > 0) {
@@ -73,7 +63,9 @@ export default function NftSelectorModal() {
                 actionLabel={<>Make a bet</>}
             />
         } else {
-            return null;
+            return <Grid gap={4} height="60vh" overflow="auto">
+                <EmptyRow></EmptyRow>
+            </Grid>;
         }
     }, [nfts]);
 
@@ -86,28 +78,26 @@ export default function NftSelectorModal() {
                     setCurrentModal("")
                 }}
                 isCentered
-                size="3xl"
+                size="5xl"
             >
                 <ModalOverlay />
                 <ModalContent
                     backgroundColor={styles.chat_even}
                     color={styles.color}
                 >
-                    <ModalHeader>Your NFTS</ModalHeader>
+                    <ModalHeader>
+                        <Button variant="info" onClick={forceReloadNfts}> <RepeatIcon /> </Button>
+                        NFT in your wallet
+                    </ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody pb={12}>
-                        <EmptyRow></EmptyRow>
+                    <ModalBody pb={12} alignItems="center">
+                        {loading ?
+                            <>
+                                <Box position="relative">
+                                    <EmptyRow skeleton={true}></EmptyRow>
+                                </Box>
+                            </> : nftSelectorContent}
                     </ModalBody>
-
-                    <ModalFooter>
-                        <Button
-                            onClick={saveUser}>
-                            Deposit
-                        </Button>
-                        <Button variant="info" onClick={() => {
-                            setCurrentModal("");
-                        }}>Cancel</Button>
-                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

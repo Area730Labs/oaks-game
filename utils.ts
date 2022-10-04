@@ -4,6 +4,7 @@ import * as spl from "@solana/spl-token"
 import { useConnection } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import Nft from "./interfaces/nft";
+import GlobalConfig from "./config";
 
 export async function getAllNfts(connection: Connection, owner: PublicKey): Promise<PublicKey[]> {
 
@@ -56,8 +57,6 @@ function appendToArray(ar: Nft[], response: QnNftResponse) {
 
 async function getNftsPage(wallet: PublicKey, page: number): Promise<QnNftResponse> {
 
-    const { connection } = useConnection();
-
     const config = {
         headers: {
             "Content-Type": "application/json",
@@ -76,10 +75,10 @@ async function getNftsPage(wallet: PublicKey, page: number): Promise<QnNftRespon
     };
 
     return axios
-        .post(connection.rpcEndpoint, data, config)
+        .post(GlobalConfig.rpc, data, config)
         .then(function (response: any) {
-            console.log('got a response : ', response.data)
-            return response.data as QnNftResponse;
+            console.log('got a response : ', response.data.result)
+            return response.data.result as QnNftResponse;
         })
 }
 
@@ -87,7 +86,6 @@ async function getNftsPage(wallet: PublicKey, page: number): Promise<QnNftRespon
 
 
 export async function getNftsByUser(wallet: PublicKey): Promise<Nft[]> {
-
 
     let result: Nft[] = [];
 

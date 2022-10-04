@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bs58 from "bs58";
 import { UserType } from "../interfaces/user";
 import { toast } from 'react-toastify';
+import { useWsContext } from "./WsContext";
 
 export interface AppContextType {
     bets: BetObject[]
@@ -124,6 +125,8 @@ export function AppContextProvider(props: { children: any }) {
     const [currentModal, setCurrentModal] = useState<string>("");
 
     const [forceAuthCounter, setForceAuthCounter] = useState<number>(0);
+
+    const {mainChannel} = useWsContext();
 
     useEffect(() => {
         if (connected) {

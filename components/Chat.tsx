@@ -1,5 +1,5 @@
 import { Box, Input, Toast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStyle } from "./StyleContext";
 
 import { SendImg } from "./Icons";
@@ -90,6 +90,19 @@ export function Chat() {
     const { styles } = useStyle();
     const { history } = useChat();
 
+    let messagesEnd: any = null;
+
+    const scrollToBottom = () => {
+        if (messagesEnd != null) {
+            messagesEnd.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
+    useEffect(() => {
+        scrollToBottom()
+    })
+
+
     return <>
         <Box
             display="flex"
@@ -101,11 +114,14 @@ export function Chat() {
                 flexDirection="column"
                 // height={"100vh"}
                 height="calc(100vh - 130px)"
-                overflowY="scroll" 
+                overflowY="scroll"
             >
                 {history ? history.map((it) => {
                     return <ChatMessage message={it} />
                 }) : null}
+                <div ref={(el) => {
+                    messagesEnd = el
+                }}></div>
             </Box>
             <ChatInput />
         </Box>

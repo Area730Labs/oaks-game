@@ -1,8 +1,8 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import { useApp } from "./AppContext"
+import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
-import { UserType } from "../interfaces/user"
+import { UserType } from "../../interfaces/user"
 
 export default function UserModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()

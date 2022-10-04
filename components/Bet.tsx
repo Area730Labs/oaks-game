@@ -29,7 +29,7 @@ export function Bet(props: { item: BetObject }) {
 
     let avatarBorder = "none";
     let currentUser = false;
-    if (currentWallet == props.item.user.wallet) {
+    if (currentWallet?.toBase58() == props.item.user.wallet) {
         avatarBorder = "1px solid " + styles.chatSendBtn
         currentUser = true;
     }

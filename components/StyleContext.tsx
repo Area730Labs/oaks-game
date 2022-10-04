@@ -10,6 +10,7 @@ export interface StylesType {
     chat_label: string
     color: string
     username : string
+    meUsername: string
     shadowRight: string
     shadowLeft: string
     chatInput : string
@@ -20,6 +21,7 @@ export interface StylesType {
     menuIcon: string
     menuIconHover: string
     betInfoValue: string
+    makeBetBtnColor: string
 }
 
 export interface StyleContextType {
@@ -45,7 +47,9 @@ const whiteTheme: StylesType = {
     menuColor : "#E5F7FF",
     menuIcon: "#386496",
     menuIconHover: "#386496",
-    betInfoValue: "#641E8F"
+    betInfoValue: "#641E8F",
+    makeBetBtnColor: "#E5F7FF",
+    meUsername : "#1D1D1F"
 }
 
 const blackTheme: StylesType = {
@@ -65,7 +69,9 @@ const blackTheme: StylesType = {
     menuColor : "#CCCCFF",
     menuIcon: "#CA1395",
     menuIconHover : "#386496",
-    betInfoValue: "#B44BFF"
+    betInfoValue: "#B44BFF",
+    makeBetBtnColor: "#E5F7FF",
+    meUsername : "white"
 }
 
 const current_theme_storage_key = "current_theme";

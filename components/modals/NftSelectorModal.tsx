@@ -4,7 +4,7 @@ import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
 import { UserType } from "../../interfaces/user"
 
-export default function UserModal() {
+export default function NftSelectorModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { currentModal, api, setCurrentModal, user, setUser } = useApp();
@@ -14,7 +14,7 @@ export default function UserModal() {
     const [username, setUsername] = useState<string>("");
 
     useEffect(() => {
-        if (currentModal == "useredit") {
+        if (currentModal == "betmodal") {
             onOpen();
         } else {
             onClose();
@@ -47,23 +47,19 @@ export default function UserModal() {
                 isOpen={isOpen}
                 onClose={onClose}
                 isCentered
+                size="3xl"
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Create your account</ModalHeader>
+                    <ModalHeader>Your NFTS</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <FormControl>
-                            <FormLabel>Username</FormLabel>
-                            <Input value={username} onChange={(e: any) => {
-                                setUsername(e.target.value)
-                            }} ref={initialRef} placeholder='username' />
-                        </FormControl>
+                    <ModalBody pb={12}>
+                        here are going the nfts list
                     </ModalBody>
 
                     <ModalFooter>
                         <Button colorScheme='blue' onClick={saveUser} mr={3}>
-                            Save
+                            Deposit
                         </Button>
                         <Button onClick={() => {
                             setCurrentModal("");

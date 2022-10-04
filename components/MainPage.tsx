@@ -4,7 +4,9 @@ import { ChatContextProvider } from './ChatContext';
 import { BetsHistory } from './BetsHistory';
 import { Navigation } from './Navigation';
 import { useStyle } from './StyleContext'
-import UserModal from './UserModal';
+import UserModal from './modals/UserModal';
+import NftSelectorModal from './modals/NftSelectorModal';
+import { MainBetsInfo } from './MainBetsInfo';
 
 export function MainPage() {
 
@@ -12,6 +14,7 @@ export function MainPage() {
 
     return (<>
         <UserModal />
+        <NftSelectorModal/>
         <Box position="relative" backgroundColor={styles.bg}>
             <Button
                 position="absolute"
@@ -50,6 +53,7 @@ export function MainPage() {
                 <Box
                     flexGrow="1"
                 >
+                    <MainBetsInfo></MainBetsInfo>
                 </Box>
                 <Box
                     bg={styles.chat_even}

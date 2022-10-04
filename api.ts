@@ -7,6 +7,7 @@ import { UserType } from "./interfaces/user";
 import { toast } from "react-toastify"
 import { ChatInfo, MsgType } from "./interfaces/msg";
 import { GameType } from "./interfaces/game";
+import { GameState } from "./components/state/game";
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -116,8 +117,7 @@ class Api {
         }
     }
 
-
-    async game(): Promise<GameType> {
+    async game(): Promise<GameState> {
 
         try {
 
@@ -127,7 +127,7 @@ class Api {
                 {},
             );
 
-            return result.game as GameType;
+            return result as GameState;
         } catch (e) {
             throw e;
         }

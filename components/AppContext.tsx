@@ -22,7 +22,7 @@ export interface AppContextType {
     currentModal: string
     setCurrentModal(name: string): void
 
-    game : GameState
+    game: GameState
 }
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX = "auth_token_";
@@ -84,13 +84,28 @@ export function AppContextProvider(props: { children: any }) {
     const [forceAuthCounter, setForceAuthCounter] = useState<number>(0);
     const [gameTotalValue, setGameTotalValue] = useState<number>(0);
 
-    const {mainChannel} = useWsContext();
+    const { mainChannel } = useWsContext();
 
-    const [gameState, dispatchGameAction] = useReducer(gameStateReduce,{
-        bets : [],
-        game : {},
-        updates : 0
+    const [gameState, dispatchGameAction] = useReducer(gameStateReduce, {
+        bets: [],
+        game: {},
+        updates: 0
     } as GameState);
+
+    useEffect(() => {
+
+        apiHandler.game().then(gm => {
+            dispatchGameAction({
+                type: "init",
+                data: gm,
+            })
+        }).catch(e => {
+            console.log(e)
+            toast.warn("unable to fetch game info")
+        })
+
+        // todo subscribe to all events here
+    }, []);
 
     useEffect(() => {
         if (connected) {
@@ -116,7 +131,7 @@ export function AppContextProvider(props: { children: any }) {
                     // token expired or not found
                     if (code == 41 || code == 42 || code == 43) {
                         lsSetAuthToken(publicKey as PublicKey, "");
-                        setForceAuthCounter(forceAuthCounter+1)
+                        setForceAuthCounter(forceAuthCounter + 1)
                     } else {
                         toast.warn(`auth problem: ${msg}`)
                     }
@@ -125,7 +140,7 @@ export function AppContextProvider(props: { children: any }) {
         } else {
             setUser(null);
         }
-    }, [apiHandler,forceAuthCounter,setForceAuthCounter])
+    }, [apiHandler, forceAuthCounter, setForceAuthCounter])
 
     useEffect(() => {
 
@@ -155,7 +170,7 @@ export function AppContextProvider(props: { children: any }) {
             setAuthToken("")
         }
 
-    }, [connected, publicKey,forceAuthCounter])
+    }, [connected, publicKey, forceAuthCounter])
 
     const memoed: AppContextType = React.useMemo(function () {
 
@@ -169,7 +184,7 @@ export function AppContextProvider(props: { children: any }) {
             currentModal,
             setCurrentModal,
             wallet: {} as Wallet,
-            game:gameState,
+            game: gameState,
         };
     }, [
         publicKey, connected, authToken,

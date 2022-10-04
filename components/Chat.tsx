@@ -121,7 +121,7 @@ export function Chat() {
                 overflowY="scroll"
             >
                 {history ? history.map((it) => {
-                    return <ChatMessage message={it} />
+                    return <ChatMessage key={it.created_at + it.sender} message={it} />
                 }) : null}
                 <div ref={(el) => {
                     messagesEnd = el

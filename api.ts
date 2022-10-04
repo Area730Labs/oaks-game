@@ -134,7 +134,6 @@ class Api {
         }
     }
 
-
     async update(user: UserType): Promise<UserType> {
 
         try {
@@ -151,6 +150,24 @@ class Api {
             throw e;
         }
     }
+
+    async bet(user: UserType): Promise<UserType> {
+
+        try {
+
+            let result = await this.sendRequest(
+                "post",
+                `user/me`,
+                user,
+                true
+            );
+
+            return result.user as UserType;
+        } catch (e) {
+            throw e;
+        }
+    }
+
 
     private async sendRequest(rm: Method, method: string, args?: any, auth: boolean = false): Promise<any> {
 

@@ -120,7 +120,8 @@ async function betSelectedItems(
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
 
-    toast.info("betting selected items : ")
+
+    toast.info("betting selected items : " + JSON.stringify(selectedItems))
 
     return 0;
 

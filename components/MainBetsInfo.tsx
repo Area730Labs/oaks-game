@@ -1,4 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { toast } from "react-toastify";
 import { useApp } from "./AppContext";
 import { useStyle } from "./StyleContext"
 import { UserInfoBlock } from "./UserInfoBlock";
@@ -7,9 +10,16 @@ export function MainBetsInfo() {
 
     const { styles } = useStyle();
     const { setCurrentModal, user } = useApp();
+    const { connected } = useWallet();
+    const {setVisible} = useWalletModal();
 
     function makeBetHandler() {
-        setCurrentModal("betmodal");
+        if (!connected) {
+            setVisible(true);
+            // todo add callback after connection ?
+        } else {
+            setCurrentModal("betmodal");
+        }
     }
 
     return <>

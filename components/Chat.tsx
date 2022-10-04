@@ -7,6 +7,7 @@ import { useChat } from "./ChatContext";
 import { useApp } from "./AppContext";
 import { toast } from "react-toastify"
 import { ChatMessage } from "./ChatMessage";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const sendBtnSize = "30px";
 
@@ -22,10 +23,12 @@ function ChatInput() {
         setMessage(e.target.value);
     }
 
+    const {setVisible} = useWalletModal();
+    
     function sendMessageHandler(msg: string) {
 
         if (!api.hasAuth()) {
-            toast.warn('connect wallet first');
+            setVisible(true);
         } else {
             api.sendMessage(msg)
             setMessage("")

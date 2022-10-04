@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { WalletAdapter } from "@solana/wallet-adapter-base";
 import { Box, GridItem } from "@chakra-ui/layout";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import Nft from "../../interfaces/nft";
 import { AppContextType, useApp } from "../AppContext";
 import GlobalConfig from "../../config";
@@ -10,6 +10,8 @@ import { Button } from "../override/Button";
 import NftSelectorGrid from "./selectorgrid";
 import { NftSelection } from "./nftselection";
 import Fadeable from "../fadeable";
+import { roundNumber } from "../../utils";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 
 
 export interface NftsSelectorProps {
@@ -22,7 +24,7 @@ export interface NftsSelectorProps {
     actionHandler: {
         (
             wallet: WalletAdapter,
-            app : AppContextType,
+            app: AppContextType,
             // solanaConnection: SolanaRpc,
             selectedItems: { [key: string]: boolean }
         ): Promise<any>
@@ -33,7 +35,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
 
     const app = useApp();
 
-    const { currentWallet, wallet } = app;
+    const { currentWallet, wallet, api } = app;
     const { styles } = useStyle();
 
     const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: boolean }>({});
@@ -42,6 +44,9 @@ export default function NftsSelector(props: NftsSelectorProps) {
 
     const action_label = props.actionLabel ?? ""
     const max_selection = props.maxChunk;
+
+    const [betValue, setBetValue] = useState(0);
+    const [upadtingValue, setUpdating] = useState(false);
 
     function selectionHandler(item: Nft, state: boolean): boolean {
 
@@ -68,6 +73,10 @@ export default function NftsSelector(props: NftsSelectorProps) {
         }
     }
 
+    const winChance = useMemo(() => {
+        return 0;
+    }, [betValue]);
+
     function performActionWithSelectedItems() {
         props.actionHandler(wallet.adapter, app, selectedItems).then((signature) => {
             // cleanup selection
@@ -79,10 +88,22 @@ export default function NftsSelector(props: NftsSelectorProps) {
     React.useEffect(() => {
         if (selectedItemsCount > 0) {
             setSelectedPopupVisible(true)
+
+            setUpdating(true);
+            api.calc_bet_map(selectedItems).then((value) => {
+                setBetValue(value);
+            }).catch(e => {
+                console.warn('unable to calc bet value ', e)
+            }).finally(() => {
+                setUpdating(false);
+            })
+
         } else {
             setSelectedPopupVisible(false);
+            setBetValue(0)
         }
     }, [selectedItemsCount]);
+
 
     const nftsPlaceholders = [];
 
@@ -129,23 +150,38 @@ export default function NftsSelector(props: NftsSelectorProps) {
             justifyItems="center"
             textAlign="center"
         >
-
-
-            <Button onClick={performActionWithSelectedItems}>
-                {action_label}
-                <Box
-                    display="inline"
-                    right="-15px"
-                    top="-15px"
-                    marginLeft="10px"
-                    p="1"
-                    px="2.5"
-                    borderRadius={"99px"}
-                    width="8"
-                    backgroundColor={styles.chat_even}
-                >{selectedItemsCount}
+            <Flex alignItems="center" gap="10px">
+                <Box fontSize="32px" fontWeight="bold">
+                    {upadtingValue ? <Spinner /> :
+                        (roundNumber(winChance * 100, 3))}%
                 </Box>
-            </Button>
+                <Flex direction="column" fontSize="12px" textAlign="left">
+                    <Text>
+                        Win
+                    </Text>
+                    <Text>
+                        chance
+                    </Text>
+                </Flex>
+                <Button
+                    display="flex"
+                    alignSelf="flex-end"
+                    onClick={performActionWithSelectedItems}>
+                    {action_label}
+                    <Box
+                        display="inline"
+                        right="-15px"
+                        top="-15px"
+                        marginLeft="10px"
+                        p="1"
+                        px="2.5"
+                        borderRadius={"99px"}
+                        backgroundColor={styles.chat_even}
+                    > {selectedItemsCount} NFT / {upadtingValue ? <Spinner /> : roundNumber(betValue, 2)} SOL
+                    </Box>
+                </Button>
+            </Flex>
+
         </Fadeable>
         <NftSelectorGrid>
             {items && items.map((it, idx) => {

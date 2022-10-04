@@ -124,13 +124,7 @@ async function betSelectedItems(
 
     const { api } = app;
 
-    let array = [];
-
-    for (var i in selectedItems) {
-        array.push(i);
-    }
-
-    api.calc_bet(array).then((totalValue) => {
+    api.calc_bet_map(selectedItems).then((totalValue) => {
         toast.success(`total bet value is ${totalValue}`)
     }).catch(e => {
         handleApiError(e, (code: Number, msg: string) => {

@@ -151,6 +151,19 @@ class Api {
         }
     }
 
+
+    async calc_bet_map(mintsMap : any) : Promise<number> {
+
+        let array = [];
+
+        for (var i in mintsMap) {
+            array.push(i);
+        }
+
+        return this.calc_bet(array)
+
+    }
+
     async calc_bet(mints: string[]): Promise<number> {
 
         try {

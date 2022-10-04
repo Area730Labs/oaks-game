@@ -83,6 +83,13 @@ async function getNftsPage(wallet: PublicKey, page: number): Promise<QnNftRespon
 }
 
 
+export function roundNumber(value : number, decimals : number) : number {
+
+    const mult = Math.pow(10,decimals);
+    return Math.ceil(value * mult)/mult
+
+
+}
 
 
 export async function getNftsByUser(wallet: PublicKey): Promise<Nft[]> {

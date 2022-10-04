@@ -23,15 +23,16 @@ function ChatInput() {
         setMessage(e.target.value);
     }
 
-    const {setVisible} = useWalletModal();
-    
+    const { setVisible } = useWalletModal();
+
     function sendMessageHandler(msg: string) {
 
         if (!api.hasAuth()) {
             setVisible(true);
         } else {
-            api.sendMessage(msg)
-            setMessage("")
+            api.sendMessage(msg).then(() => {
+                setMessage("")
+            })
         }
     }
 

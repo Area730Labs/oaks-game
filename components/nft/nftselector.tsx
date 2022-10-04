@@ -3,7 +3,7 @@ import { WalletAdapter } from "@solana/wallet-adapter-base";
 import { Box, GridItem } from "@chakra-ui/layout";
 import React, { ReactNode } from "react";
 import Nft from "../../interfaces/nft";
-import { useApp } from "../AppContext";
+import { AppContextType, useApp } from "../AppContext";
 import GlobalConfig from "../../config";
 import { useStyle } from "../StyleContext";
 import { Button } from "../override/Button";
@@ -22,6 +22,7 @@ export interface NftsSelectorProps {
     actionHandler: {
         (
             wallet: WalletAdapter,
+            app : AppContextType,
             // solanaConnection: SolanaRpc,
             selectedItems: { [key: string]: boolean }
         ): Promise<any>
@@ -30,7 +31,9 @@ export interface NftsSelectorProps {
 
 export default function NftsSelector(props: NftsSelectorProps) {
 
-    const { currentWallet, wallet } = useApp();
+    const app = useApp();
+
+    const { currentWallet, wallet } = app;
     const { styles } = useStyle();
 
     const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: boolean }>({});
@@ -66,7 +69,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
     }
 
     function performActionWithSelectedItems() {
-        props.actionHandler(wallet.adapter, selectedItems).then((signature) => {
+        props.actionHandler(wallet.adapter, app, selectedItems).then((signature) => {
             // cleanup selection
             setSelectedItemsCount(0);
             setSelectedItems({});

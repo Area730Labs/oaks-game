@@ -151,18 +151,20 @@ class Api {
         }
     }
 
-    async bet(user: UserType): Promise<UserType> {
+    async calc_bet(mints : string[]): Promise<number> {
 
         try {
 
             let result = await this.sendRequest(
                 "post",
-                `user/me`,
-                user,
+                `calc_bet`,
+                {
+                    mints: mints
+                },
                 true
             );
 
-            return result.user as UserType;
+            return result.value as number;
         } catch (e) {
             throw e;
         }

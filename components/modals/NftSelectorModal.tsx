@@ -1,6 +1,6 @@
 import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box, Flex } from "@chakra-ui/react"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { useApp } from "../AppContext"
+import { AppContextType, useApp } from "../AppContext"
 import { toast } from 'react-toastify'
 import { UserType } from "../../interfaces/user"
 import { useStyle } from "../StyleContext"
@@ -12,6 +12,7 @@ import Nft from "../../interfaces/nft"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
+import { handleApiError } from "../../api"
 
 export default function NftSelectorModal() {
 
@@ -116,14 +117,28 @@ export default function NftSelectorModal() {
 
 async function betSelectedItems(
     wallet: WalletAdapter,
+    app : AppContextType,
     // solanaConnection: SolanaRpc,
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
 
+    const { api } = app;
 
-    toast.info("betting selected items : " + JSON.stringify(selectedItems))
+    let array = [];
 
-    return 0;
+    for (var i in selectedItems) {
+        array.push(i);
+    }
+
+    api.calc_bet(array).then((totalValue) => {
+        toast.success(`total bet value is ${totalValue}`)
+    }).catch(e => {
+        handleApiError(e, (code: Number, msg: string) => {
+            toast.error('unable to calc bet value: '+msg)
+        })
+    })
+
+    return ;
 
     // let instructions = [] as TransactionInstruction[];
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import Pusher, { Channel } from "pusher-js"
 import GlobalConfig from "../config";
+import { Toast } from "@chakra-ui/react";
 
 export interface WsContextType {
     mainChannel: Channel,
@@ -11,20 +12,19 @@ const ContextValue = React.createContext<WsContextType>({} as WsContextType);
 
 export function WsContextProvider(props: { children: any }) {
 
-    // init connection
-    const pusher = useMemo(() => {
-        return new Pusher(GlobalConfig.pusherAppKey, {
+    const [mainChannel, chatChannel] = useMemo(() => {
+
+        console.log('ws context redraw')
+
+        const pusher =  new Pusher(GlobalConfig.pusherAppKey, {
             cluster: 'eu',
         });
-    }, []);
-
-    const [mainChannel, chatChannel] = useMemo(() => {
 
         const channelObj = pusher.subscribe(GlobalConfig.pusherMainChannel)
         const chatChannel = pusher.subscribe(GlobalConfig.chatChannel)
 
         return [channelObj, chatChannel];
-    }, [pusher]);
+    }, []);
 
     const memoed: WsContextType = React.useMemo(function () {
 
@@ -32,7 +32,7 @@ export function WsContextProvider(props: { children: any }) {
             mainChannel,
             chatChannel
         };
-        
+
     }, [mainChannel, chatChannel]);
 
     return <ContextValue.Provider value={memoed}>
@@ -41,7 +41,7 @@ export function WsContextProvider(props: { children: any }) {
 }
 
 
-export function useChat(): WsContextType {
+export function useWsContext(): WsContextType {
 
     const ctx = React.useContext(ContextValue);
 

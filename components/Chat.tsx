@@ -101,7 +101,7 @@ export function Chat() {
                 flexDirection="column"
                 // height={"100vh"}
                 height="calc(100vh - 130px)"
-                overflowY="scroll"
+                overflowY="scroll" 
             >
                 {history ? history.map((it) => {
                     return <ChatMessage message={it} />

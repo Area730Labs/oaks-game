@@ -56,9 +56,6 @@ class Api {
     }
 
     hasAuth(): boolean {
-
-        console.log("has auth : ", this.authToken)
-
         return this.authToken != null && this.authToken != ""
     }
 

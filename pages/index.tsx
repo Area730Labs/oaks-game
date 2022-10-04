@@ -9,9 +9,11 @@ import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react
 import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets"
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { clusterApiUrl } from '@solana/web3.js'
-
+import { ToastContainer, toast } from 'react-toastify';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
+import 'react-toastify/dist/ReactToastify.css';
+
 const Home: NextPage = () => {
 
   const network = 'mainnet-beta';
@@ -25,19 +27,22 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <ChakraProvider>
-      <StyleContextProvider>
-        <ConnectionProvider endpoint={endpoint}>
-          <WalletProvider wallets={wallets}>
-            <WalletModalProvider>
-              <AppContextProvider>
-                <MainPage></MainPage>
-              </AppContextProvider>
-            </WalletModalProvider>
-          </WalletProvider>
-        </ConnectionProvider>
-      </StyleContextProvider>
-    </ChakraProvider>
+    <>
+      <ToastContainer position='bottom-right' theme="dark"/>
+      <ChakraProvider>
+        <StyleContextProvider>
+          <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect={true}>
+              <WalletModalProvider>
+                <AppContextProvider>
+                  <MainPage></MainPage>
+                </AppContextProvider>
+              </WalletModalProvider>
+            </WalletProvider>
+          </ConnectionProvider>
+        </StyleContextProvider>
+      </ChakraProvider>
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
-import { PublicKey } from "@solana/web3.js"
-import { useWallet, Wallet, WalletContextState } from "@solana/wallet-adapter-react"
+import { PublicKey,Connection } from "@solana/web3.js"
+import { useConnection, useWallet, Wallet, WalletContextState } from "@solana/wallet-adapter-react"
 import Api, { handleApiError } from "../api";
 import { AuthArgs } from "../interfaces/auth";
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +23,10 @@ export interface AppContextType {
     setCurrentModal(name: string): void
 
     game: GameState
+
+    connection: Connection,
+    signTransaction: any
+    
 }
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX = "auth_token_";
@@ -83,6 +87,9 @@ export function AppContextProvider(props: { children: any }) {
 
     const [forceAuthCounter, setForceAuthCounter] = useState<number>(0);
     const [gameTotalValue, setGameTotalValue] = useState<number>(0);
+
+    const { connection } = useConnection();
+    const { signTransaction } = useWallet();
 
     const { mainChannel } = useWsContext();
 
@@ -185,6 +192,8 @@ export function AppContextProvider(props: { children: any }) {
             setCurrentModal,
             wallet: {} as Wallet,
             game: gameState,
+
+            connection, signTransaction
         };
     }, [
         publicKey, connected, authToken,

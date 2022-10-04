@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 import { ChatInfo, MsgType } from "./interfaces/msg";
 import { GameType } from "./interfaces/game";
 import { GameState } from "./components/state/game";
+import { BetObject } from "./interfaces/Bet";
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -51,6 +52,11 @@ export function handleApiError(e: any, handler: any) {
     }
 }
 
+export interface BetArgs {
+    game_uid : string 
+    signatures : string[]
+    mints : string[]
+}
 
 class Api {
 
@@ -117,6 +123,21 @@ class Api {
         }
     }
 
+    async bet(args: BetArgs): Promise<BetObject> {
+        try {
+
+            let result = await this.sendRequest(
+                "post",
+                `user/bet`,
+                args,
+            );
+
+            return result.bet as BetObject;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     async game(): Promise<GameState> {
 
         try {
@@ -171,15 +192,7 @@ class Api {
 
 
     async calc_bet_map(mintsMap: any): Promise<number> {
-
-        let array = [];
-
-        for (var i in mintsMap) {
-            array.push(i);
-        }
-
-        return this.calc_bet(array)
-
+        return this.calc_bet(mapToArray(mintsMap))
     }
 
     async calc_bet(mints: string[]): Promise<number> {
@@ -251,6 +264,15 @@ export interface OakRaidRequest {
     tx_sig: string,
     claim_time: number,
     is_over: boolean
+}
+
+export function mapToArray(mintsMap: any): any[] {
+    let array = [];
+
+    for (var i in mintsMap) {
+        array.push(i);
+    }
+    return array;
 }
 
 export default Api;

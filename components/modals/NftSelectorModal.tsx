@@ -1,18 +1,20 @@
-import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box, Flex } from "@chakra-ui/react"
+import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box, Flex, useTabList, SliderProvider } from "@chakra-ui/react"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { AppContextType, useApp } from "../AppContext"
 import { toast } from 'react-toastify'
-import { UserType } from "../../interfaces/user"
 import { useStyle } from "../StyleContext"
 import { Button } from "../override/Button"
 import EmptyRow from "../nft/emptyrow"
 import { WalletAdapter } from "@solana/wallet-adapter-base"
 import NftsSelector from "../nft/nftselector"
 import Nft from "../../interfaces/nft"
-import { useWallet } from "@solana/wallet-adapter-react"
+import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
-import { handleApiError } from "../../api"
+import { BetArgs, handleApiError, mapToArray } from "../../api"
+import { PublicKey, Transaction, TransactionBlockhashCtor } from "@solana/web3.js"
+import { getAssociatedTokenAddressSync, createTransferInstruction, createAssociatedTokenAccountInstruction } from "@solana/spl-token"
+import bs58 from "bs58"
 
 export default function NftSelectorModal() {
 
@@ -117,22 +119,88 @@ export default function NftSelectorModal() {
 
 async function betSelectedItems(
     wallet: WalletAdapter,
-    app : AppContextType,
+    app: AppContextType,
     // solanaConnection: SolanaRpc,
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
 
-    const { api } = app;
+    const { api, game, currentWallet, connection, signTransaction } = app;
+
+    const mints = mapToArray(selectedItems);
+
+    // generate tx 
+    const escrowPk = new PublicKey(game.game.escrow);
+
+    let ixs = [];
+
+    for (let mint of mints) {
+
+        const mintObject = new PublicKey(mint);
+        const sourceAssoc = getAssociatedTokenAddressSync(mintObject, currentWallet)
+        const destAssoc = getAssociatedTokenAddressSync(mintObject, escrowPk)
+
+        const destCreateIx = createAssociatedTokenAccountInstruction(currentWallet, destAssoc, escrowPk, mintObject);
+        ixs.push(destCreateIx);
+
+        const transferIx = createTransferInstruction(sourceAssoc, destAssoc, currentWallet, 1);
+        ixs.push(transferIx);
+    }
+
+    connection.getLatestBlockhash().then(bh => {
+        const txInitArgs: TransactionBlockhashCtor = {
+            blockhash: bh.blockhash,
+            lastValidBlockHeight: bh.lastValidBlockHeight,
+            feePayer: currentWallet,
+        }
+        const tx = new Transaction(txInitArgs)
+        tx.add(...ixs)
+
+        signTransaction(tx).then(signed => {
+            const sigStr = bs58.encode(signed.signatures[0].signature)
+
+            const serializedTx = tx.serialize()
+            const serializedTxString = serializedTx.toString('base64')
+
+            const betArgs: BetArgs = {
+                signatures: [sigStr],
+                mints: mints,
+                game_uid: game.game.uid
+            }
+
+            api.bet(betArgs).then((response) => {
+
+                connection.sendEncodedTransaction(serializedTxString).then(sig => {
+                    console.log("tx sent : ", sig)
+                }).catch(e => {
+                    toast.warn("unable to send transaction, try again later")
+                })
+
+            }).catch(e => {
+                handleApiError(e, (code, msg) => {
+                    toast.error("unable to bet: " + msg)
+                })
+            })
+
+        }).catch(e => {
+            toast.warn('unable to sign a transaction',)
+        })
+
+    }).catch(e => {
+        toast.warn("solana rpc error. try again later")
+    })
+
+
+
 
     api.calc_bet_map(selectedItems).then((totalValue) => {
         toast.success(`total bet value is ${totalValue}`)
     }).catch(e => {
         handleApiError(e, (code: Number, msg: string) => {
-            toast.error('unable to calc bet value: '+msg)
+            toast.error('unable to calc bet value: ' + msg)
         })
     })
 
-    return ;
+    return;
 
     // let instructions = [] as TransactionInstruction[];
 

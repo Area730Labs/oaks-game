@@ -119,8 +119,8 @@ export function Chat() {
                 height="calc(100vh - 130px)"
                 overflowY="scroll"
             >
-                {history ? history.map((it) => {
-                    return <ChatMessage message={it} />
+                {history ? history.map((it, index) => {
+                    return <ChatMessage key={index} message={it} />
                 }) : null}
                 <div ref={(el) => {
                     messagesEnd = el

@@ -18,8 +18,8 @@ export function BetsHistory() {
             flexDirection="column"
             overflowY="scroll"
         >
-            {bets.map(it => {
-                return <Bet item={it}></Bet>
+            {bets.map((it, index) => {
+                return <Bet key={index} item={it}></Bet>
             })}
         </Box>
     </Box>

@@ -22,7 +22,7 @@ function BetNftImage(props: { item: NftInfo, key: any}) {
     </Box>
 }
 
-export function Bet(props: { item: BetObject }) {
+export function Bet(props: { item: BetObject, key: any }) {
 
     const { styles } = useStyle();
     const { currentWallet, betsTotalSol } = useApp()

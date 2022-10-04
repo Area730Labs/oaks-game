@@ -8,6 +8,7 @@ import { AuthArgs } from "./interfaces/auth";
 import { UserType } from "./interfaces/user";
 
 import {toast} from "react-toastify"
+import { MsgType } from "./interfaces/msg";
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -97,7 +98,23 @@ class Api {
         }
     }
 
-    async sendMessage(msg: string): Promise<UserType> {
+    async chat(msg: string): Promise<MsgType[]> {
+
+        try {
+
+            let result = await this.sendRequest(
+                "get",
+                `chat`,
+                {},
+            );
+
+            return result.history as MsgType[];
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async sendMessage(msg: string): Promise<MsgType> {
 
         try {
 
@@ -110,7 +127,7 @@ class Api {
                 true
             );
 
-            return result.user as UserType;
+            return result.message as MsgType;
         } catch (e) {
             throw e;
         }

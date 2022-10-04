@@ -1,11 +1,12 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Input, Toast } from "@chakra-ui/react";
 import { useState } from "react";
 import { ChatMessage } from "./ChatMessage";
 import { useStyle } from "./StyleContext";
 
 import { SendImg } from "./Icons";
-import {useChat } from "./ChatContext";
+import { useChat } from "./ChatContext";
 import { useApp } from "./AppContext";
+import { toast } from "react-toastify"
 
 const sendBtnSize = "30px";
 
@@ -13,7 +14,7 @@ function ChatInput() {
 
     const { styles } = useStyle();
 
-    const {api} = useApp();
+    const { api } = useApp();
 
     const [message, setMessage] = useState("");
 
@@ -22,13 +23,18 @@ function ChatInput() {
     }
 
     function sendMessageHandler(msg: string) {
-        api.sendMessage(msg)
+
+        if (!api.hasAuth()) {
+            toast.warn('connect wallet first');
+        } else {
+            api.sendMessage(msg)
+            setMessage("")
+        }
     }
 
     const inputHandler = (e: any) => {
         if (e.key == "Enter") {
             sendMessageHandler(message);
-            setMessage("")
         }
     }
 
@@ -85,23 +91,23 @@ export function Chat() {
     const { history } = useChat();
 
     return <>
+        <Box
+            display="flex"
+            flexDirection="column"
+        >
             <Box
+                flexGrow="1"
                 display="flex"
                 flexDirection="column"
+                // height={"100vh"}
+                height="calc(100vh - 130px)"
+                overflowY="scroll"
             >
-                <Box
-                    flexGrow="1"
-                    display="flex"
-                    flexDirection="column"
-                    // height={"100vh"}
-                    height="calc(100vh - 130px)"
-                    overflowY="scroll"
-                >
-                    {history ? history.map((it) => {
-                        return <ChatMessage message={it} />
-                    }) : null}
-                </Box>
-                <ChatInput />
+                {history ? history.map((it) => {
+                    return <ChatMessage message={it} />
+                }) : null}
             </Box>
+            <ChatInput />
+        </Box>
     </>
 }

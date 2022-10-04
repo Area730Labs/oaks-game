@@ -84,16 +84,19 @@ export default function NftSelectorModal() {
                 <ModalContent
                     backgroundColor={styles.chat_even}
                     color={styles.color}
+                    height="95vh"
+                    overflow="auto"
                 >
                     <ModalHeader>
                         <Button variant="info" onClick={forceReloadNfts}> <RepeatIcon /> </Button>
                         NFT in your wallet
                     </ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody pb={12} alignItems="center">
+                    <ModalBody pb={12} alignItems="center" >
                         {loading ?
                             <>
                                 <Box position="relative">
+                                    <Text textAlign="center">Loading ...</Text>
                                     <EmptyRow skeleton={true}></EmptyRow>
                                 </Box>
                             </> : nftSelectorContent}

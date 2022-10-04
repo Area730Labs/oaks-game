@@ -192,7 +192,7 @@ export function AppContextProvider(props: { children: any }) {
             setAuthToken("")
         }
 
-    }, [connected, publicKey, apiHandler,forceAuthCounter])
+    }, [connected, publicKey,forceAuthCounter])
 
     const memoed: AppContextType = React.useMemo(function () {
 

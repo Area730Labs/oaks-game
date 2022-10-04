@@ -122,17 +122,26 @@ export default function NftsSelector(props: NftsSelectorProps) {
             alignSelf="stretch"
             color="black"
             p="4"
-            borderRadius={styles.borderRadiusPx + "px"}>
+            borderRadius={styles.borderRadiusPx + "px"}
+            justifyItems="center"
+            textAlign="center"
+        >
 
-            <Button onClick={performActionWithSelectedItems}>{action_label} <Box
-                display="inline"
-                right="-15px"
-                top="-15px"
-                p="1"
-                px="2.5"
-                width="8"
-                backgroundColor={styles.chatSendBtn}
-            >{selectedItemsCount}</Box>
+
+            <Button onClick={performActionWithSelectedItems}>
+                {action_label}
+                <Box
+                    display="inline"
+                    right="-15px"
+                    top="-15px"
+                    marginLeft="10px"
+                    p="1"
+                    px="2.5"
+                    borderRadius={"99px"}
+                    width="8"
+                    backgroundColor={styles.chat_even}
+                >{selectedItemsCount}
+                </Box>
             </Button>
         </Fadeable>
         <NftSelectorGrid>

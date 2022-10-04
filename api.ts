@@ -1,14 +1,11 @@
-import { Toast } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
 import axios from "axios";
-import { timeStamp } from "console";
-import { MissingStaticPage } from "next/dist/shared/lib/utils";
 import GlobalConfig from "./config";
 import { AuthArgs } from "./interfaces/auth";
 import { UserType } from "./interfaces/user";
 
 import {toast} from "react-toastify"
-import { MsgType } from "./interfaces/msg";
+import { ChatInfo, MsgType } from "./interfaces/msg";
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -98,7 +95,7 @@ class Api {
         }
     }
 
-    async chat(msg: string): Promise<MsgType[]> {
+    async chat(): Promise<ChatInfo> {
 
         try {
 
@@ -108,7 +105,7 @@ class Api {
                 {},
             );
 
-            return result.history as MsgType[];
+            return result as ChatInfo;
         } catch (e) {
             throw e;
         }

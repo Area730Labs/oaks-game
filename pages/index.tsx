@@ -13,6 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 import 'react-toastify/dist/ReactToastify.css';
+import { WsContextProvider } from '../components/WsContext'
 
 const Home: NextPage = () => {
 
@@ -28,15 +29,17 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <ToastContainer position='bottom-right' theme="dark"/>
+      <ToastContainer position='bottom-right' theme="dark" />
       <ChakraProvider>
         <StyleContextProvider>
           <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={wallets} autoConnect={true}>
               <WalletModalProvider>
-                <AppContextProvider>
-                  <MainPage></MainPage>
-                </AppContextProvider>
+                <WsContextProvider>
+                  <AppContextProvider>
+                    <MainPage></MainPage>
+                  </AppContextProvider>
+                </WsContextProvider>
               </WalletModalProvider>
             </WalletProvider>
           </ConnectionProvider>

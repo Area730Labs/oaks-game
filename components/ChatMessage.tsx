@@ -1,11 +1,19 @@
 import { Box } from "@chakra-ui/react";
-import { ChatMessageObject } from "../interfaces/ChatMessage";
+import { useMemo } from "react";
+import { MsgType } from "../interfaces/msg";
+import { useChat } from "./ChatContext";
 import { useStyle } from "./StyleContext";
 import { Username } from "./Username";
 
-export function ChatMessage(props: {message: ChatMessageObject}) {
+export function ChatMessage(props: {message: MsgType}) {
 
     const {styles} = useStyle();
+    const {usernames} = useChat();
+
+    const username = useMemo(() => {
+        return usernames[props.message.sender]
+    },[usernames])
+
 
     return <Box
             padding="15px 10px"
@@ -16,12 +24,12 @@ export function ChatMessage(props: {message: ChatMessageObject}) {
                 backgroundColor: styles.chat_even
             }}
         >
-        <Username>{props.message.username}</Username>
+        <Username>{username}</Username>
         <Box
             fontSize="10px"
             width="95%"
         >
-            {props.message.body}
+            {props.message.contents}
         </Box>
     </Box>
 }

@@ -1,12 +1,12 @@
 import { Box, Input, Toast } from "@chakra-ui/react";
 import { useState } from "react";
-import { ChatMessage } from "./ChatMessage";
 import { useStyle } from "./StyleContext";
 
 import { SendImg } from "./Icons";
 import { useChat } from "./ChatContext";
 import { useApp } from "./AppContext";
 import { toast } from "react-toastify"
+import { ChatMessage } from "./ChatMessage";
 
 const sendBtnSize = "30px";
 

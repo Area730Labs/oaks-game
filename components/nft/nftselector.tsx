@@ -35,7 +35,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
 
     const app = useApp();
 
-    const { currentWallet, wallet, api } = app;
+    const { currentWallet, wallet, api, game } = app;
     const { styles } = useStyle();
 
     const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: boolean }>({});
@@ -74,8 +74,8 @@ export default function NftsSelector(props: NftsSelectorProps) {
     }
 
     const winChance = useMemo(() => {
-        return 0;
-    }, [betValue]);
+        return betValue / (game.game.total_floor_value + betValue) * 0.99;
+    }, [betValue, game.game.total_floor_value]);
 
     function performActionWithSelectedItems() {
         props.actionHandler(wallet.adapter, app, selectedItems).then((signature) => {

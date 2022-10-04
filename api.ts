@@ -33,19 +33,19 @@ export function handleApiError(e: any, handler: any) {
 
     console.log('api error is ', e)
 
-    const errorStatus = e.response.status;
-    if (errorStatus != 400) {
-        try {
+    try {
+        const errorStatus = e.response.status;
+        if (errorStatus != 400) {
             const errorCode = e.response.data.code;
             const msg = e.response.data.msg
 
             handler(errorCode, msg);
-        } catch (ee) {
-            toast.warn("looks like api server is down. try again later")
+        } else {
+            console.log("got an error ", e)
+            toast.warn("something goes wrong, reload page")
         }
-    } else {
-        console.log("got an error ", e)
-        toast.warn("something goes wrong, reload page")
+    } catch (ee) {
+        toast.warn("looks like api server is down. try again later")
     }
 }
 
@@ -151,7 +151,7 @@ class Api {
         }
     }
 
-    async calc_bet(mints : string[]): Promise<number> {
+    async calc_bet(mints: string[]): Promise<number> {
 
         try {
 

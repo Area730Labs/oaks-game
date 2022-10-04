@@ -1,4 +1,4 @@
-import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box } from "@chakra-ui/react"
+import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box, Flex } from "@chakra-ui/react"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
@@ -88,8 +88,14 @@ export default function NftSelectorModal() {
                     overflow="auto"
                 >
                     <ModalHeader>
-                        <Button variant="info" onClick={forceReloadNfts}> <RepeatIcon /> </Button>
-                        NFT in your wallet
+                        <Flex alignItems="center">
+                            <Button variant="info" onClick={forceReloadNfts}> <RepeatIcon /> </Button>
+                            <Flex direction="column">
+                                <Text>NFT in your wallet</Text>
+                                <Text fontSize={"10px"}>{currentWallet?.toBase58()}</Text>
+                            </Flex>
+                        </Flex>
+
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={12} alignItems="center" >

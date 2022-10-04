@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
 import { PublicKey } from "@solana/web3.js"
 import { useWallet, WalletContextState } from "@solana/wallet-adapter-react"
-import Api from "../api";
+import Api, { handleApiError } from "../api";
 import { AuthArgs } from "../interfaces/auth";
 import { v4 as uuidv4 } from 'uuid';
 import bs58 from "bs58";
@@ -123,6 +123,8 @@ export function AppContextProvider(props: { children: any }) {
 
     const [currentModal, setCurrentModal] = useState<string>("");
 
+    const [forceAuthCounter, setForceAuthCounter] = useState<number>(0);
+
     useEffect(() => {
         if (connected) {
             setApiHandler(new Api(publicKey, getAuthToken(publicKey)))
@@ -142,11 +144,21 @@ export function AppContextProvider(props: { children: any }) {
         if (apiHandler.hasAuth()) {
             apiHandler.me().then((userinfo) => {
                 setUser(userinfo);
+            }).catch(e => {
+                handleApiError(e, (code: number, msg: string) => {
+                    // token expired or not found
+                    if (code == 41 || code == 42) {
+                        lsSetAuthToken(publicKey as PublicKey, "");
+                        setForceAuthCounter(forceAuthCounter+1)
+                    } else {
+                        toast.warn(`auth problem: ${msg}`)
+                    }
+                })
             })
         } else {
             setUser(null);
         }
-    }, [apiHandler])
+    }, [apiHandler,forceAuthCounter,setForceAuthCounter])
 
     useEffect(() => {
 
@@ -161,24 +173,22 @@ export function AppContextProvider(props: { children: any }) {
                     const localApi = new Api(publicKey, null);
 
                     localApi.auth(args).then((authResponse) => {
-
                         // update token in lcoal storage
                         lsSetAuthToken(publicKey as PublicKey, authResponse.session);
-
                         setAuthToken(authResponse.session);
                     }).catch((e) => {
                         console.error('auth error :', e)
                     });
 
                 }).catch((e) => { // user rejected auth
-                    alert('user rejected authorization')
+                    toast.info('auth rejected')
                 })
             }
         } else {
             setAuthToken("")
         }
 
-    }, [connected, publicKey, apiHandler])
+    }, [connected, publicKey, apiHandler,forceAuthCounter])
 
     const memoed: AppContextType = React.useMemo(function () {
 

@@ -5,12 +5,15 @@ import { useStyle } from "./StyleContext";
 
 import { SendImg } from "./Icons";
 import {useChat } from "./ChatContext";
+import { useApp } from "./AppContext";
 
 const sendBtnSize = "30px";
 
 function ChatInput() {
 
     const { styles } = useStyle();
+
+    const {api} = useApp();
 
     const [message, setMessage] = useState("");
 
@@ -19,7 +22,7 @@ function ChatInput() {
     }
 
     function sendMessageHandler(msg: string) {
-        alert("sending a message " + message)
+        api.sendMessage(msg)
     }
 
     const inputHandler = (e: any) => {

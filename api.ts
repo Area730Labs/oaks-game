@@ -1,9 +1,13 @@
+import { Toast } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { timeStamp } from "console";
+import { MissingStaticPage } from "next/dist/shared/lib/utils";
 import GlobalConfig from "./config";
 import { AuthArgs } from "./interfaces/auth";
 import { UserType } from "./interfaces/user";
+
+import {toast} from "react-toastify"
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -27,6 +31,21 @@ export interface SdkProject {
     address: string,
 }
 
+export function handleApiError(e: any, handler: any) {
+    const errorStatus = e.response.status;
+    if (errorStatus != 400) {
+
+        const errorCode = e.response.data.code;
+        const msg = e.response.data.msg
+
+        handler(errorCode, msg);
+    } else {
+        console.log("got an error ",e)
+        toast.warn("something goes wrong, reload page")
+    }
+}
+
+
 class Api {
 
     private host: string = GlobalConfig.apiBaseUrl;
@@ -38,9 +57,9 @@ class Api {
         this.key = key
     }
 
-    hasAuth() : boolean {
+    hasAuth(): boolean {
 
-        console.log("has auth : ",this.authToken)
+        console.log("has auth : ", this.authToken)
 
         return this.authToken != null && this.authToken != ""
     }
@@ -78,8 +97,27 @@ class Api {
         }
     }
 
+    async sendMessage(msg: string): Promise<UserType> {
 
-    async update(user : UserType): Promise<UserType> {
+        try {
+
+            let result = await this.sendRequest(
+                "post",
+                `chat/send`,
+                {
+                    msg: msg
+                },
+                true
+            );
+
+            return result.user as UserType;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+
+    async update(user: UserType): Promise<UserType> {
 
         try {
 
@@ -113,22 +151,19 @@ class Api {
             };
         }
 
-        try {
-            let response_result = await axios.request({
-                method: rm,
-                url: url,
-                data: args,
-                headers: headersConstructed
-            })
+        let response_result = await axios.request({
+            method: rm,
+            url: url,
+            data: args,
+            headers: headersConstructed
+        });
 
-            if (response_result.data != null) {
-                return response_result.data;
-            } else {
-                throw new Error("no response data were found");
-            }
-        } catch (e) {
-            throw e;
+        if (response_result.data != null) {
+            return response_result.data;
+        } else {
+            throw new Error("no response data were found");
         }
+
     }
 
 

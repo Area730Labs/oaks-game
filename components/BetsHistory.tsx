@@ -5,9 +5,9 @@ import { useStyle } from "./StyleContext";
 
 export function BetsHistory() {
 
-    const { bets } = useApp();
-    const {styles} = useStyle();
-    
+    const { game } = useApp();
+    const { styles } = useStyle();
+
     return <Box
         display="flex"
         flexDirection="column"
@@ -18,7 +18,7 @@ export function BetsHistory() {
             flexDirection="column"
             overflowY="scroll"
         >
-            {bets.map(it => {
+            {game.bets.map(it => {
                 return <Bet item={it}></Bet>
             })}
         </Box>

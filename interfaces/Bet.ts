@@ -1,9 +1,9 @@
-import { NftInfo } from "./NftInfo";
+import Nft from "./nft";
 import { UserObject } from "./UserObject";
 
 export interface BetObject {
     user : UserObject
-    createdAt: number,
-    solSum: number,
-    nfts: NftInfo[],
+    created_at: number,
+    value: number,
+    nfts: Nft[],
 }

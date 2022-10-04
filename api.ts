@@ -6,6 +6,7 @@ import { UserType } from "./interfaces/user";
 
 import { toast } from "react-toastify"
 import { ChatInfo, MsgType } from "./interfaces/msg";
+import { GameType } from "./interfaces/game";
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -115,6 +116,23 @@ class Api {
         }
     }
 
+
+    async game(): Promise<GameType> {
+
+        try {
+
+            let result = await this.sendRequest(
+                "get",
+                `game`,
+                {},
+            );
+
+            return result.game as GameType;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     async sendMessage(msg: string): Promise<MsgType> {
 
         try {
@@ -152,7 +170,7 @@ class Api {
     }
 
 
-    async calc_bet_map(mintsMap : any) : Promise<number> {
+    async calc_bet_map(mintsMap: any): Promise<number> {
 
         let array = [];
 

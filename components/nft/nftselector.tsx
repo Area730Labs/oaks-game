@@ -155,7 +155,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
                     {upadtingValue ? <Spinner /> :
                         (roundNumber(winChance * 100, 3))}%
                 </Box>
-                <Flex direction="column" fontSize="12px" textAlign="left">
+                <Flex direction="column" fontSize="12px" textAlign="left" flexGrow="1">
                     <Text>
                         Win
                     </Text>
@@ -165,7 +165,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
                 </Flex>
                 <Button
                     display="flex"
-                    alignSelf="flex-end"
+                    justifySelf="flex-end"
                     onClick={performActionWithSelectedItems}>
                     {action_label}
                     <Box

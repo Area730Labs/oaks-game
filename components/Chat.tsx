@@ -119,9 +119,16 @@ export function Chat() {
                 // height={"100vh"}
                 height="calc(100vh - 130px)"
                 overflowY="scroll"
+                sx={{
+                    "::-webkit-scrollbar": {
+                      display: "none",
+                    },
+                  }}
             >
+
                 {history ? history.map((it) => {
                     return <ChatMessage key={it.created_at + it.sender} message={it} />
+
                 }) : null}
                 <div ref={(el) => {
                     messagesEnd = el

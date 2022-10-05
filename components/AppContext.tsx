@@ -30,6 +30,7 @@ export interface AppContextType {
 
 }
 
+
 const AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX = "auth_token_";
 const ContextValue = React.createContext<AppContextType>({} as AppContextType);
 

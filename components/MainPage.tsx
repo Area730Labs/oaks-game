@@ -12,12 +12,15 @@ import { useApp } from './AppContext';
 import { useReducer } from 'react';
 import { useTimer } from 'react-timer-hook';
 import { PublicKey } from '@solana/web3.js';
+import WinnerDialog from './modals/WinnerDialog';
+
 
 export function MainPage() {
     //@ts-ignore
     const [animation, setAnimation] = useState(null);
     const { styles, toggleTheme } = useStyle()
     const {game: {players, game}, currentWallet} = useApp();
+    const { currentModal, api, setCurrentModal } = useApp();
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [winnerAnimOverTime, setWinnerAnimOverTime] = useState(0);
 
@@ -209,13 +212,6 @@ export function MainPage() {
 
             setWinnerAnimOverTime(Date.now() + 5000);
 
-            setTimeout(() => {
-                const winnerId = game.winner;
-                let youWon = winnerId && (new PublicKey(winnerId)) == currentWallet;
-                if (youWon) {
-                    alert('Congrats! You won!');
-                }
-            }, Date.now() + 5000);
 
             setLastState(gState);
         }
@@ -229,7 +225,8 @@ export function MainPage() {
                 setAnimation(null);
 
                 if (youWon) {
-                    alert('Your prize should be already in your wallet!');
+                    setCurrentModal("winnerdialog");
+                    // alert('Your prize should be already in your wallet!');
                 }
                
             } else {
@@ -250,6 +247,7 @@ export function MainPage() {
 
     return (<>
         <UserModal />
+        <WinnerDialog />
         <NftSelectorModal/>
         <Box position="relative" backgroundColor={styles.bg}>
             <Box

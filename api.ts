@@ -130,6 +130,7 @@ class Api {
                 "post",
                 `user/bet`,
                 args,
+                true
             );
 
             return result.bet as BetObject;

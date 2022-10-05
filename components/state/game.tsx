@@ -41,7 +41,7 @@ export function reduce(state: GameState, action: StateAction): GameState {
             const betUid = action.data.bet
             const subAction = action.data.status
 
-            if (subAction != 'rollback') {
+            if (subAction == 'rollback') {
                 // 
                 let newBets = [];
                 for (let it of newState.bets) {

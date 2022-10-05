@@ -185,7 +185,7 @@ export function AppContextProvider(props: { children: any }) {
         } else {
             setUser(null);
         }
-    }, [apiHandler, forceAuthCounter, setForceAuthCounter])
+    }, [apiHandler, forceAuthCounter])
 
     useEffect(() => {
 

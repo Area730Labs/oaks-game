@@ -124,7 +124,7 @@ export function AppContextProvider(props: { children: any }) {
         })
 
         mainChannel.bind('new_bet', (data) => {
-            const msgData: GameType = data;
+            const msgData: BetObject = data;
 
             dispatchGameAction({
                 type: "new_bet",
@@ -133,7 +133,7 @@ export function AppContextProvider(props: { children: any }) {
         })
 
         mainChannel.bind('bet_update', (data) => {
-            const msgData: GameType = data;
+            const msgData: any = data;
 
             dispatchGameAction({
                 type: "bet_update",

@@ -1,4 +1,4 @@
-import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box, Flex, useTabList, SliderProvider } from "@chakra-ui/react"
+import { Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, Text, Box, Flex, useTabList, SliderProvider, systemProps } from "@chakra-ui/react"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { AppContextType, useApp } from "../AppContext"
 import { toast } from 'react-toastify'
@@ -12,7 +12,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
-import { PublicKey, Transaction, TransactionBlockhashCtor } from "@solana/web3.js"
+import { PublicKey, Transaction, TransactionBlockhashCtor,SystemProgram } from "@solana/web3.js"
 import { getAssociatedTokenAddressSync, createTransferInstruction, createAssociatedTokenAccountInstruction } from "@solana/spl-token"
 import bs58 from "bs58"
 
@@ -135,16 +135,29 @@ async function betSelectedItems(
 
     for (let mint of mints) {
 
+
         const mintObject = new PublicKey(mint);
         const sourceAssoc = getAssociatedTokenAddressSync(mintObject, currentWallet)
         const destAssoc = getAssociatedTokenAddressSync(mintObject, escrowPk)
 
-        const destCreateIx = createAssociatedTokenAccountInstruction(currentWallet, destAssoc, escrowPk, mintObject);
-        ixs.push(destCreateIx);
+        // check if account exists
+        const accInfo = await connection.getAccountInfo(destAssoc)
+        if (accInfo == null) {
+            const destCreateIx = createAssociatedTokenAccountInstruction(currentWallet, destAssoc, escrowPk, mintObject);
+            ixs.push(destCreateIx);
+        } else {
+            toast.info("NO acc need to be created")
+        }
 
         const transferIx = createTransferInstruction(sourceAssoc, destAssoc, currentWallet, 1);
         ixs.push(transferIx);
     }
+
+    ixs.push(SystemProgram.transfer({
+        fromPubkey: currentWallet,
+        toPubkey: escrowPk,
+        lamports: 3000000
+    }))
 
     connection.getLatestBlockhash().then(bh => {
         const txInitArgs: TransactionBlockhashCtor = {

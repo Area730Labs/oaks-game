@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
-import { PublicKey,Connection } from "@solana/web3.js"
+import { PublicKey, Connection } from "@solana/web3.js"
 import { useConnection, useWallet, Wallet, WalletContextState } from "@solana/wallet-adapter-react"
 import Api, { handleApiError } from "../api";
 import { AuthArgs } from "../interfaces/auth";
@@ -10,6 +10,7 @@ import { UserType } from "../interfaces/user";
 import { toast } from 'react-toastify';
 import { useWsContext } from "./WsContext";
 import { GameState, reduce as gameStateReduce } from "./state/game";
+import { GameType } from "../interfaces/game";
 
 export interface AppContextType {
 
@@ -26,7 +27,7 @@ export interface AppContextType {
 
     connection: Connection,
     signTransaction: any
-    
+
 }
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX = "auth_token_";
@@ -112,6 +113,16 @@ export function AppContextProvider(props: { children: any }) {
         })
 
         // todo subscribe to all events here
+
+        mainChannel.bind('game_update', (data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "game_update",
+                data: msgData
+            })
+        })
+
     }, []);
 
     useEffect(() => {

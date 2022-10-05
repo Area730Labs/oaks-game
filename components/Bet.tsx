@@ -9,24 +9,31 @@ import { Metaplex } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 
 
-const connection = new Connection(clusterApiUrl("mainnet-beta"));
-const metaplex = new Metaplex(connection);
+
 
 
 function BetNftImage(props: { item: Nft, key: any}) {
-    const [img, setImg] = useState('https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=');
+    const [img, setImg] = useState('/icons/holder.jpeg');
     useEffect(() => {
         const getImg = async() => {
-            if (!props.item || !props.item.address){
+            if (!props || !props.item || !props.item.address){
                 return;
             }
 
-            const mintAddress = new PublicKey(props.item.address);
-            const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+        //    try {
+        //     // const connection = new Connection(clusterApiUrl("mainnet-beta"));
+        //     const connection = new Connection('https://snowy-lively-snowflake.solana-mainnet.quiknode.pro/3c545fb3fa56c585512c81b6cf190db3d02df68b/');
+        //     const metaplex = new Metaplex(connection);
 
-            const imgUrl = (await (await fetch(nft.uri)).json()).image;
+        //     const mintAddress = new PublicKey(props.item.address);
+        //     const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+
+        //     const imgUrl = (await (await fetch(nft.uri)).json()).image;
         
-            setImg(imgUrl);
+        //     setImg(imgUrl);
+        //    } catch(e) {
+        //     console.error(e);
+        //    }
         };
 
         getImg();

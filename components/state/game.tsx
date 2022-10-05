@@ -36,40 +36,6 @@ export function reduce(state: GameState, action: StateAction): GameState {
             break;
         }
 
-        case 'update_player': {
-
-            const playerPubkey = action.data.bet
-            const value = action.data.player
-
-            let found = false;
-
-            let players = [];
-            for (let it of newState.players) {
-                if (it.pubkey == playerPubkey) {
-
-                    found = true;
-
-                    it.bets += 1
-                    it.nfts += value.nfts
-                    it.sol_lamports += value.sol_lamports
-                    it.total_value += value.total_value
-
-                    players.push(value);
-                } else {
-                    players.push(it);
-                }
-            }
-
-            if (!found) {
-                players.push(value);
-            }
-
-
-            newState.players = players
-
-            break;
-        }
-
         case 'bet_update': {
 
             const betUid = action.data.bet
@@ -85,6 +51,49 @@ export function reduce(state: GameState, action: StateAction): GameState {
                 }
 
                 newState.bets = newBets
+            } else {
+
+                // confirmed
+                // update players
+
+                for (let it of newState.bets) {
+                    if (it.uid == betUid) {
+
+                        let found = false;
+
+                        let players: PlayerType[] = [];
+
+                        for (let userIt of newState.players) {
+                            if (userIt.pubkey == it.user.wallet) {
+
+                                found = true;
+
+                                userIt.bets += 1
+                                userIt.nfts += it.nfts.length
+                                userIt.sol_lamports += 0
+                                userIt.total_value += it.value
+
+                                players.push(userIt);
+                            } else {
+                                players.push(userIt);
+                            }
+                        }
+
+                        if (!found) {
+                            players.push({
+                                bets: 1,
+                                nfts: it.nfts.length,
+                                sol_lamports: 0,
+                                total_value: it.value,
+                                pubkey: it.user.wallet
+                            });
+                        }
+
+                        newState.players = players
+
+                        break;
+                    }
+                }
             }
 
             break;

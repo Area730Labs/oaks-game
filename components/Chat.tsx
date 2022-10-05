@@ -23,15 +23,16 @@ function ChatInput() {
         setMessage(e.target.value);
     }
 
-    const {setVisible} = useWalletModal();
-    
+    const { setVisible } = useWalletModal();
+
     function sendMessageHandler(msg: string) {
 
         if (!api.hasAuth()) {
             setVisible(true);
         } else {
-            api.sendMessage(msg)
-            setMessage("")
+            api.sendMessage(msg).then(() => {
+                setMessage("")
+            })
         }
     }
 
@@ -124,8 +125,10 @@ export function Chat() {
                     },
                   }}
             >
-                {history ? history.map((it, index) => {
-                    return <ChatMessage key={index} message={it} />
+
+                {history ? history.map((it) => {
+                    return <ChatMessage key={it.created_at + it.sender} message={it} />
+
                 }) : null}
                 <div ref={(el) => {
                     messagesEnd = el

@@ -1,13 +1,13 @@
 import { Box, Flex, Text, Img } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { BetObject } from "../interfaces/Bet";
-import { NftInfo } from "../interfaces/NftInfo";
+import Nft from "../interfaces/nft";
 import { useApp } from "./AppContext";
 import { useStyle } from "./StyleContext";
 import { Username } from "./Username";
 
-function BetNftImage(props: { item: NftInfo, key: any}) {
 
+function BetNftImage(props: { item: NftInfo, key: any}) {
     return <Box
         width="70px"
         height="70px"
@@ -25,7 +25,7 @@ function BetNftImage(props: { item: NftInfo, key: any}) {
 export function Bet(props: { item: BetObject, key: any }) {
 
     const { styles } = useStyle();
-    const { currentWallet, betsTotalSol } = useApp()
+    const { currentWallet, game } = useApp()
 
     let avatarBorder = "none";
     let currentUser = false;
@@ -34,10 +34,10 @@ export function Bet(props: { item: BetObject, key: any }) {
         currentUser = true;
     }
 
-    const betdepositvalue = `${props.item.nfts.length} NFTs (${props.item.solSum}SOL)`
+    const betdepositvalue = `${props.item.nfts.length} NFTs (${props.item.value}SOL)`
     const chance = useMemo(() => {
-        return (Math.floor((props.item.solSum * 100 / betsTotalSol * 100)) / 100);
-    }, [betsTotalSol])
+        return (Math.floor((props.item.value * 100 / game.game.total_floor_value * 100)) / 100);
+    }, [game.game.total_floor_value])
 
     return <Box>
         <Flex

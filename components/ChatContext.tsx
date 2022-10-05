@@ -38,8 +38,6 @@ export function ChatContextProvider(props: { children: any }) {
 
         api.chat().then((chat) => {
 
-            console.warn('chat info request')
-
             dispatch({
                 type: 'init',
                 data: chat

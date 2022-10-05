@@ -1,10 +1,13 @@
 
 import { Connection, PublicKey } from "@solana/web3.js"
 import * as spl from "@solana/spl-token"
-import { useConnection } from "@solana/wallet-adapter-react";
 import axios from "axios";
 import Nft from "./interfaces/nft";
 import GlobalConfig from "./config";
+
+export function getTokenAccount(owner: PublicKey, mint: PublicKey): PublicKey {
+    return spl.getAssociatedTokenAddressSync(mint, owner)
+}
 
 export async function getAllNfts(connection: Connection, owner: PublicKey): Promise<PublicKey[]> {
 
@@ -77,12 +80,15 @@ async function getNftsPage(wallet: PublicKey, page: number): Promise<QnNftRespon
     return axios
         .post(GlobalConfig.rpc, data, config)
         .then(function (response: any) {
-            console.log('got a response : ', response.data.result)
             return response.data.result as QnNftResponse;
         })
 }
 
 
+export function roundNumber(value: number, decimals: number): number {
+    const mult = Math.pow(10, decimals);
+    return Math.ceil(value * mult) / mult
+}
 
 
 export async function getNftsByUser(wallet: PublicKey): Promise<Nft[]> {
@@ -91,12 +97,12 @@ export async function getNftsByUser(wallet: PublicKey): Promise<Nft[]> {
 
     const firstPageInfo = await getNftsPage(wallet, 1)
 
-    appendToArray(result,firstPageInfo);
+    appendToArray(result, firstPageInfo);
 
     if (firstPageInfo.pageNumber >= 2) {
         for (let i = 2; i <= firstPageInfo.totalPages; i++) {
             const nftsChunk = await getNftsPage(wallet, i);
-            appendToArray(result,nftsChunk);
+            appendToArray(result, nftsChunk);
         }
 
     }

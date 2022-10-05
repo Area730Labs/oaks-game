@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
-import { PublicKey } from "@solana/web3.js"
-import { useWallet, Wallet, WalletContextState } from "@solana/wallet-adapter-react"
+import { PublicKey, Connection } from "@solana/web3.js"
+import { useConnection, useWallet, Wallet, WalletContextState } from "@solana/wallet-adapter-react"
 import Api, { handleApiError } from "../api";
 import { AuthArgs } from "../interfaces/auth";
 import { v4 as uuidv4 } from 'uuid';
@@ -9,10 +9,11 @@ import bs58 from "bs58";
 import { UserType } from "../interfaces/user";
 import { toast } from 'react-toastify';
 import { useWsContext } from "./WsContext";
+import { GameState, reduce as gameStateReduce } from "./state/game";
+import { GameType } from "../interfaces/game";
 
 export interface AppContextType {
-    bets: BetObject[]
-    betsTotalSol: number
+
     authToken: string | null
     currentWallet: PublicKey | null
     wallet: Wallet,
@@ -21,53 +22,14 @@ export interface AppContextType {
     setUser(u: UserType): void
     currentModal: string
     setCurrentModal(name: string): void
+
+    game: GameState
+
+    connection: Connection,
+    signTransaction: any
+
 }
 
-const fakeBets: BetObject[] = [{
-    user: {
-        username: "noah",
-        image: "https://pbs.twimg.com/profile_images/1556384244598964226/S3cx06I2_400x400.jpg",
-        wallet: ""
-    },
-    createdAt: 0,
-    solSum: 30.5,
-    nfts: [
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:640:640:0:0/plain/https%3A%2F%2Fwww.arweave.net%2FUV8webA4YmATkwIAJTGDCizbnQ7CzoWJugu-wExqVRg%3Fext%3Dpng"
-        },
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:400:400:0:0/plain/https://metadata.degods.com/g/1954-dead.png"
-        },
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:400:400:0:0/plain/https%3A%2F%2Fwww.arweave.net%2FGXhG8ElSF3ZkZ2RLaj1Y_3U7FQdFchTfZAsoYDa4RD8%3Fext%3Dpng"
-        },
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:400:400:0:0/plain/https://arweave.net/XuiGPentkPWP8e9iSXTRZxnCAvnTjKHoJfWNUqQgU_o"
-        },
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:400:400:0:0/plain/https%3A%2F%2Fwww.arweave.net%2FGXhG8ElSF3ZkZ2RLaj1Y_3U7FQdFchTfZAsoYDa4RD8%3Fext%3Dpng"
-        },
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:400:400:0:0/plain/https://arweave.net/XuiGPentkPWP8e9iSXTRZxnCAvnTjKHoJfWNUqQgU_o"
-        }
-    ]
-}, {
-    user: {
-        username: "Melon2020",
-        image: "https://pbs.twimg.com/profile_images/1556384244598964226/S3cx06I2_400x400.jpg",
-        wallet: ""
-    },
-    createdAt: 0,
-    solSum: 15.5,
-    nfts: [
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:640:640:0:0/plain/https%3A%2F%2Fwww.arweave.net%2FUV8webA4YmATkwIAJTGDCizbnQ7CzoWJugu-wExqVRg%3Fext%3Dpng"
-        },
-        {
-            image: "https://img-cdn.magiceden.dev/rs:fill:400:400:0:0/plain/https://arweave.net/XuiGPentkPWP8e9iSXTRZxnCAvnTjKHoJfWNUqQgU_o"
-        }
-    ]
-}];
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX = "auth_token_";
 const ContextValue = React.createContext<AppContextType>({} as AppContextType);
@@ -126,8 +88,61 @@ export function AppContextProvider(props: { children: any }) {
     const [currentModal, setCurrentModal] = useState<string>("");
 
     const [forceAuthCounter, setForceAuthCounter] = useState<number>(0);
+    const [gameTotalValue, setGameTotalValue] = useState<number>(0);
 
-    const {mainChannel} = useWsContext();
+    const { connection } = useConnection();
+    const { signTransaction } = useWallet();
+
+    const { mainChannel } = useWsContext();
+
+    const [gameState, dispatchGameAction] = useReducer(gameStateReduce, {
+        bets: [],
+        game: {},
+        updates: 0
+    } as GameState);
+
+    useEffect(() => {
+
+        apiHandler.game().then(gm => {
+            dispatchGameAction({
+                type: "init",
+                data: gm,
+            })
+        }).catch(e => {
+            console.log(e)
+            toast.warn("unable to fetch game info")
+        })
+
+        // todo subscribe to all events here
+
+        mainChannel.bind('game_update', (data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "game_update",
+                data: msgData
+            })
+        })
+
+        mainChannel.bind('new_bet', (data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "new_bet",
+                data: msgData
+            })
+        })
+
+        mainChannel.bind('bet_update', (data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "bet_update",
+                data: msgData
+            })
+        })
+
+    }, []);
 
     useEffect(() => {
         if (connected) {
@@ -153,7 +168,7 @@ export function AppContextProvider(props: { children: any }) {
                     // token expired or not found
                     if (code == 41 || code == 42 || code == 43) {
                         lsSetAuthToken(publicKey as PublicKey, "");
-                        setForceAuthCounter(forceAuthCounter+1)
+                        setForceAuthCounter(forceAuthCounter + 1)
                     } else {
                         toast.warn(`auth problem: ${msg}`)
                     }
@@ -162,7 +177,7 @@ export function AppContextProvider(props: { children: any }) {
         } else {
             setUser(null);
         }
-    }, [apiHandler,forceAuthCounter,setForceAuthCounter])
+    }, [apiHandler, forceAuthCounter])
 
     useEffect(() => {
 
@@ -192,12 +207,11 @@ export function AppContextProvider(props: { children: any }) {
             setAuthToken("")
         }
 
-    }, [connected, publicKey,forceAuthCounter])
+    }, [connected, publicKey, forceAuthCounter])
 
     const memoed: AppContextType = React.useMemo(function () {
 
         return {
-            bets: fakeBets,
             currentWallet: publicKey,
             betsTotalSol: 0.0,
             authorizedWallet: publicKey,
@@ -206,13 +220,18 @@ export function AppContextProvider(props: { children: any }) {
             user, setUser,
             currentModal,
             setCurrentModal,
-            wallet: {} as Wallet 
+            wallet: {} as Wallet,
+            game: gameState,
+
+            connection, signTransaction
         };
     }, [
         publicKey, connected, authToken,
         user, setUser,
         apiHandler,
-        currentModal, setCurrentModal
+        currentModal, setCurrentModal,
+
+        gameState.updates
     ]);
 
     return <ContextValue.Provider value={memoed}>

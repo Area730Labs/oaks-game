@@ -1,5 +1,6 @@
 import { MsgType } from "../../interfaces/msg";
 import { ChatUsersInfo } from "../ChatContext";
+import { StateAction } from "./state";
 
 export interface ChatState {
     history: MsgType[]
@@ -7,13 +8,7 @@ export interface ChatState {
     updates: number
 }
 
-export interface ChatStateAction {
-    type: string,
-    data: any
-}
-
-export function chatStateReducer(state: ChatState, action: ChatStateAction): ChatState {
-
+export function chatStateReducer(state: ChatState, action: StateAction): ChatState {
 
     const newState: ChatState = {
         history: state.history,

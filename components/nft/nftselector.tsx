@@ -25,6 +25,7 @@ export interface NftsSelectorProps {
         (
             wallet: WalletAdapter,
             app: AppContextType,
+            nfts: Nft[],
             // solanaConnection: SolanaRpc,
             selectedItems: { [key: string]: boolean }
         ): Promise<any>
@@ -78,7 +79,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
     }, [betValue, game.game.total_floor_value]);
 
     function performActionWithSelectedItems() {
-        props.actionHandler(wallet.adapter, app, selectedItems).then((signature) => {
+        props.actionHandler(wallet.adapter, app, props.items, selectedItems).then((signature) => {
             // cleanup selection
             setSelectedItemsCount(0);
             setSelectedItems({});

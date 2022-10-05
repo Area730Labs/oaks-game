@@ -7,4 +7,5 @@ export interface BetObject {
     created_at: number,
     value: number,
     nfts: Nft[],
+    confirmed? : boolean,
 }

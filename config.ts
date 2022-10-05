@@ -6,6 +6,7 @@ const GlobalConfig : Config = {
     pusherMainChannel: "game",
     chatChannel: "chat",
     selector_max_nft_per_row: 4,
+    rpcTx: "https://api.mainnet-beta.solana.com",
     rpc: "https://fittest-frosty-dawn.solana-mainnet.discover.quiknode.pro/40c04e0341ac0dab520f1cd38b8ec29d0be1c486/"
 }
 

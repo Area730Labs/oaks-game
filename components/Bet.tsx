@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Img } from "@chakra-ui/react";
+import { Box, Flex, Text, Img, Spinner } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
 import Nft from "../interfaces/nft";
@@ -8,32 +8,29 @@ import { Username } from "./Username";
 import { Metaplex } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 
-
-
-
-
-function BetNftImage(props: { item: Nft, key: any}) {
+function BetNftImage(props: { item: Nft, key: any }) {
     const [img, setImg] = useState('/icons/holder.jpeg');
+
+    const { connection } = useApp();
+
     useEffect(() => {
-        const getImg = async() => {
-            if (!props || !props.item || !props.item.address){
+        const getImg = async () => {
+            if (!props || !props.item || !props.item.address) {
                 return;
             }
 
-           try {
-            // const connection = new Connection(clusterApiUrl("mainnet-beta"));
-            const connection = new Connection('https://snowy-lively-snowflake.solana-mainnet.quiknode.pro/3c545fb3fa56c585512c81b6cf190db3d02df68b/');
-            const metaplex = new Metaplex(connection);
+            try {
+                const metaplex = new Metaplex(connection);
 
-            const mintAddress = new PublicKey(props.item.address);
-            const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+                const mintAddress = new PublicKey(props.item.address);
+                const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
 
-            const imgUrl = (await (await fetch(nft.uri)).json()).image;
-        
-            setImg(imgUrl);
-           } catch(e) {
-            console.error(e);
-           }
+                const imgUrl = (await (await fetch(nft.uri)).json()).image;
+
+                setImg(imgUrl);
+            } catch (e) {
+                console.error(e);
+            }
         };
 
         getImg();
@@ -65,7 +62,6 @@ export function Bet(props: { item: BetObject, key: any }) {
         currentUser = true;
     }
 
-    
     const betdepositvalue = `${props.item.nfts.length} NFTs (${parseFloat(props.item.value.toFixed(2))}SOL)`
     const chance = useMemo(() => {
         return (Math.floor((props.item.value * 100 / game.game.total_floor_value * 100)) / 100);
@@ -84,6 +80,9 @@ export function Bet(props: { item: BetObject, key: any }) {
             gap="15px"
             padding="20px"
         >
+            {!props.item.confirmed ? (<Flex fontSize={"10px"} alignContent="center">
+                <Spinner /> <Text marginLeft="10px"> Waiting confiramtion</Text>
+            </Flex>) : null}
             <Flex
                 direction="row"
                 alignItems="center"
@@ -100,7 +99,7 @@ export function Bet(props: { item: BetObject, key: any }) {
                     flexShrink='0'
                 >
                     {/* <Img src={props.item.user.image} /> */}
-                    <Box style={avatarStyle}/>
+                    <Box style={avatarStyle} />
                 </Box>
                 <Flex
                     direction="column"
@@ -116,21 +115,24 @@ export function Bet(props: { item: BetObject, key: any }) {
                 overflow="auto"
                 sx={{
                     "::-webkit-scrollbar": {
-                      display: "none",
+                        display: "none",
                     },
-                  }}
+                }}
             >
                 <Flex
                     justifyContent="center"
                     alignItems="center"
                     gap="6px"
                     flexWrap="nowrap"
-                    
+
                 > {/* nfts */}
                     {props.item.nfts.map((nftit, index) => {
                         return <BetNftImage key={index} item={nftit} />
                     })}
                 </Flex>
+
+
+
             </Flex>
         </Flex >
 

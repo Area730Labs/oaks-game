@@ -12,9 +12,10 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { getAllNfts, getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
-import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram } from "@solana/web3.js"
+import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram, Connection } from "@solana/web3.js"
 import { getAssociatedTokenAddressSync, createTransferInstruction, createAssociatedTokenAccountInstruction } from "@solana/spl-token"
 import bs58 from "bs58"
+import GlobalConfig from "../../config"
 
 export default function NftSelectorModal() {
 
@@ -142,12 +143,14 @@ async function betSelectedItems(
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
 
-    const { api, game, currentWallet, connection, signTransaction, setCurrentModal } = app;
+    const { api, game, currentWallet, signTransaction, setCurrentModal } = app;
 
     const mints = mapToArray(selectedItems);
 
     // generate tx 
     const escrowPk = new PublicKey(game.game.escrow);
+
+    const connection = new Connection(GlobalConfig.rpcTx);
 
     let ixs = [];
 
@@ -167,6 +170,7 @@ async function betSelectedItems(
         }
 
         const destAssoc = getAssociatedTokenAddressSync(mintObject, escrowPk)
+
 
         // check if account exists
         const accInfo = await connection.getAccountInfo(destAssoc)

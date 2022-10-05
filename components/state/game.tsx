@@ -53,11 +53,16 @@ export function reduce(state: GameState, action: StateAction): GameState {
                 newState.bets = newBets
             } else {
 
+
+
+
                 // confirmed
                 // update players
 
                 for (let it of newState.bets) {
                     if (it.uid == betUid) {
+
+                        it.confirmed = true;
 
                         let found = false;
 

@@ -1,13 +1,36 @@
 import { Box, Flex, Text, Img } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
 import Nft from "../interfaces/nft";
 import { useApp } from "./AppContext";
 import { useStyle } from "./StyleContext";
 import { Username } from "./Username";
+import { Metaplex } from "@metaplex-foundation/js";
+import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+
+
+const connection = new Connection(clusterApiUrl("mainnet-beta"));
+const metaplex = new Metaplex(connection);
+
 
 function BetNftImage(props: { item: Nft, key: any}) {
+    const [img, setImg] = useState('https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=');
+    useEffect(() => {
+        const getImg = async() => {
+            if (!props.item || !props.item.address){
+                return;
+            }
 
+            const mintAddress = new PublicKey(props.item.address);
+            const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+
+            const imgUrl = (await (await fetch(nft.uri)).json()).image;
+        
+            setImg(imgUrl);
+        };
+
+        getImg();
+    }, [props.item.address]);
 
     return <Box
         width="70px"
@@ -16,7 +39,7 @@ function BetNftImage(props: { item: Nft, key: any}) {
         overflow="hidden"
     >
         <Img
-            src={props.item.image}
+            src={img}
             width="70px"
             height="70px"
         />
@@ -35,13 +58,14 @@ export function Bet(props: { item: BetObject, key: any }) {
         currentUser = true;
     }
 
-    const betdepositvalue = `${props.item.nfts.length} NFTs (${props.item.value}SOL)`
+    
+    const betdepositvalue = `${props.item.nfts.length} NFTs (${parseFloat(props.item.value.toFixed(2))}SOL)`
     const chance = useMemo(() => {
         return (Math.floor((props.item.value * 100 / game.game.total_floor_value * 100)) / 100);
     }, [game.game.total_floor_value])
 
     let avatarStyle = {
-        backgroundImage: 'url(https://pbs.twimg.com/profile_images/1575922827454083072/i52P3q2f_400x400.jpg)',
+        backgroundImage: 'url(https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png)',
         backgroundSize: 'contain',
         with: '40px',
         height: '40px'
@@ -96,7 +120,6 @@ export function Bet(props: { item: BetObject, key: any }) {
                     flexWrap="nowrap"
                     
                 > {/* nfts */}
-                <BetNftImage item={{image: 'https://img-cdn.magiceden.dev/rs:fill:640:640:0:0/plain/https://metadata.degods.com/g/2897-dead.png'}}/>
                     {props.item.nfts.map((nftit, index) => {
                         return <BetNftImage key={index} item={nftit} />
                     })}

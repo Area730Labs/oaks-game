@@ -7,7 +7,7 @@ import { useStyle } from './StyleContext'
 import UserModal from './modals/UserModal';
 import NftSelectorModal from './modals/NftSelectorModal';
 import { MainBetsInfo } from './MainBetsInfo';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApp } from './AppContext';
 
 
@@ -19,7 +19,7 @@ export function MainPage() {
 
     const initialWheelState = {
         timeLeft: '1:00',
-        nfts:'0/40',
+        nfts:'0/20',
         solAmount: '0',
         avatars: []
     };
@@ -40,7 +40,7 @@ export function MainPage() {
         if (index < players.length) {
             return {
                 // backgroundImage: `url(${players[index].img})`,
-                backgroundImage: 'url(https://pbs.twimg.com/profile_images/1575922827454083072/i52P3q2f_400x400.jpg)',
+                backgroundImage: 'url(https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png)',
                 backgroundSize: 'contain',
                 border: '2px solid #00B0FF'
             }
@@ -51,16 +51,30 @@ export function MainPage() {
 
     let icons = [];
 
+    useEffect(() => {
+        if (!players){
+            return;
+        }
+
+        let total = 0;
+        let nftCount = 0;
+
+        players.forEach((player) => {
+            total += player.total_value;
+            nftCount += player.nfts;
+        });
+
+        setWheelState({
+            ...wheelState,
+            nfts: `${nftCount}/20`,
+            solAmount: parseFloat(total.toFixed(2)).toString()
+        })
+    }, players);
+
     for(let i = 0; i < 8; ++i){
         icons.push(<Box key={i} className={`selection-base selection-${i + 1}`} style={getAvatarStyle(i)}></Box>);
     }
 
-    const updateNfts = (current: number, max: number) => {
-        setWheelState({
-            ...wheelState,
-            nfts: `${current}/${max}`
-        })
-    };
 
     const updateTimeLeft = (timeLeft: string) => {
         setWheelState({

@@ -13,7 +13,7 @@ export function UserInfoBlock(props: { user: UserType }) {
 
 
     let userImg = props.user.image;
-    userImg = 'https://pbs.twimg.com/media/FeQBdpwXEAI2PaB?format=png&name=small'
+    userImg = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'
 
     return <Flex
         flexDirection="row"

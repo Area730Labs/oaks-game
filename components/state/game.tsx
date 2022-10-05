@@ -1,4 +1,5 @@
 import { BreadcrumbLink } from "@chakra-ui/react";
+import { toast } from "react-toastify";
 import { BetObject } from "../../interfaces/Bet";
 import { GameType } from "../../interfaces/game";
 import { PlayerType } from "../../interfaces/player";
@@ -21,7 +22,46 @@ export function reduce(state: GameState, action: StateAction): GameState {
         updates: state.updates + 1
     }
 
+    toast.info("got action over ws: "+action.type)
+
     switch (action.type) {
+
+        case 'new_game': {
+
+            newState.bets = [];
+            newState.game = action.data;
+            newState.players = []
+    
+            
+            break;
+        }
+
+        case 'new_player': {
+            
+            newState.players.push(action.data)
+
+            break;
+        }
+
+        case 'update_player': {
+            
+            const playerPubkey = action.data.bet
+            const value = action.data.player
+
+                // 
+                let players = [];
+                for (let it of newState.players) {
+                    if (it.pubkey == playerPubkey) {
+                        players.push(value);
+                    } else {
+                        players.push(it);
+                    }
+                }
+
+                newState.players = players
+
+            break;
+        }
 
         case 'bet_update': {
 
@@ -60,7 +100,6 @@ export function reduce(state: GameState, action: StateAction): GameState {
 
             break;
         }
-
 
         case 'init': {
 

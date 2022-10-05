@@ -114,6 +114,15 @@ export function AppContextProvider(props: { children: any }) {
 
         // todo subscribe to all events here
 
+        mainChannel.bind('new_game',(data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "new_game",
+                data: msgData
+            })
+        })
+
         mainChannel.bind('game_update', (data) => {
             const msgData: GameType = data;
 

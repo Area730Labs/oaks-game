@@ -15,10 +15,30 @@ export function MainPage() {
     const [animation, setAnimation] = useState(null);
     const { styles, toggleTheme } = useStyle()
 
+
+    const userAvatars = [
+        {
+            'img': 'https://pbs.twimg.com/profile_images/1569799065474404352/ybiusq2L_400x400.jpg',
+            'id': 0
+        },
+        {
+            'img': 'https://pbs.twimg.com/profile_images/1380530524779859970/TfwVAbyX_400x400.jpg',
+            'id': 1
+        },
+        {
+            'img': 'https://pbs.twimg.com/profile_images/1215070700026855425/7edvU72D_400x400.jpg',
+            'id': 2
+        }
+    ]
+
+    //@ts-ignore
+    const [players, setPlayers] = useState(userAvatars);
+
     const initialWheelState = {
         timeLeft: '1:00',
         nfts:'0/40',
         solAmount: '0',
+        avatars: []
     };
 
     //@ts-ignore
@@ -32,16 +52,12 @@ export function MainPage() {
     
 
 
-    const userAvatars = [
-        'https://pbs.twimg.com/profile_images/1569799065474404352/ybiusq2L_400x400.jpg',
-        'https://pbs.twimg.com/profile_images/1380530524779859970/TfwVAbyX_400x400.jpg',
-        'https://pbs.twimg.com/profile_images/1215070700026855425/7edvU72D_400x400.jpg'
-    ]
+   
 
     const getAvatarStyle = (index: number) => {
-        if (index < userAvatars.length) {
+        if (index < players.length) {
             return {
-                backgroundImage: `url(${userAvatars[index]})`,
+                backgroundImage: `url(${players[index].img})`,
                 backgroundSize: 'contain',
                 border: '2px solid #00B0FF'
             }
@@ -56,15 +72,39 @@ export function MainPage() {
         icons.push(<Box key={i} className={`selection-base selection-${i + 1}`} style={getAvatarStyle(i)}></Box>);
     }
 
+    const updateNfts = (current: number, max: number) => {
+        setWheelState({
+            ...wheelState,
+            nfts: `${current}/${max}`
+        })
+    };
+
+    const updateTimeLeft = (timeLeft: string) => {
+        setWheelState({
+            ...wheelState,
+            timeLeft: timeLeft
+        })
+    };
+
     const onRoll = () => {
         setWheelState({
             timeLeft: '-',
             nfts:'40/40',
             solAmount: `${Math.floor(Math.random() * 400)}`,
+            avatars: wheelState.avatars
         });
 
-        const finalAngle = 180 + 1800 - Math.floor(Math.random() * userAvatars.length) * sector;
+        // get this from server
+        const playerWinnerId = Math.floor(Math.random() * userAvatars.length);
 
+        let winnerIndex = 0;
+        players.map((x, index) => {
+            if (x.id == playerWinnerId) {
+                winnerIndex = index;
+            }
+        });
+
+        const finalAngle = 180 + 1800 - winnerIndex * sector;
 
         const spin = keyframes`
         from { transform: rotate(0deg); }

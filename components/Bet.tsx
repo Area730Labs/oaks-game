@@ -66,7 +66,7 @@ export function Bet(props: { item: BetObject, key: any }) {
                     gap="10px"
                 >
                     <Username>{props.item.user.username}</Username>
-                    <Flex direction="row" fontSize="10px" gap="5px" fontFamily="GolosUI" fontWeight="400">
+                    <Flex direction="row" fontSize="10px" gap="5px" fontFamily="GolosUI" fontWeight="400" >
                         <Box>Deposited: <Text display="inline" color={styles.betInfoValue} fontWeight="600">{betdepositvalue}</Text></Box>
                         <Box>Chance: <Text display="inline" fontWeight="600" color={styles.betInfoValue}>{chance}%</Text></Box>
                     </Flex>
@@ -74,12 +74,18 @@ export function Bet(props: { item: BetObject, key: any }) {
             </Flex>
             <Flex
                 overflow="auto"
+                sx={{
+                    "::-webkit-scrollbar": {
+                      display: "none",
+                    },
+                  }}
             >
                 <Flex
                     justifyContent="center"
                     alignItems="center"
                     gap="6px"
                     flexWrap="nowrap"
+                    
                 > {/* nfts */}
                     {props.item.nfts.map((nftit, index) => {
                         return <BetNftImage key={index} item={nftit} />

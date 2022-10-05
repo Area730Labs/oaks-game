@@ -26,7 +26,7 @@ export interface AppContextType {
 const fakeBets: BetObject[] = [{
     user: {
         username: "noah",
-        image: "https://pbs.twimg.com/profile_images/1552403419176001543/mVVajmCx_400x400.jpg",
+        image: "https://pbs.twimg.com/profile_images/1556384244598964226/S3cx06I2_400x400.jpg",
         wallet: ""
     },
     createdAt: 0,

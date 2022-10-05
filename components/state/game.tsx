@@ -22,7 +22,7 @@ export function reduce(state: GameState, action: StateAction): GameState {
         updates: state.updates + 1
     }
 
-    toast.info("got action over ws: "+action.type)
+    toast.info("got action over ws: " + action.type)
 
     switch (action.type) {
 
@@ -31,34 +31,41 @@ export function reduce(state: GameState, action: StateAction): GameState {
             newState.bets = [];
             newState.game = action.data;
             newState.players = []
-    
-            
-            break;
-        }
 
-        case 'new_player': {
-            
-            newState.players.push(action.data)
 
             break;
         }
 
         case 'update_player': {
-            
+
             const playerPubkey = action.data.bet
             const value = action.data.player
 
-                // 
-                let players = [];
-                for (let it of newState.players) {
-                    if (it.pubkey == playerPubkey) {
-                        players.push(value);
-                    } else {
-                        players.push(it);
-                    }
-                }
+            let found = false;
 
-                newState.players = players
+            let players = [];
+            for (let it of newState.players) {
+                if (it.pubkey == playerPubkey) {
+
+                    found = true;
+
+                    it.bets += 1
+                    it.nfts += value.nfts
+                    it.sol_lamports += value.sol_lamports
+                    it.total_value += value.total_value
+
+                    players.push(value);
+                } else {
+                    players.push(it);
+                }
+            }
+
+            if (!found) {
+                players.push(value);
+            }
+
+
+            newState.players = players
 
             break;
         }
@@ -78,7 +85,7 @@ export function reduce(state: GameState, action: StateAction): GameState {
                 }
 
                 newState.bets = newBets
-            } 
+            }
 
             break;
         }

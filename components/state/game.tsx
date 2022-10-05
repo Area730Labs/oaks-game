@@ -125,6 +125,11 @@ export function reduce(state: GameState, action: StateAction): GameState {
         case 'init': {
 
             newState.bets = action.data.bets;
+
+            for (let b of newState.bets) {
+                b.confirmed = (b.state == 4)
+            }
+
             newState.game = action.data.game
             newState.players = action.data.players
 

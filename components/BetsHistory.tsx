@@ -24,7 +24,7 @@ export function BetsHistory() {
               }}
         >
 
-            {bets.map((it, index) => {
+            {game.bets.map((it, index) => {
                 return <Bet key={index} item={it}></Bet>
 
             })}

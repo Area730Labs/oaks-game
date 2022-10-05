@@ -5,4 +5,5 @@ export interface Config {
     chatChannel: string
     selector_max_nft_per_row: number
     rpc: string 
+    rpcTx: string
 }

@@ -11,14 +11,18 @@ import { useEffect, useState } from 'react';
 import { useApp } from './AppContext';
 import { useReducer } from 'react';
 import { useTimer } from 'react-timer-hook';
-
+import { PublicKey } from '@solana/web3.js';
 
 export function MainPage() {
     //@ts-ignore
     const [animation, setAnimation] = useState(null);
     const { styles, toggleTheme } = useStyle()
-    const {game: {players, game}} = useApp();
+    const {game: {players, game}, currentWallet} = useApp();
     const [, forceUpdate] = useReducer(x => x + 1, 0);
+    const [winnerAnimOverTime, setWinnerAnimOverTime] = useState(0);
+
+    const [fakeState, setFakeState] = useState(0);
+    const [lastState, setLastState] = useState(0);
 
     const initialWheelState = {
         nfts:'0/40',
@@ -55,8 +59,34 @@ export function MainPage() {
         // start();
     }, [players]);
 
+    useEffect(() => {
+        setTimeout(() => {
+            setFakeState(1);
+        }, 2000);
+
+        setTimeout(() => {
+            setFakeState(2);
+        }, 5000);
+
+        setTimeout(() => {
+            setFakeState(3);
+        }, 10000);
+
+        setTimeout(() => {
+            setFakeState(4);
+        }, 12000);
+    }, []);
+
 
     const getAvatarStyle = (index: number) => {
+        if (index == 0) {
+            return {
+                // backgroundImage: `url(${players[index].img})`,
+                backgroundImage: 'url(/icons/avatar.png)',
+                backgroundSize: 'contain',
+                border: '2px solid #00B0FF'
+            }
+        }
         if (!players){
             return null;
         }
@@ -121,8 +151,6 @@ export function MainPage() {
             : `${spin} 1 5s ease-in-out normal forwards`;
 
             setAnimation(anim);
-        } else {
-            setAnimation(null);
         }
     }, [game]);
 
@@ -132,16 +160,92 @@ export function MainPage() {
 
     // timer
     useEffect(() => {
-        if (game.started_at == 0 || game.state > 0) {
-            stop();
-            return;
+        if (!game) return;
+
+        const gState = game.state; //fakeState
+
+
+        if (game.started_at == 0 || gState > 0) {
+            pause();
         }
 
-        let dueTime = new Date();
-        dueTime.setSeconds(game.started_at);
+        if (gState == 0 && game.started_at > 0) {
+            let dueTime = new Date();
+            dueTime.setSeconds(game.started_at);
+    
+            restart(dueTime);
+        }
 
-        restart(dueTime);
-    }, [game]);
+        if (gState == 0 && gState != lastState) {
+            setLastState(gState);
+        }
+
+        if (gState == 1 && gState != lastState) {
+            const spin = keyframes`
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }`
+
+            const anim = prefersReducedMotion
+            ? undefined
+            : `${spin} infinite 1s linear normal forwards`;
+
+            setAnimation(anim);
+
+            setLastState(gState);
+        }
+
+        if (gState == 3 && gState != lastState) {
+            const finalAngle = 180 + 1800 - 3 * sector;
+
+            const spin = keyframes`
+            from { transform: rotate(0deg); }
+            to { transform: rotate(${finalAngle}deg); }`
+
+            const anim = prefersReducedMotion
+            ? undefined
+            : `${spin} 1 5s ease-out normal forwards`;
+
+            setAnimation(anim);
+
+            setWinnerAnimOverTime(Date.now() + 5000);
+
+            setTimeout(() => {
+                const winnerId = game.winner;
+                let youWon = winnerId && (new PublicKey(winnerId)) == currentWallet;
+                if (youWon) {
+                    alert('Congrats! You won!');
+                }
+            }, Date.now() + 5000);
+
+            setLastState(gState);
+        }
+
+        // prize sent
+        if (gState == 4 && gState != lastState) {
+            const winnerId = game.winner;
+            let youWon = winnerId && (new PublicKey(winnerId)) == currentWallet;
+           
+            if (winnerAnimOverTime < Date.now()) {
+                setAnimation(null);
+
+                if (youWon) {
+                    alert('Your prize should be already in your wallet!');
+                }
+               
+            } else {
+                setTimeout(() => {
+                    setAnimation(null);
+
+                    if (youWon) {
+                        alert('Your prize should be already in your wallet!');
+                    }
+                }, winnerAnimOverTime - Date.now() + 5000);
+            }
+            
+            setLastState(gState);
+
+        }
+    }, [game, fakeState]);
 
 
     return (<>
@@ -213,6 +317,7 @@ export function MainPage() {
                                         )}
 
                                         {!isRunning && ("-:-")}
+                                        
                                     </Text>
                                 </Box>
 

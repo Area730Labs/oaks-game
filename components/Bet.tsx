@@ -40,6 +40,13 @@ export function Bet(props: { item: BetObject, key: any }) {
         return (Math.floor((props.item.value * 100 / game.game.total_floor_value * 100)) / 100);
     }, [game.game.total_floor_value])
 
+    let avatarStyle = {
+        backgroundImage: 'url(https://pbs.twimg.com/profile_images/1575922827454083072/i52P3q2f_400x400.jpg)',
+        backgroundSize: 'contain',
+        with: '40px',
+        height: '40px'
+    }
+
     return <Box>
         <Flex
             flexDirection="column"
@@ -59,12 +66,13 @@ export function Bet(props: { item: BetObject, key: any }) {
                     overflow="hidden"
                     border={avatarBorder}
                     boxSizing="border-box"
+                    flexShrink='0'
                 >
-                    <Img src={props.item.user.image} />
+                    {/* <Img src={props.item.user.image} /> */}
+                    <Box style={avatarStyle}/>
                 </Box>
                 <Flex
                     direction="column"
-                    gap="10px"
                 >
                     <Username>{props.item.user.username}</Username>
                     <Flex direction="row" fontSize="10px" gap="5px" fontFamily="GolosUI" fontWeight="400" >
@@ -88,6 +96,7 @@ export function Bet(props: { item: BetObject, key: any }) {
                     flexWrap="nowrap"
                     
                 > {/* nfts */}
+                <BetNftImage item={{image: 'https://img-cdn.magiceden.dev/rs:fill:640:640:0:0/plain/https://metadata.degods.com/g/2897-dead.png'}}/>
                     {props.item.nfts.map((nftit, index) => {
                         return <BetNftImage key={index} item={nftit} />
                     })}

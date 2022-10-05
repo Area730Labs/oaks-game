@@ -12,6 +12,9 @@ export function UserInfoBlock(props: { user: UserType }) {
     const chance = 5.3;
 
 
+    let userImg = props.user.image;
+    userImg = 'https://pbs.twimg.com/media/FeQBdpwXEAI2PaB?format=png&name=small'
+
     return <Flex
         flexDirection="row"
         alignItems="center"
@@ -25,7 +28,7 @@ export function UserInfoBlock(props: { user: UserType }) {
             border={avatarBorder}
             boxSizing="border-box"
         >
-            <Img src={props.user.image} />
+            <Img src={userImg} />
         </Box>
         <Flex
             direction="column"

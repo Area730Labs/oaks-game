@@ -33,9 +33,14 @@ export function MainPage() {
 
 
     const getAvatarStyle = (index: number) => {
+        if (!players){
+            return null;
+        }
+
         if (index < players.length) {
             return {
-                backgroundImage: `url(${players[index].img})`,
+                // backgroundImage: `url(${players[index].img})`,
+                backgroundImage: 'url(https://pbs.twimg.com/profile_images/1575922827454083072/i52P3q2f_400x400.jpg)',
                 backgroundSize: 'contain',
                 border: '2px solid #00B0FF'
             }
@@ -65,34 +70,34 @@ export function MainPage() {
     };
 
     const onRoll = () => {
-        setWheelState({
-            timeLeft: '-',
-            nfts:'40/40',
-            solAmount: `${Math.floor(Math.random() * 400)}`,
-            avatars: wheelState.avatars
-        });
+        // setWheelState({
+        //     timeLeft: '-',
+        //     nfts:'40/40',
+        //     solAmount: `${Math.floor(Math.random() * 400)}`,
+        //     avatars: wheelState.avatars
+        // });
 
-        // get this from server
-        const playerWinnerId = Math.floor(Math.random() * userAvatars.length);
+        // // get this from server
+        // const playerWinnerId = Math.floor(Math.random() * userAvatars.length);
 
-        let winnerIndex = 0;
-        players.map((x, index) => {
-            if (x.id == playerWinnerId) {
-                winnerIndex = index;
-            }
-        });
+        // let winnerIndex = 0;
+        // players.map((x, index) => {
+        //     if (x.id == playerWinnerId) {
+        //         winnerIndex = index;
+        //     }
+        // });
 
-        const finalAngle = 180 + 1800 - winnerIndex * sector;
+        // const finalAngle = 180 + 1800 - winnerIndex * sector;
 
-        const spin = keyframes`
-        from { transform: rotate(0deg); }
-        to { transform: rotate(${finalAngle}deg); }`
+        // const spin = keyframes`
+        // from { transform: rotate(0deg); }
+        // to { transform: rotate(${finalAngle}deg); }`
 
-        const anim = prefersReducedMotion
-        ? undefined
-        : `${spin} 1 5s ease-in-out normal forwards`;
+        // const anim = prefersReducedMotion
+        // ? undefined
+        // : `${spin} 1 5s ease-in-out normal forwards`;
 
-        setAnimation(anim);
+        // setAnimation(anim);
     
     };
 
@@ -105,13 +110,24 @@ export function MainPage() {
         <UserModal />
         <NftSelectorModal/>
         <Box position="relative" backgroundColor={styles.bg}>
-            <Button
+            {/* <Button
                 position="absolute"
                 top="20px"
                 left="20px"
                 onClick={toggleTheme}
                 zIndex="11"
-            >Toggle theme</Button>
+            >Toggle theme</Button> */}
+
+            <Box
+            position="absolute"
+            top="8px"
+                left="20px"
+                display='flex'
+            >
+                    <Image src='/icons/logo.png' />
+                    <Text lineHeight='54px' marginLeft='10px' fontSize='20px' color='white' fontWeight='bold'>PARADISE GAMING</Text>
+            </Box>
+            
 
             <Flex
                 zIndex="10"
@@ -180,8 +196,7 @@ export function MainPage() {
 
                     </Flex>
                     <Spacer/>
-                    <Button onClick={onRoll}>Roll</Button>
-                    <Button onClick={onReset}>Reset</Button>
+                   
 
                 </Flex>
                 <Box

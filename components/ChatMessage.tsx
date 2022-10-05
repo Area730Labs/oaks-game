@@ -5,7 +5,7 @@ import { useChat } from "./ChatContext";
 import { useStyle } from "./StyleContext";
 import { Username } from "./Username";
 
-export function ChatMessage(props: {message: MsgType}) {
+export function ChatMessage(props: {message: MsgType, key: any}) {
 
     const {styles} = useStyle();
     const {usernames} = useChat();

@@ -17,9 +17,14 @@ export function BetsHistory() {
             display="flex"
             flexDirection="column"
             overflowY="scroll"
+            sx={{
+                "::-webkit-scrollbar": {
+                  display: "none",
+                },
+              }}
         >
-            {game.bets.map(it => {
-                return <Bet item={it}></Bet>
+            {game.bets.map((it, index) => {
+                return <Bet key={index} item={it}></Bet>
             })}
         </Box>
     </Box>

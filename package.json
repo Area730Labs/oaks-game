@@ -29,7 +29,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@next/swc-darwin-arm64": "^11.1.2",
     "@types/node": "18.7.18",
     "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",

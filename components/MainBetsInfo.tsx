@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Spacer } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { toast } from "react-toastify";
@@ -54,6 +54,8 @@ export function MainBetsInfo() {
             >
                 Make a bet
             </Flex>
+            
+            
         </Flex>
     </>
 }

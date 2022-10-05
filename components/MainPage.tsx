@@ -194,7 +194,7 @@ export function MainPage() {
             setLastState(gState);
         }
 
-        if (gState == 3 && gState != lastState) {
+        if (gState == 4 && gState != lastState) {
             const finalAngle = 180 + 1800 - 3 * sector;
 
             const spin = keyframes`
@@ -221,7 +221,7 @@ export function MainPage() {
         }
 
         // prize sent
-        if (gState == 4 && gState != lastState) {
+        if (gState == 5 && gState != lastState) {
             const winnerId = game.winner;
             let youWon = winnerId && (new PublicKey(winnerId)) == currentWallet;
            

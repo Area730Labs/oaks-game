@@ -20,20 +20,20 @@ function BetNftImage(props: { item: Nft, key: any}) {
                 return;
             }
 
-        //    try {
-        //     // const connection = new Connection(clusterApiUrl("mainnet-beta"));
-        //     const connection = new Connection('https://snowy-lively-snowflake.solana-mainnet.quiknode.pro/3c545fb3fa56c585512c81b6cf190db3d02df68b/');
-        //     const metaplex = new Metaplex(connection);
+           try {
+            // const connection = new Connection(clusterApiUrl("mainnet-beta"));
+            const connection = new Connection('https://snowy-lively-snowflake.solana-mainnet.quiknode.pro/3c545fb3fa56c585512c81b6cf190db3d02df68b/');
+            const metaplex = new Metaplex(connection);
 
-        //     const mintAddress = new PublicKey(props.item.address);
-        //     const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+            const mintAddress = new PublicKey(props.item.address);
+            const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
 
-        //     const imgUrl = (await (await fetch(nft.uri)).json()).image;
+            const imgUrl = (await (await fetch(nft.uri)).json()).image;
         
-        //     setImg(imgUrl);
-        //    } catch(e) {
-        //     console.error(e);
-        //    }
+            setImg(imgUrl);
+           } catch(e) {
+            console.error(e);
+           }
         };
 
         getImg();

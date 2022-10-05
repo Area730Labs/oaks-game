@@ -82,14 +82,6 @@ export function MainPage() {
 
 
     const getAvatarStyle = (index: number) => {
-        if (index == 0) {
-            return {
-                // backgroundImage: `url(${players[index].img})`,
-                backgroundImage: 'url(/icons/avatar.png)',
-                backgroundSize: 'contain',
-                border: '2px solid #00B0FF'
-            }
-        }
         if (!players){
             return null;
         }

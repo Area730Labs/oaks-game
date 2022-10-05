@@ -9,7 +9,7 @@ import { WalletAdapter } from "@solana/wallet-adapter-base"
 import NftsSelector from "../nft/nftselector"
 import Nft from "../../interfaces/nft"
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
-import { getNftsByUser } from "../../utils"
+import { getAllNfts, getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
 import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram } from "@solana/web3.js"
@@ -23,7 +23,7 @@ export default function NftSelectorModal() {
     const { styles } = useStyle();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { connected } = useWallet();
-    const { currentModal, api, setCurrentModal, user, setUser, currentWallet } = useApp();
+    const { currentModal, api, setCurrentModal, user, setUser, currentWallet, connection } = useApp();
     const initialRef = React.useRef(null)
     const [nfts, setNfts] = useState<Nft[]>([]);
 
@@ -31,19 +31,36 @@ export default function NftSelectorModal() {
 
     const forceReloadNfts = useCallback(() => {
         if (connected) {
+            if (isOpen) {
 
-            setLoading(true);
-            getNftsByUser(currentWallet).then((nftList) => {
-                setNfts(nftList);
-            }).catch(e => {
-                toast.warn("unable to load your nfts")
-            }).finally(() => {
-                setLoading(false);
-            })
+                setLoading(true);
+                getNftsByUser(currentWallet).then((nftList) => {
+
+                    getAllNfts(connection, currentWallet).then(function (tokenaccs) {
+
+                        for (let toki  of tokenaccs) {
+                            
+                            for (let nft of nftList) {
+                                if (nft.address.equals(toki.mint)) {
+                                    nft.tokenAcc = toki.account.toBase58()
+                                }
+                            }
+                        }
+
+                        setNfts(nftList);
+
+                    })
+                    
+                }).catch(e => {
+                    toast.warn("unable to load your nfts")
+                }).finally(() => {
+                    setLoading(false);
+                })
+            }
         } else {
             setNfts([]);
         }
-    }, [currentWallet, connected])
+    }, [currentWallet, connected, isOpen])
 
     useEffect(() => {
         forceReloadNfts();
@@ -120,6 +137,7 @@ export default function NftSelectorModal() {
 async function betSelectedItems(
     wallet: WalletAdapter,
     app: AppContextType,
+    nfts: Nft[],
     // solanaConnection: SolanaRpc,
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
@@ -135,7 +153,19 @@ async function betSelectedItems(
 
     for (let mint of mints) {
         const mintObject = new PublicKey(mint);
-        const sourceAssoc = getAssociatedTokenAddressSync(mintObject, currentWallet)
+
+        let sourceAssoc : any = null;
+
+        for (let sourceNft of nfts) {
+            if (sourceNft.address.equals(mintObject)) {
+                sourceAssoc = new PublicKey(sourceNft.tokenAcc);
+            }
+        }
+
+        if (sourceAssoc == null) {
+            sourceAssoc = getAssociatedTokenAddressSync(mintObject, currentWallet)
+        }
+
         const destAssoc = getAssociatedTokenAddressSync(mintObject, escrowPk)
 
         // check if account exists

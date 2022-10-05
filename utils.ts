@@ -9,17 +9,25 @@ export function getTokenAccount(owner: PublicKey, mint: PublicKey): PublicKey {
     return spl.getAssociatedTokenAddressSync(mint, owner)
 }
 
-export async function getAllNfts(connection: Connection, owner: PublicKey): Promise<PublicKey[]> {
+export interface TokenAcc {
+    mint : PublicKey
+    account : PublicKey
+}
+
+export async function getAllNfts(connection: Connection, owner: PublicKey): Promise<TokenAcc[]> {
 
     const accounts = await connection.getParsedTokenAccountsByOwner(owner, {
-        programId: spl.TOKEN_PROGRAM_ID
+        programId: spl.TOKEN_PROGRAM_ID,
     }, 'confirmed')
 
     let result = [];
 
     for (var acc of accounts.value) {
         if (acc.account.data.parsed.info.tokenAmount.amount === "1") {
-            result.push(new PublicKey(acc.account.data.parsed.info.mint))
+            result.push({
+                mint : new PublicKey(acc.account.data.parsed.info.mint),
+                account: acc.pubkey
+            })
         }
     }
 

@@ -6,4 +6,5 @@ export default interface Nft {
     image: string
     props?: { [key: string]: any }
     collectionName? : string
+    tokenAcc?: string
 }

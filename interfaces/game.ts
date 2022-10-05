@@ -9,5 +9,6 @@ export interface GameType {
     total_floor_value: number,
     escrow: string,
     winner: string,
-    state: number
+    state: number,
+    duration_min: number
 }

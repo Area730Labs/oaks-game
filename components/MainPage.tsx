@@ -165,7 +165,7 @@ export function MainPage() {
         }
 
         if (game.started_at > 0) {
-            let dueTime = new Date(game.started_at + 5*60);
+            let dueTime = new Date(game.started_at*1000 + game.duration_min*60*1000);
     
             restart(dueTime);
         }
@@ -210,6 +210,8 @@ export function MainPage() {
         // prize sent
         if (gState == 5 && gState != lastState) {
             const winnerId = game.winner;
+            alert("winner: " + winnerId + ", your wallet: " + currentWallet);
+
             let youWon = winnerId && (new PublicKey(winnerId)) == currentWallet;
            
             if (winnerAnimOverTime < Date.now()) {

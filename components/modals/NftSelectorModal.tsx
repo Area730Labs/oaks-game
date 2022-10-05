@@ -12,7 +12,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
-import { PublicKey, Transaction, TransactionBlockhashCtor,SystemProgram } from "@solana/web3.js"
+import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram } from "@solana/web3.js"
 import { getAssociatedTokenAddressSync, createTransferInstruction, createAssociatedTokenAccountInstruction } from "@solana/spl-token"
 import bs58 from "bs58"
 
@@ -124,7 +124,7 @@ async function betSelectedItems(
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
 
-    const { api, game, currentWallet, connection, signTransaction } = app;
+    const { api, game, currentWallet, connection, signTransaction, setCurrentModal } = app;
 
     const mints = mapToArray(selectedItems);
 
@@ -134,8 +134,6 @@ async function betSelectedItems(
     let ixs = [];
 
     for (let mint of mints) {
-
-
         const mintObject = new PublicKey(mint);
         const sourceAssoc = getAssociatedTokenAddressSync(mintObject, currentWallet)
         const destAssoc = getAssociatedTokenAddressSync(mintObject, escrowPk)
@@ -186,11 +184,14 @@ async function betSelectedItems(
                     console.log("tx sent : ", sig)
                 }).catch(e => {
                     toast.warn("unable to send transaction, try again later")
+                }).finally(() => {
+                    setCurrentModal("")
                 })
 
             }).catch(e => {
                 handleApiError(e, (code, msg) => {
                     toast.error("unable to bet: " + msg)
+                    setCurrentModal("")
                 })
             })
 
@@ -201,27 +202,4 @@ async function betSelectedItems(
     }).catch(e => {
         toast.warn("solana rpc error. try again later")
     })
-
-
-
-
-    api.calc_bet_map(selectedItems).then((totalValue) => {
-        toast.success(`total bet value is ${totalValue}`)
-    }).catch(e => {
-        handleApiError(e, (code: Number, msg: string) => {
-            toast.error('unable to calc bet value: ' + msg)
-        })
-    })
-
-    return;
-
-    // let instructions = [] as TransactionInstruction[];
-
-    // for (var it in selectedItems) {
-    //     instructions.push(createStakeNftIx(staking, new PublicKey(it), wallet as WalletAdapter));
-    // }
-
-    // return sendTx(instructions, 'stake').catch((e) => {
-    //     toast.error(`Unable to stake: ${e.message}`)
-    // });
 }

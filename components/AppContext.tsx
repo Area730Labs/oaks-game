@@ -123,6 +123,24 @@ export function AppContextProvider(props: { children: any }) {
             })
         })
 
+        mainChannel.bind('new_bet', (data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "new_bet",
+                data: msgData
+            })
+        })
+
+        mainChannel.bind('bet_update', (data) => {
+            const msgData: GameType = data;
+
+            dispatchGameAction({
+                type: "bet_update",
+                data: msgData
+            })
+        })
+
     }, []);
 
     useEffect(() => {

@@ -164,9 +164,8 @@ export function MainPage() {
             pause();
         }
 
-        if (gState == 0 && game.started_at > 0) {
-            let dueTime = new Date();
-            dueTime.setSeconds(game.started_at);
+        if (game.started_at > 0) {
+            let dueTime = new Date(game.started_at + 5*60);
     
             restart(dueTime);
         }
@@ -175,7 +174,7 @@ export function MainPage() {
             setLastState(gState);
         }
 
-        if (gState == 1 && gState != lastState) {
+        if (gState == 2 && gState != lastState) {
             const spin = keyframes`
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }`

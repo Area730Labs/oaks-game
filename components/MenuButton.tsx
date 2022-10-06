@@ -4,13 +4,22 @@ import { useStyle } from "./StyleContext";
 
 export interface MenuButtonProps extends ChakraProps {
     label: any,
+    url?: string,
     children: React.ReactNode
 }
 
 export function MenuButton(props: MenuButtonProps) {
 
     const { styles } = useStyle();
-    const { children, label, ...rest } = props;
+    const { children, label, url, ...rest } = props;
+
+    const onclick = () => {
+        if (!url) {
+            return;
+        }
+        
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
 
     return (<Box
         color={styles.menuColor}
@@ -23,6 +32,7 @@ export function MenuButton(props: MenuButtonProps) {
         borderRadius="99px"
         transition=".2s all ease"
         role="group"
+        onClick={onclick}
         {...rest}
     >
         <Flex>

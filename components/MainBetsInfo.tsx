@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer } from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { toast } from "react-toastify";
@@ -25,7 +25,6 @@ export function MainBetsInfo() {
     return <>
         <Flex
             gap="30px"
-            width="350px"
             height="53px"
             marginLeft="20px"
             marginTop="20px"
@@ -44,7 +43,7 @@ export function MainBetsInfo() {
                 gap="10px"
 
                 flex="none"
-                order="1"
+
                 flexGrow="0"
                 flexDirection="row"
                 alignItems="center"
@@ -55,6 +54,19 @@ export function MainBetsInfo() {
                 Make a bet
             </Flex>
             
+            <Spacer/>
+
+            <Flex direction='row' marginRight='-15px' gap='5px'>
+                <Box backgroundImage='url(/icons/user-profile.png)' width='20px' height='20px' marginTop='17px'/>
+                <Text lineHeight='53px' fontSize='16px' color='#641E8F'>5</Text>
+                <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Players</Text>
+            </Flex>
+
+            <Flex direction='row' marginRight='15px' gap='5px'>
+                <Box backgroundImage='url(/icons/online.png)' width='20px' height='20px' marginTop='17px'/>
+                <Text lineHeight='53px' fontSize='16px' color='#641E8F'>128</Text>
+                <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Online</Text>
+            </Flex>
             
         </Flex>
     </>

@@ -210,10 +210,11 @@ export function MainPage() {
         // prize sent
         if (gState == 5 && gState != lastState) {
             const winnerId = game.winner;
-            alert("winner: " + winnerId + ", your wallet: " + currentWallet);
+            // alert("winner: " + winnerId + ", your wallet: " + currentWallet);
 
-            let youWon = winnerId && (new PublicKey(winnerId)) == currentWallet;
-           
+            let youWon = winnerId && currentWallet && winnerId == currentWallet.toString();
+
+
             if (winnerAnimOverTime < Date.now()) {
                 setAnimation(null);
 
@@ -227,7 +228,7 @@ export function MainPage() {
                     setAnimation(null);
 
                     if (youWon) {
-                        alert('Your prize should be already in your wallet!');
+                        setCurrentModal("winnerdialog");
                     }
                 }, winnerAnimOverTime - Date.now() + 5000);
             }
@@ -299,7 +300,7 @@ export function MainPage() {
                     flexGrow="1"
                     flexDirection='column'
                 >
-                    
+
                     <MainBetsInfo/>
 
                     <Flex flexDir='row' marginLeft='20px' marginTop='10px'>

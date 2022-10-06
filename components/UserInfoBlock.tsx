@@ -15,15 +15,20 @@ export function UserInfoBlock(props: { user: UserType }) {
     let chance = 0;
 
     bets.map((bet) => {
-        if ((new PublicKey(bet.user.wallet)) == currentWallet) {
+        if (!currentWallet) {
+            return;
+        }
+
+        if (bet.user.wallet == currentWallet.toString()) {
             chance = (Math.floor((bet.value * 100 / game.total_floor_value * 100)) / 100);
+            chance = parseFloat(chance.toFixed(2))
             betdepositvalue = bet.value;
         }
     });
 
 
     let userImg = props.user.image;
-    userImg = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'
+    userImg = '/icons/avatar.png'
 
     return <Flex
         flexDirection="row"

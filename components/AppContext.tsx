@@ -219,17 +219,20 @@ export function AppContextProvider(props: { children: any }) {
 
     useEffect(() => {
 
-        if (gameState.game.winner != "") {
-            if (gameState.game.winner == publicKey.toBase58()) {
-                let audio = new Audio('/resources/winner.mp3');
-                audio.play()
-            } else {
-                let audio = new Audio('/resources/looser.mp3');
-                audio.play()
+        if (publicKey != null) {
+            if (gameState.game.winner != "") {
+                if (gameState.game.winner == publicKey.toBase58()) {
+                    let audio = new Audio('/resources/winner.mp3');
+                    audio.play()
+                } else {
+                    let audio = new Audio('/resources/looser.mp3');
+                    audio.play()
+                }
             }
         }
 
-    }, [gameState.game.state])
+
+    }, [gameState.game.state, publicKey])
 
     const memoed: AppContextType = React.useMemo(function () {
 

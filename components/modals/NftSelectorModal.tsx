@@ -39,19 +39,36 @@ export default function NftSelectorModal() {
 
                     getAllNfts(connection, currentWallet).then(function (tokenaccs) {
 
-                        for (let toki  of tokenaccs) {
-                            
-                            for (let nft of nftList) {
-                                if (nft.address.equals(toki.mint)) {
-                                    nft.tokenAcc = toki.account.toBase58()
-                                }
-                            }
+                        let mints = [];
+                        for (let n of nftList) {
+                            mints.push(n.address);
                         }
 
-                        setNfts(nftList);
+                        api.whitelist({ list: mints }).then(whitelisted => {
 
+                            let whitelistedResult = [];
+                            let whitelistMap: any = {};
+                            for (let x of whitelisted.list) {
+                                whitelistMap[x] = true;
+                            }
+
+
+                            for (let toki of tokenaccs) {
+                                if (whitelistMap[toki.mint.toBase58()]) {
+                                    for (let nft of nftList) {
+                                        if (nft.address.equals(toki.mint)) {
+                                            nft.tokenAcc = toki.account.toBase58()
+                                            whitelistedResult.push(nft);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            setNfts(whitelistedResult);
+                        })
                     })
-                    
+
                 }).catch(e => {
                     toast.warn("unable to load your nfts")
                 }).finally(() => {
@@ -157,7 +174,7 @@ async function betSelectedItems(
     for (let mint of mints) {
         const mintObject = new PublicKey(mint);
 
-        let sourceAssoc : any = null;
+        let sourceAssoc: any = null;
 
         for (let sourceNft of nfts) {
             if (sourceNft.address.equals(mintObject)) {
@@ -217,6 +234,7 @@ async function betSelectedItems(
                 connection.sendEncodedTransaction(serializedTxString).then(sig => {
                     console.log("tx sent : ", sig)
                 }).catch(e => {
+                    console.log('unable to send transaction', e)
                     toast.warn("unable to send transaction, try again later")
                 }).finally(() => {
                     setCurrentModal("")

@@ -77,8 +77,8 @@ async function generateAuthArgs(wctx: WalletContextState): Promise<AuthArgs> {
 
 export function AppContextProvider(props: { children: any }) {
 
-    const { publicKey, connected } = useWallet();
     const wctx = useWallet();
+    const { publicKey, connected } = wctx;
 
     const [authToken, setAuthToken] = useState<string | null>(getAuthToken(publicKey));
     const [user, setUser] = useState<UserType | null>(null);
@@ -215,19 +215,26 @@ export function AppContextProvider(props: { children: any }) {
             setAuthToken("")
         }
 
-    }, [connected, publicKey, forceAuthCounter])
+    }, [connected, publicKey, forceAuthCounter, wctx])
 
     useEffect(() => {
 
         if (publicKey != null) {
             if (gameState.game.winner != "") {
-                if (gameState.game.winner == publicKey.toBase58()) {
-                    let audio = new Audio('/resources/winner.mp3');
-                    audio.play()
-                } else {
-                    let audio = new Audio('/resources/looser.mp3');
-                    audio.play()
-                }
+
+                // todo 
+                // check if you took a part in the game
+
+                setTimeout(function () {
+                    if (gameState.game.winner == publicKey.toBase58()) {
+                        let audio = new Audio('/resources/winner.mp3');
+                        audio.play()
+                    } else {
+                        let audio = new Audio('/resources/looser.mp3');
+                        audio.play()
+                    }
+                }, 5000);
+
             }
         }
 

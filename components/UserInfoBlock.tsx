@@ -22,7 +22,7 @@ export function UserInfoBlock(props: { user: UserType }) {
         if (bet.user.wallet == currentWallet.toString()) {
             chance = (Math.floor((bet.value * 100 / game.total_floor_value * 100)) / 100);
             chance = parseFloat(chance.toFixed(2))
-            betdepositvalue = bet.value;
+            betdepositvalue = parseFloat(bet.value.toFixed(2));
         }
     });
 

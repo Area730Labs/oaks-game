@@ -128,24 +128,7 @@ export function MainPage() {
         }
 
         if ((game.winner?.trim()?.length || 0) > 0) {
-            let winnerIndex = 0;
-            players.map((x, index) => {
-                if (x.pubkey == game.winner) {
-                    winnerIndex = index;
-                }
-            });
-
-            const finalAngle = 180 + 1800 - winnerIndex * sector;
-
-            const spin = keyframes`
-            from { transform: rotate(0deg); }
-            to { transform: rotate(${finalAngle}deg); }`
-
-            const anim = prefersReducedMotion
-            ? undefined
-            : `${spin} 1 5s ease-in-out normal forwards`;
-
-            setAnimation(anim);
+            
         }
     }, [game]);
 
@@ -166,30 +149,52 @@ export function MainPage() {
 
         if (game.started_at > 0) {
             let dueTime = new Date(game.started_at*1000 + game.duration_min*60*1000);
-    
-            restart(dueTime);
+
+            if ((new Date(Date.now())) < dueTime) {
+                restart(dueTime);
+            }
         }
 
         if (gState == 0 && gState != lastState) {
-            setLastState(gState);
-        }
-
-        if (gState == 2 && gState != lastState) {
-            const spin = keyframes`
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }`
-
-            const anim = prefersReducedMotion
-            ? undefined
-            : `${spin} infinite 1s linear normal forwards`;
-
-            setAnimation(anim);
+            setAnimation(null);
 
             setLastState(gState);
         }
+
+        // if (gState == 2 && gState != lastState) {
+        //     const spin = keyframes`
+        //     from { transform: rotate(0deg); }
+        //     to { transform: rotate(360deg); }`
+
+        //     const anim = prefersReducedMotion
+        //     ? undefined
+        //     : `${spin} infinite 1s linear normal forwards`;
+
+        //     setAnimation(anim);
+
+        //     setLastState(gState);
+        // }
 
         if (gState == 4 && gState != lastState) {
-            const finalAngle = 180 + 1800 - 3 * sector;
+            const winnerId = game.winner;
+            let youWon = winnerId && currentWallet && winnerId == currentWallet.toString();
+
+            setTimeout(() => {
+                
+                if (youWon) {
+                    setCurrentModal("winnerdialog");
+                }
+            }, 5000);
+
+
+            let winnerIndex = 0;
+            players.map((x, index) => {
+                if (x.pubkey == game.winner) {
+                    winnerIndex = index;
+                }
+            });
+
+            const finalAngle = 180 + 1800 - winnerIndex * sector;
 
             const spin = keyframes`
             from { transform: rotate(0deg); }
@@ -197,46 +202,21 @@ export function MainPage() {
 
             const anim = prefersReducedMotion
             ? undefined
-            : `${spin} 1 5s ease-out normal forwards`;
+            : `${spin} 1 5s ease-in-out normal forwards`;
 
             setAnimation(anim);
-
-            setWinnerAnimOverTime(Date.now() + 5000);
 
 
             setLastState(gState);
         }
 
         // prize sent
-        if (gState == 5 && gState != lastState) {
-            const winnerId = game.winner;
-            // alert("winner: " + winnerId + ", your wallet: " + currentWallet);
-
-            let youWon = winnerId && currentWallet && winnerId == currentWallet.toString();
-
-
-            if (winnerAnimOverTime < Date.now()) {
-                setAnimation(null);
-
-                if (youWon) {
-                    setCurrentModal("winnerdialog");
-                    // alert('Your prize should be already in your wallet!');
-                }
-               
-            } else {
-                setTimeout(() => {
-                    setAnimation(null);
-
-                    if (youWon) {
-                        setCurrentModal("winnerdialog");
-                    }
-                }, winnerAnimOverTime - Date.now() + 5000);
-            }
+        // if (gState == 5 && gState != lastState) {
             
-            setLastState(gState);
+        //     setLastState(gState);
 
-        }
-    }, [game, fakeState]);
+        // }
+    }, [game]);
 
 
     let participants = [];

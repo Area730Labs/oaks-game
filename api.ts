@@ -9,6 +9,7 @@ import { ChatInfo, MsgType } from "./interfaces/msg";
 import { GameType } from "./interfaces/game";
 import { GameState } from "./components/state/game";
 import { BetObject } from "./interfaces/Bet";
+import { Whitelist } from "./interfaces/whitelist";
 
 export type Method = "post" | "get";
 export interface SdkItem {
@@ -134,6 +135,22 @@ class Api {
             );
 
             return result.bet as BetObject;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async whitelist(args: Whitelist): Promise<Whitelist> {
+        try {
+
+            let result = await this.sendRequest(
+                "post",
+                `whitelist`,
+                args,
+                true
+            );
+
+            return result as Whitelist;
         } catch (e) {
             throw e;
         }

@@ -222,6 +222,9 @@ export function AppContextProvider(props: { children: any }) {
         if (publicKey != null) {
             if (gameState.game.winner != "") {
 
+                // todo 
+                // check if you took a part in the game
+
                 setTimeout(function () {
                     if (gameState.game.winner == publicKey.toBase58()) {
                         let audio = new Audio('/resources/winner.mp3');

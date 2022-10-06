@@ -9,7 +9,7 @@ import { UserInfoBlock } from "./UserInfoBlock";
 export function MainBetsInfo() {
 
     const { styles } = useStyle();
-    const { setCurrentModal, user } = useApp();
+    const { setCurrentModal, user, game } = useApp();
     const { connected } = useWallet();
     const {setVisible} = useWalletModal();
 
@@ -58,7 +58,7 @@ export function MainBetsInfo() {
 
             <Flex direction='row' marginRight='-15px' gap='5px'>
                 <Box backgroundImage='url(/icons/user-profile.png)' width='20px' height='20px' marginTop='17px'/>
-                <Text lineHeight='53px' fontSize='16px' color='#641E8F'>5</Text>
+                <Text lineHeight='53px' fontSize='16px' color='#641E8F'>{game?.players?.length}</Text>
                 <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Players</Text>
             </Flex>
 

@@ -19,7 +19,7 @@ export function MainPage() {
     //@ts-ignore
     const [animation, setAnimation] = useState(null);
     const { styles, toggleTheme } = useStyle()
-    const {game: {players, game}, currentWallet} = useApp();
+    const {game: {players, game, bets}, currentWallet} = useApp();
     const { currentModal, api, setCurrentModal } = useApp();
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [winnerAnimOverTime, setWinnerAnimOverTime] = useState(0);
@@ -238,10 +238,25 @@ export function MainPage() {
     }, [game, fakeState]);
 
 
+    let participants = [];
+    bets.map((bet) => {
+        const chance = (Math.floor((bet.value * 100 / game.total_floor_value * 100)) / 100);
+        const user = bet.user.username;
+
+        participants.push((
+            <Flex gap='6px'>
+                <Text fontWeight='normal' fontSize='11px'>{user}</Text>
+                <Text fontWeight='normal' fontSize='11px' color='#641E8F'>{chance}%</Text>
+            </Flex>
+        ))
+    });
+
     return (<>
         <UserModal />
         <WinnerDialog />
         <NftSelectorModal/>
+
+
         <Box position="relative" backgroundColor={styles.bg}>
             <Box
             position="absolute"
@@ -273,7 +288,7 @@ export function MainPage() {
                 <Box
                     alignSelf="flex-end"
                     bg={styles.chat}
-                    width="226px"
+                    width="290px"
                     boxShadow={styles.shadowRight}
                 >
                     <ChatContextProvider>
@@ -284,7 +299,12 @@ export function MainPage() {
                     flexGrow="1"
                     flexDirection='column'
                 >
-                    <MainBetsInfo></MainBetsInfo>
+                    
+                    <MainBetsInfo/>
+
+                    <Flex flexDir='row' marginLeft='20px' marginTop='10px'>
+                        {participants}
+                    </Flex>
                     <Spacer/>
 
                     <Flex flex='1' justifyContent='center' flexGrow='1'>

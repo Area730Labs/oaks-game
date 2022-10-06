@@ -68,7 +68,7 @@ export function Bet(props: { item: BetObject, key: any }) {
     }, [game.game.total_floor_value])
 
     let avatarStyle = {
-        backgroundImage: 'url(https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png)',
+        backgroundImage: 'url(/icons/avatar.png)',
         backgroundSize: 'contain',
         with: '40px',
         height: '40px'

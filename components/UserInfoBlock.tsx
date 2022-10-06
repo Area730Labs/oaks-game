@@ -1,15 +1,25 @@
 import { Box, Flex, Img, Text } from "@chakra-ui/react";
 import { UserType } from "../interfaces/user";
 import { useStyle } from "./StyleContext";
+import { useApp } from "./AppContext";
+import { PublicKey } from "@solana/web3.js";
 
 export function UserInfoBlock(props: { user: UserType }) {
 
     const { styles } = useStyle();
+    const {game: {players, game, bets}, currentWallet} = useApp();
 
     const avatarBorder = "2px solid " + styles.chatSendBtn
 
-    const betdepositvalue = 0;
-    const chance = 5.3;
+    let betdepositvalue = 0;
+    let chance = 0;
+
+    bets.map((bet) => {
+        if ((new PublicKey(bet.user.wallet)) == currentWallet) {
+            chance = (Math.floor((bet.value * 100 / game.total_floor_value * 100)) / 100);
+            betdepositvalue = bet.value;
+        }
+    });
 
 
     let userImg = props.user.image;

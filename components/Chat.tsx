@@ -58,7 +58,7 @@ function ChatInput() {
             <Input
                 placeholder="Type here..."
                 borderRadius="99px"
-                width="164px"
+                width="230px"
                 backgroundColor={styles.chatInputBg}
                 border="none"
                 _focus={outlineConfig}

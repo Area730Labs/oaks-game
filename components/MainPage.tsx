@@ -26,6 +26,7 @@ export function MainPage() {
 
     const [fakeState, setFakeState] = useState(0);
     const [lastState, setLastState] = useState(0);
+    const [currentGame, setCurrentgame] = useState(null);
 
     const initialWheelState = {
         nfts:'0/40',
@@ -120,6 +121,10 @@ export function MainPage() {
         })
     }, [players, game]);
 
+    for(let i = 0; i < 8; ++i){
+        icons.push(<Box key={i} className={`selection-base selection-${i + 1}`} style={getAvatarStyle(i)}></Box>);
+    }
+
 
     useEffect(() => {
         if (!game) {
@@ -127,21 +132,10 @@ export function MainPage() {
             return;
         }
 
-        if ((game.winner?.trim()?.length || 0) > 0) {
-            
-        }
-    }, [game]);
+        const gState = game.state;
 
-    for(let i = 0; i < 8; ++i){
-        icons.push(<Box key={i} className={`selection-base selection-${i + 1}`} style={getAvatarStyle(i)}></Box>);
-    }
-
-    // timer
-    useEffect(() => {
-        if (!game) return;
-
-        const gState = game.state; //fakeState
-
+        console.log("game state: " + gState + ", escrow: " + game.escrow);
+        
 
         if (game.started_at == 0 || gState > 0) {
             pause();
@@ -155,35 +149,28 @@ export function MainPage() {
             }
         }
 
-        if (gState == 0 && gState != lastState) {
-            setAnimation(null);
-
-            setLastState(gState);
+        if (gState == lastState) {
+            return;
         }
 
-        // if (gState == 2 && gState != lastState) {
-        //     const spin = keyframes`
-        //     from { transform: rotate(0deg); }
-        //     to { transform: rotate(360deg); }`
 
-        //     const anim = prefersReducedMotion
-        //     ? undefined
-        //     : `${spin} infinite 1s linear normal forwards`;
+        console.log("game state changed: " + gState);
 
-        //     setAnimation(anim);
+        if (gState == 0) {
+            console.log("Reseting anim");
+            setAnimation(null);
+        }
 
-        //     setLastState(gState);
-        // }
-
-        if (gState == 4 && gState != lastState) {
+        if (gState == 4) {
             const winnerId = game.winner;
             let youWon = winnerId && currentWallet && winnerId == currentWallet.toString();
 
             setTimeout(() => {
-                
                 if (youWon) {
                     setCurrentModal("winnerdialog");
                 }
+
+                console.log("Winner dialog shown to winner");
             }, 5000);
 
 
@@ -205,17 +192,9 @@ export function MainPage() {
             : `${spin} 1 5s ease-in-out normal forwards`;
 
             setAnimation(anim);
-
-
-            setLastState(gState);
         }
 
-        // prize sent
-        // if (gState == 5 && gState != lastState) {
-            
-        //     setLastState(gState);
-
-        // }
+        setLastState(gState);
     }, [game]);
 
 

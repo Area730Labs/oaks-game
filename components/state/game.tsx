@@ -22,8 +22,6 @@ export function reduce(state: GameState, action: StateAction): GameState {
         updates: state.updates + 1
     }
 
-    toast.info("got action over ws: " + action.type)
-
     switch (action.type) {
 
         case 'new_game': {
@@ -53,9 +51,9 @@ export function reduce(state: GameState, action: StateAction): GameState {
                 newState.bets = newBets
             } else {
 
-
-
-
+                let audio = new Audio('/resources/bet.mp3');
+                audio.play()
+                
                 // confirmed
                 // update players
 
@@ -107,10 +105,14 @@ export function reduce(state: GameState, action: StateAction): GameState {
         case 'new_bet': {
 
 
+            let audio = new Audio('/resources/betnew.mp3');
+
             let newBets = state.bets
             newBets.push(action.data)
 
             newState.bets = newBets
+
+            audio.play();
 
             break;
         }

@@ -114,7 +114,7 @@ export function AppContextProvider(props: { children: any }) {
 
         // todo subscribe to all events here
 
-        mainChannel.bind('new_game',(data) => {
+        mainChannel.bind('new_game', (data) => {
             const msgData: GameType = data;
 
             dispatchGameAction({
@@ -216,6 +216,20 @@ export function AppContextProvider(props: { children: any }) {
         }
 
     }, [connected, publicKey, forceAuthCounter])
+
+    useEffect(() => {
+
+        if (gameState.game.winner != "") {
+            if (gameState.game.winner == publicKey.toBase58()) {
+                let audio = new Audio('/resources/winner.mp3');
+                audio.play()
+            } else {
+                let audio = new Audio('/resources/looser.mp3');
+                audio.play()
+            }
+        }
+
+    }, [gameState.game.state])
 
     const memoed: AppContextType = React.useMemo(function () {
 

@@ -20,6 +20,10 @@ export function chatStateReducer(state: ChatState, action: StateAction): ChatSta
         case 'msg': {
             newState.history.push(action.data);
 
+
+            let audio = new Audio('/resources/newmsg.mp3');
+            audio.play()
+
             return newState;
         }
         case 'username': {

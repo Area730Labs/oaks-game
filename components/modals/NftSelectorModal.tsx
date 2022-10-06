@@ -217,6 +217,7 @@ async function betSelectedItems(
                 connection.sendEncodedTransaction(serializedTxString).then(sig => {
                     console.log("tx sent : ", sig)
                 }).catch(e => {
+                    console.log('unable to send transaction',e)
                     toast.warn("unable to send transaction, try again later")
                 }).finally(() => {
                     setCurrentModal("")

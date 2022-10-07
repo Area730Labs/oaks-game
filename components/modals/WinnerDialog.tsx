@@ -52,7 +52,9 @@ export default function WinnerDialog() {
             <Modal
                 initialFocusRef={initialRef}
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={() => {
+                    setCurrentModal("");
+                }}
                 size='2xl'
                 isCentered
             >

@@ -50,7 +50,9 @@ export default function UserModal() {
             <Modal
                 initialFocusRef={initialRef}
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={() => {
+                    setCurrentModal("");
+                }}
                 isCentered
             >
                 <ModalOverlay />

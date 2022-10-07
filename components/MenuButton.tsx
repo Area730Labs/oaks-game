@@ -1,24 +1,29 @@
 import { Box, Button, ChakraProps, Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 import { useStyle } from "./StyleContext";
-
+import { useApp } from "./AppContext";
 
 export interface MenuButtonProps extends ChakraProps {
     label: any,
     url?: string,
+    modal?: string,
     children: React.ReactNode
 }
 
 export function MenuButton(props: MenuButtonProps) {
 
     const { styles } = useStyle();
-    const { children, label, url, ...rest } = props;
+    const { children, label, url,modal, ...rest } = props;
+
+    const { setCurrentModal } = useApp();
 
     const onclick = () => {
-        if (!url) {
-            return;
+        if (modal) {
+            setCurrentModal(modal);
         }
         
-        window.open(url, '_blank', 'noopener,noreferrer');
+        if (url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
     };
 
     return (<Box

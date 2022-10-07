@@ -27,6 +27,10 @@ function ChatInput() {
 
     function sendMessageHandler(msg: string) {
 
+        if (!msg || !msg.trim()){
+            return;
+        }
+
         if (!api.hasAuth()) {
             setVisible(true);
         } else {

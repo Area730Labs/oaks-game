@@ -25,7 +25,7 @@ export function Navigation() {
         <MenuButton label="top 30" >
             <TopImg />
         </MenuButton>
-        <MenuButton label="faq" >
+        <MenuButton label="faq" modal="faq">
             <FaqImg />
         </MenuButton>
         <MenuButton label="statistics" >

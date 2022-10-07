@@ -13,7 +13,7 @@ import { useReducer } from 'react';
 import { useTimer } from 'react-timer-hook';
 import { PublicKey } from '@solana/web3.js';
 import WinnerDialog from './modals/WinnerDialog';
-
+import Faq from './modals/Faq';
 
 export function MainPage() {
     //@ts-ignore
@@ -22,11 +22,7 @@ export function MainPage() {
     const {game: {players, game, bets}, currentWallet} = useApp();
     const { currentModal, api, setCurrentModal } = useApp();
     const [, forceUpdate] = useReducer(x => x + 1, 0);
-    const [winnerAnimOverTime, setWinnerAnimOverTime] = useState(0);
-
-    const [fakeState, setFakeState] = useState(0);
     const [lastState, setLastState] = useState(0);
-    const [currentGame, setCurrentgame] = useState(null);
 
     const initialWheelState = {
         nfts:'0/40',
@@ -64,21 +60,7 @@ export function MainPage() {
     }, [players]);
 
     useEffect(() => {
-        setTimeout(() => {
-            setFakeState(1);
-        }, 2000);
-
-        setTimeout(() => {
-            setFakeState(2);
-        }, 5000);
-
-        setTimeout(() => {
-            setFakeState(3);
-        }, 10000);
-
-        setTimeout(() => {
-            setFakeState(4);
-        }, 12000);
+        // setCurrentModal("faq");
     }, []);
 
 
@@ -215,6 +197,7 @@ export function MainPage() {
         <UserModal />
         <WinnerDialog />
         <NftSelectorModal/>
+        <Faq/>
 
 
         <Box position="relative" backgroundColor={styles.bg}>

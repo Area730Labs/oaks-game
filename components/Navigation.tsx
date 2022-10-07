@@ -22,13 +22,13 @@ export function Navigation() {
         <MenuButton label="poker" url='https://oak.bet/games?category=Video%20Poker'>
             <></>
         </MenuButton>
-        <MenuButton label="top 30" >
+        <MenuButton label="top 30" modal="top">
             <TopImg />
         </MenuButton>
         <MenuButton label="faq" modal="faq">
             <FaqImg />
         </MenuButton>
-        <MenuButton label="statistics" >
+        <MenuButton label="statistics" modal="stats">
             <StatsImg />
         </MenuButton>
         <ConnectButton>connect wallet</ConnectButton>

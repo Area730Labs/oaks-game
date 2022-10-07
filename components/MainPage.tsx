@@ -14,6 +14,9 @@ import { useTimer } from 'react-timer-hook';
 import { PublicKey } from '@solana/web3.js';
 import WinnerDialog from './modals/WinnerDialog';
 import Faq from './modals/Faq';
+import Top from './modals/Top';
+import Stats from './modals/Stats';
+
 
 export function MainPage() {
     //@ts-ignore
@@ -60,7 +63,7 @@ export function MainPage() {
     }, [players]);
 
     useEffect(() => {
-        // setCurrentModal("faq");
+        // setCurrentModal("top");
     }, []);
 
 
@@ -198,6 +201,8 @@ export function MainPage() {
         <WinnerDialog />
         <NftSelectorModal/>
         <Faq/>
+        <Top/>
+        <Stats/>
 
 
         <Box position="relative" backgroundColor={styles.bg}>

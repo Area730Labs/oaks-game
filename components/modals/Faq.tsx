@@ -75,8 +75,8 @@ export default function Faq() {
                     >
 
                         <Accordion>
-                            {qa.map((item) => {
-                                return (<AccordionItem>
+                            {qa.map((item, index) => {
+                                return (<AccordionItem key={index}>
                                     <h2>
                                         <AccordionButton>
                                             <Box flex='1' textAlign='left'>

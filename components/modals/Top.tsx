@@ -95,7 +95,7 @@ export default function Top() {
                             <Tbody>
                                 {data.map((item, index) => {
                                     return (
-                                        <Tr>
+                                        <Tr key={index}>
                                             <Td width='15px'>{index + 1}</Td>
                                             <Td>{item.wallet}</Td>
                                             <Td isNumeric>{item.total} SOL</Td>

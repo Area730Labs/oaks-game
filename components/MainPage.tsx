@@ -16,7 +16,7 @@ import WinnerDialog from './modals/WinnerDialog';
 import Faq from './modals/Faq';
 import Top from './modals/Top';
 import Stats from './modals/Stats';
-
+import { BetNftImage } from './Bet';
 
 export function MainPage() {
     //@ts-ignore
@@ -26,6 +26,7 @@ export function MainPage() {
     const { currentModal, api, setCurrentModal } = useApp();
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [lastState, setLastState] = useState(0);
+    
 
     const initialWheelState = {
         nfts:'0/40',
@@ -119,7 +120,7 @@ export function MainPage() {
 
         const gState = game.state;
 
-        console.log("game state: " + gState + ", escrow: " + game.escrow);
+        // console.log("game state: " + gState + ", escrow: " + game.escrow);
         
 
         if (game.started_at == 0 || gState > 0) {
@@ -138,8 +139,6 @@ export function MainPage() {
             return;
         }
 
-
-        console.log("game state changed: " + gState);
 
         if (gState == 0) {
             console.log("Reseting anim");
@@ -195,6 +194,26 @@ export function MainPage() {
             </Flex>
         ))
     });
+
+
+
+    let allNfts = []
+    let counter = 0;
+
+    bets.map((item) => {
+        item.nfts.map((nft) => {
+            allNfts.push(<BetNftImage key={counter} item={nft}/>)
+            counter++;
+        });
+    });
+
+//    for(let i = 0; i < 30; ++i) {
+//     allNfts.push(<BetNftImage key={counter} item={{
+//         address: new PublicKey('FJny4iLNMStjiVG3dY3tFRFUmvUDj5mfMHrA7B6rxW7n'),
+//         name: 'Gloom Punk Club',
+//         image: null
+//     }}/>)
+//    }
 
     return (<>
         <UserModal />
@@ -295,7 +314,28 @@ export function MainPage() {
                         </Box>
 
                     </Flex>
+
                     <Spacer/>
+
+                    <Box maxW='100vh' overflow='scroll' padding='5px'>
+                        <Flex
+                            overflow="auto"
+                            sx={{
+                                "::-webkit-scrollbar": {
+                                display: "none",
+                                },
+                            }}
+                        >
+                            <Flex
+                                justifyContent="center"
+                                alignItems="center"
+                                gap="5px"
+                                flexWrap="nowrap"
+                            >
+                                {allNfts}
+                            </Flex>
+                        </Flex>
+                    </Box>
                    
 
                 </Flex>

@@ -24,6 +24,8 @@ export interface AppContextType {
     setCurrentModal(name: string): void
 
     game: GameState
+    imageCache: { [name: string]: string }
+    setImageCache(obj:any): void
 
     connection: Connection,
     signTransaction: any
@@ -93,6 +95,8 @@ export function AppContextProvider(props: { children: any }) {
     const { signTransaction } = useWallet();
 
     const { mainChannel } = useWsContext();
+
+    const [imageCache, setImageCache] = useState({});
 
     const [gameState, dispatchGameAction] = useReducer(gameStateReduce, {
         bets: [],
@@ -251,7 +255,8 @@ export function AppContextProvider(props: { children: any }) {
             setCurrentModal,
             wallet: {} as Wallet,
             game: gameState,
-
+            imageCache: imageCache,
+            setImageCache: setImageCache,
             connection, signTransaction
         };
     }, [
@@ -259,7 +264,7 @@ export function AppContextProvider(props: { children: any }) {
         user, setUser,
         apiHandler,
         currentModal, setCurrentModal,
-
+        imageCache,
         gameState.updates
     ]);
 

@@ -8,16 +8,24 @@ import { Username } from "./Username";
 import { Metaplex } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 
-function BetNftImage(props: { item: Nft, key: any }) {
+export function BetNftImage(props: { item: Nft, key: any }) {
     const [img, setImg] = useState('/icons/holder.jpeg');
 
-    const { connection } = useApp();
+    const { connection, imageCache, setImageCache } = useApp();
 
     useEffect(() => {
         const getImg = async () => {
             if (!props || !props.item || !props.item.address) {
                 return;
             }
+
+            const mint = props.item.address.toString();
+            const cachedImgUrl = imageCache[mint];
+
+            if (cachedImgUrl){
+                setImg(cachedImgUrl);
+                return;
+            } 
 
             try {
                 const metaplex = new Metaplex(connection);
@@ -27,7 +35,16 @@ function BetNftImage(props: { item: Nft, key: any }) {
 
                 const imgUrl = (await (await fetch(nft.uri)).json()).image;
 
-                setImg(imgUrl);
+                if (imgUrl) {
+                    setImg(imgUrl);
+
+                    let newCache = {
+                        ...imageCache
+                    };
+                    newCache[mint] = imgUrl;
+                    setImageCache(newCache);
+                }
+
             } catch (e) {
                 console.error(e);
             }

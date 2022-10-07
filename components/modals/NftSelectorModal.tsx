@@ -65,6 +65,11 @@ export default function NftSelectorModal() {
                                 }
                             }
 
+                            if (whitelistedResult.length == 0) {
+                                toast.info('no whitelisted nfts')
+                                setCurrentModal("");
+                            }
+
                             setNfts(whitelistedResult);
                         })
                     })

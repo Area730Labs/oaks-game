@@ -229,10 +229,7 @@ export function AppContextProvider(props: { children: any }) {
                     if (gameState.game.winner == publicKey.toBase58()) {
                         let audio = new Audio('/resources/winner.mp3');
                         audio.play()
-                    } else {
-                        let audio = new Audio('/resources/looser.mp3');
-                        audio.play()
-                    }
+                    } 
                 }, 5000);
 
             }

@@ -12,7 +12,7 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { getAllNfts, getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
-import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram, Connection } from "@solana/web3.js"
+import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { getAssociatedTokenAddressSync, createTransferInstruction, createAssociatedTokenAccountInstruction } from "@solana/spl-token"
 import bs58 from "bs58"
 import GlobalConfig from "../../config"
@@ -208,10 +208,14 @@ async function betSelectedItems(
         ixs.push(transferIx);
     }
 
+    let betLamports = solValue * LAMPORTS_PER_SOL; 
+
+    // toast.info('adding extra '+ solValue + " to bet")
+
     ixs.push(SystemProgram.transfer({
         fromPubkey: currentWallet,
         toPubkey: escrowPk,
-        lamports: 3000000
+        lamports: GlobalConfig.betFee + betLamports
     }))
 
     connection.getLatestBlockhash().then(bh => {
@@ -229,11 +233,13 @@ async function betSelectedItems(
             const serializedTx = tx.serialize()
             const serializedTxString = serializedTx.toString('base64')
 
+            const lamport = solValue * LAMPORTS_PER_SOL;
+
             const betArgs: BetArgs = {
                 signatures: [sigStr],
                 mints: mints,
                 game_uid: game.game.uid,
-                sol_value: solValue,
+                sol_value: lamport,
             }
 
             api.bet(betArgs).then((response) => {
@@ -255,7 +261,7 @@ async function betSelectedItems(
             })
 
         }).catch(e => {
-            toast.warn('unable to sign a transaction',)
+            toast.warn('unable to sign a transaction: '+e.message)
         })
 
     }).catch(e => {

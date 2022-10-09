@@ -12,6 +12,7 @@ import { NftSelection } from "./nftselection";
 import Fadeable from "../fadeable";
 import { roundNumber } from "../../utils";
 import { Flex, Input, Spinner, Text } from "@chakra-ui/react";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 
 export interface NftsSelectorProps {
@@ -90,11 +91,14 @@ export default function NftsSelector(props: NftsSelectorProps) {
     }
 
     React.useEffect(() => {
-        if (selectedItemsCount > 0) {
+        if (selectedItemsCount > 0 || solvalue > 0) {
             setSelectedPopupVisible(true)
 
             setUpdating(true);
-            api.calc_bet_map(selectedItems, solvalue).then((value) => {
+
+            const lamport = solvalue * LAMPORTS_PER_SOL
+
+            api.calc_bet_map(selectedItems, lamport).then((value) => {
                 setBetValue(value);
             }).catch(e => {
                 console.warn('unable to calc bet value ', e)
@@ -106,7 +110,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
             setSelectedPopupVisible(false);
             setBetValue(0)
         }
-    }, [selectedItemsCount]);
+    }, [selectedItemsCount,solvalue]);
 
 
     const nftsPlaceholders = [];
@@ -189,16 +193,8 @@ export default function NftsSelector(props: NftsSelectorProps) {
             </Flex>
 
         </Fadeable>
-        <Input placeholder="extra sol" value={solvalue} onChange={(e: any) => {
-
-
-            if (e.target.value > 0) {
-                setSelectedPopupVisible(true);
-            } else {
-                setSelectedPopupVisible(false);
-            }
-
-            setSolvalue(e.target.value)
+        <Input placeholder="extra sol" type="number" value={solvalue} onChange={(e: any) => { 
+            setSolvalue(parseFloat(e.target.value))
         }}/>
         <NftSelectorGrid>
             {items && items.map((it, idx) => {

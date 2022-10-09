@@ -6,4 +6,5 @@ export interface Config {
     selector_max_nft_per_row: number
     rpc: string 
     rpcTx: string
+    betFee: number
 }

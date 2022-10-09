@@ -68,7 +68,7 @@ function ChatInput() {
                 _focus={outlineConfig}
                 _active={outlineConfig}
                 fontSize="10px"
-                outline={"none!important"}
+                outline={`1px solid ${styles.chatInputOutline}`}
                 height="30px"
                 onKeyDown={inputHandler}
                 onChange={inputTextHandler}
@@ -82,6 +82,7 @@ function ChatInput() {
             height={sendBtnSize}
             fontFamily="GolosUI"
             borderRadius="99px"
+            cursor='pointer'
             backgroundColor={styles.chatSendBtn}
             onClick={() => {
                 sendMessageHandler(message);

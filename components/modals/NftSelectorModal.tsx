@@ -132,7 +132,7 @@ export default function NftSelectorModal() {
                 >
                     <ModalHeader>
                         <Flex alignItems="center">
-                            <Button variant="info" onClick={forceReloadNfts}> <RepeatIcon /> </Button>
+                            <Button variant="info" onClick={forceReloadNfts} backgroundColor={styles.chatSendBtn}> <RepeatIcon color={styles.makeBetBtnColor} /> </Button>
                             <Flex direction="column">
                                 <Text>NFT in your wallet</Text>
                                 <Text fontSize={"10px"}>{currentWallet?.toBase58()}</Text>

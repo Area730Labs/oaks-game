@@ -1,18 +1,19 @@
 import { Box, Button, ChakraProps, Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react";
 import { useStyle } from "./StyleContext";
 import { useApp } from "./AppContext";
-
+import { Children } from "react";
 export interface MenuButtonProps extends ChakraProps {
     label: any,
     url?: string,
     modal?: string,
-    children: React.ReactNode
+    children: React.ReactNode,
+    withIcon: boolean
 }
 
 export function MenuButton(props: MenuButtonProps) {
 
     const { styles } = useStyle();
-    const { children, label, url,modal, ...rest } = props;
+    const { children, label, url,modal, withIcon, ...rest } = props;
 
     const { setCurrentModal } = useApp();
 
@@ -26,13 +27,15 @@ export function MenuButton(props: MenuButtonProps) {
         }
     };
 
+    const txtColor = withIcon  ? styles.navColorWithIcons: styles.menuColor ;
+
     return (<Box
-        color={styles.menuColor}
+        color={txtColor}
         textTransform="uppercase"
         fontFamily="GolosUI"
         fontWeight="400"
         cursor="pointer"
-        _hover={{ backgroundColor: styles.chatSendBtn }}
+        // _hover={{ backgroundColor: styles.chatSendBtn }}
         padding="10px 15px"
         borderRadius="99px"
         transition=".2s all ease"
@@ -43,7 +46,7 @@ export function MenuButton(props: MenuButtonProps) {
         <Flex>
             <Box
                 color={styles.menuIcon}
-                _groupHover={{ color: styles.menuIconHover }}
+                // _groupHover={{ color: styles.menuIconHover }}
                 fontSize="22px"
             >
                 {children} {/* icon? */}

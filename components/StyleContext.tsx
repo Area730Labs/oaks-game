@@ -34,7 +34,19 @@ export interface StylesType {
     makeBetBtnColor: string
     buttons: StyledButtons 
     borderRadiusPx: number
-    transition: string
+    transition: string,
+    chatInputOutline: string,
+    navColorWithIcons: string,
+    logoLeft: string,
+    logoRight: string,
+    wheelBg1: string,
+    wheelOutline: string,
+    wheelBg2: string,
+    wheelText: string,
+    wheelLabels: string,
+    wheelLabelsBg: string,
+    wheelTotalLabel: string,
+    wheelAvatarBorder: string,
 }
 
 export interface StyleContextType {
@@ -74,28 +86,40 @@ const whiteTheme: StylesType = {
         }
     },
     borderRadiusPx: 8,
-    transition: "all .2s ease"
+    transition: "all .2s ease",
+    chatInputOutline: "#0EA5E9",
+    navColorWithIcons: "#E5F7FF",
+    logoLeft: "#2E3339",
+    logoRight: "#FFFFFF",
+    wheelBg1: "rgba(30, 60, 73, 0.4)",
+    wheelOutline: "4px solid #0EA5E9",
+    wheelBg2: "rgba(30, 60, 73, 0.3)",
+    wheelText: "rgba(33, 37, 53, 1)",
+    wheelLabels: "rgba(185, 212, 188, 1)",
+    wheelLabelsBg: "rgba(64, 81, 95, 1)",
+    wheelTotalLabel: "#33B5EF",
+    wheelAvatarBorder: "2px solid #00B0FF",
 }
 
 const blackTheme: StylesType = {
-    color : "#CCD7FF",
-    bg : "rgba(22, 6, 34, 1)",
-    header: "rgb(46, 15, 64)",
-    chat : "rgba(56, 44, 89, 1)",
-    chat_even : "rgba(62, 50, 98, 1)",
+    color : "#9C9C9C",
+    bg : "#172018",
+    header: "#2A2A2A",
+    chat : "#232323",
+    chat_even : "#2A2A2A",
     chat_label : "rgba(180, 75, 255, 1)",
-    username: "#B44BFF",
+    username: "#32C745",
     shadowRight: "5px 0px 15px rgba(0, 0, 0, 0.15)",
     shadowLeft : "-5px 0px 15px rgba(0, 0, 0, 0.15)",
-    chatInput : "#2E0F40",
+    chatInput : "#383838",
     shadowTop: "0px -5px 20px rgba(0, 0, 0, 0.4)",
-    chatSendBtn: "rgba(202, 19, 149, 1)",
-    chatInputBg : "rgba(66, 27, 89, 1)",
-    menuColor : "#CCCCFF",
-    menuIcon: "#CA1395",
+    chatSendBtn: "#32C745",
+    chatInputBg : "#303030",
+    menuColor : "#32C745",
+    menuIcon: "#32C745",
     menuIconHover : "#386496",
-    betInfoValue: "#B44BFF",
-    makeBetBtnColor: "#E5F7FF",
+    betInfoValue: "#32C745",
+    makeBetBtnColor: "#21601C",
     meUsername : "white",
     buttons: {
         info: {
@@ -108,7 +132,20 @@ const blackTheme: StylesType = {
         }
     },
     borderRadiusPx : 8,
-    transition: "all .2s ease"
+    transition: "all .2s ease",
+    chatInputOutline: "#32C745",
+    navColorWithIcons: "#BEBEBE",
+    logoLeft: "#EAEAEA",
+    logoRight: "#41DD55",
+    wheelBg1: "rgba(0, 0, 0, 0.1)",
+    wheelOutline: "4px solid rgba(65, 221, 85, 1)",
+    wheelBg2: "rgba(44, 49, 44, 1)",
+    wheelText: "rgba(143, 143, 143, 1)",
+    wheelLabels: "rgba(231, 255, 229, 1)",
+    wheelLabelsBg: "rgba(44, 49, 44, 1)",
+    wheelTotalLabel: "#41DD55",
+    wheelAvatarBorder: "2px solid #41DD55",
+
 }
 
 const current_theme_storage_key = "current_theme";

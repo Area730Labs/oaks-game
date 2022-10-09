@@ -167,7 +167,8 @@ export default function NftsSelector(props: NftsSelectorProps) {
                 <Button
                     display="flex"
                     justifySelf="flex-end"
-                    onClick={performActionWithSelectedItems}>
+                    onClick={performActionWithSelectedItems}
+                    backgroundColor={styles.username}>
                     {action_label}
                     <Box
                         display="inline"
@@ -177,7 +178,8 @@ export default function NftsSelector(props: NftsSelectorProps) {
                         p="1"
                         px="2.5"
                         borderRadius={"99px"}
-                        backgroundColor={styles.chat_even}
+                        backgroundColor='white'
+                        color={styles.username}
                     > {selectedItemsCount} NFT / {upadtingValue ? <Spinner /> : roundNumber(betValue, 2)} SOL
                     </Box>
                 </Button>

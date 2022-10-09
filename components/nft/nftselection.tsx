@@ -41,7 +41,7 @@ export function NftSelection(props: NftSelectionProps | any) {
 
     const border = React.useMemo(() => {
         if (!selected) {
-            return `${borderSize}px solid white`
+            return `${borderSize}px solid ${styles.chatSendBtn}`
         } else {
             return `${borderSize}px solid ${styles.chatSendBtn}`
         }
@@ -60,16 +60,16 @@ export function NftSelection(props: NftSelectionProps | any) {
         transition="all .2s ease"
         _hover={{
             boxShadow: "dark-lg",
-            border: `${borderSize}px solid black`
+            border: `${borderSize}px solid ${styles.chatSendBtn}`
         }}
-        backgroundColor={"white"}//appTheme.themeColor}
+        backgroundColor={styles.chat_even}//appTheme.themeColor}
         onClick={clickHandler}
         {...props}
     >
         {selected ? <Box
             color="black"
             borderRadius="50%"
-            border={`${borderSize}px solid black`}
+            border={`${borderSize}px solid ${styles.chatSendBtn}`}
             borderColor={styles.chatSendBtn}
             backgroundColor="white"
             display="inline-block"
@@ -90,7 +90,7 @@ export function NftSelection(props: NftSelectionProps | any) {
             <Box overflowY="hidden" borderRadius={brVal} minH={["100px", "150px", "200px"]} minW={["100px", "150px", "200px"]} backgroundColor={styles.chat}>
                 <Image margin="0 auto" maxH={["100px", "150px", "200px"]} maxW={["100px", "150px", "200px"]} src={nftInfo.image} borderRadius={brVal} />
             </Box>
-            <Text width="100%" marginTop="2" color="black" marginBottom="2">{nftInfo.name}</Text>
+            <Text width="100%" marginTop="2" color={styles.username} marginBottom="2" >{nftInfo.name}</Text>
         </Box>
         {props.children}
     </GridItem>

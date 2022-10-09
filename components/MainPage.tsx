@@ -21,7 +21,7 @@ import { BetNftImage } from './Bet';
 export function MainPage() {
     //@ts-ignore
     const [animation, setAnimation] = useState(null);
-    const { styles, toggleTheme } = useStyle()
+    const { styles, toggleTheme, theme } = useStyle()
     const {game: {players, game, bets}, currentWallet} = useApp();
     const { currentModal, api, setCurrentModal } = useApp();
     const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -78,7 +78,7 @@ export function MainPage() {
                 // backgroundImage: `url(${players[index].img})`,
                 backgroundImage: 'url(/icons/avatar.png)',
                 backgroundSize: 'contain',
-                border: '2px solid #00B0FF'
+                border: styles.wheelAvatarBorder
             }
         } 
 
@@ -106,9 +106,10 @@ export function MainPage() {
             solAmount: parseFloat(total.toFixed(2)).toString()
         })
     }, [players, game]);
-
+    
+    const avCls = theme == "white" ? "selection-base-white" : "selection-base-dark";
     for(let i = 0; i < 8; ++i){
-        icons.push(<Box key={i} className={`selection-base selection-${i + 1}`} style={getAvatarStyle(i)}></Box>);
+        icons.push(<Box key={i} className={`selection-base ${avCls} selection-${i + 1}`} style={getAvatarStyle(i)}></Box>);
     }
 
 
@@ -190,7 +191,7 @@ export function MainPage() {
         participants.push((
             <Flex gap='6px'>
                 <Text fontWeight='normal' fontSize='11px'>{user}</Text>
-                <Text fontWeight='normal' fontSize='11px' color='#641E8F'>{chance}%</Text>
+                <Text fontWeight='normal' fontSize='11px' color={styles.betInfoValue}>{chance}%</Text>
             </Flex>
         ))
     });
@@ -215,6 +216,8 @@ export function MainPage() {
 //     }}/>)
 //    }
 
+    const wheelBg = theme == "white" ? '/icons/subtract.png' : '/icons/subtract-dark.png';
+
     return (<>
         <UserModal />
         <WinnerDialog />
@@ -230,9 +233,11 @@ export function MainPage() {
             top="8px"
                 left="20px"
                 display='flex'
+                onClick={toggleTheme}
             >
                     <Image src='/icons/logo.png' />
-                    <Text lineHeight='54px' marginLeft='10px' fontSize='20px' color='white' fontWeight='bold'>PARADISE GAMING</Text>
+                    <Text lineHeight='54px' marginLeft='10px' fontSize='20px' color={styles.logoLeft} fontWeight='bold'>PARADISE</Text>
+                    <Text lineHeight='54px' marginLeft='10px' fontSize='20px' color={styles.logoRight} fontWeight='bold'>GAMING</Text>
             </Box>
             
 
@@ -275,10 +280,10 @@ export function MainPage() {
                     <Spacer/>
 
                     <Flex flex='1' justifyContent='center' flexGrow='1'>
-                        <Box width='560px' height='560px' backgroundColor='rgba(30, 60, 73, 0.4);' borderRadius='280px' overflow='hidden'>
-                            <Box className='wheel-inner'>
+                        <Box width='560px' height='560px' backgroundColor={styles.wheelBg1} borderRadius='280px' overflow='hidden'>
+                            <Box className='wheel-inner' backgroundColor={styles.wheelBg2} outline={styles.wheelOutline}>
                                 <Box className='wheel-inner-2' animation={animation}> 
-                                    <Image src='/icons/subtract.png' className='wheel-img'></Image>
+                                    <Image src={wheelBg} className='wheel-img'></Image>
 
                                     {icons}
                                 </Box>
@@ -287,9 +292,9 @@ export function MainPage() {
                         <Box className='wheel-arrow'></Box>
                         <Box className='wheel-data' textAlign='center'>
                             <Flex flexDirection='column' flex='1' justifyContent='center' alignItems='center' flexGrow='1'>
-                                <Text textAlign='center' fontSize='14px' fontFamily='GolosUi' fontWeight='normal' color='black'>Time</Text>
-                                <Box className='wheel-text-box'>
-                                    <Text color='#B9D4BC' fontSize='18px' lineHeight='37px' fontWeight='normal'>
+                                <Text textAlign='center' fontSize='14px' fontFamily='GolosUi' fontWeight='normal' color={styles.wheelText}>Time</Text>
+                                <Box className='wheel-text-box' backgroundColor={styles.wheelLabelsBg}>
+                                    <Text color={styles.wheelLabels} fontSize='18px' lineHeight='37px' fontWeight='normal'>
                                         {isRunning && (
                                             `${minutes}:${seconds}`
                                         )}
@@ -299,15 +304,15 @@ export function MainPage() {
                                     </Text>
                                 </Box>
 
-                                <Text textAlign='center' fontSize='41px' fontFamily='GolosUi' fontWeight='normal' color='#33B5EF' marginTop='20px'>
+                                <Text textAlign='center' fontSize='41px' fontFamily='GolosUi' fontWeight='normal' color={styles.wheelTotalLabel} marginTop='20px'>
                                     {wheelState.solAmount} $SOL
                                 </Text>
 
-                                <Text textAlign='center' fontSize='14px' fontFamily='GolosUi' fontWeight='normal' marginTop='10px' color='black'>Current pot</Text>
-                                <Box className='wheel-text-box'>
-                                    <Text color='#B9D4BC' fontSize='18px' lineHeight='37px' fontWeight='normal'>{wheelState.nfts}</Text>
+                                <Text textAlign='center' fontSize='14px' fontFamily='GolosUi' fontWeight='normal' marginTop='10px' color={styles.wheelText}>Current pot</Text>
+                                <Box className='wheel-text-box' backgroundColor={styles.wheelLabelsBg}>
+                                    <Text color={styles.wheelLabels} fontSize='18px' lineHeight='37px' fontWeight='normal'>{wheelState.nfts}</Text>
                                 </Box>
-                                <Text textAlign='center' fontSize='14px' fontFamily='GolosUi' fontWeight='normal' color='black'>NFTs</Text>
+                                <Text textAlign='center' fontSize='14px' fontFamily='GolosUi' fontWeight='normal' color={styles.wheelText}>NFTs</Text>
 
                             </Flex>
                         </Box>
@@ -317,7 +322,11 @@ export function MainPage() {
 
                     <Spacer/>
 
-                    <Box maxW='100vh' overflow='scroll' padding='5px'>
+                    <Box maxW='100vh' overflow='scroll' padding='5px' sx={{
+                    "::-webkit-scrollbar": {
+                        display: "none",
+                    },
+                }}>
                         <Flex
                             overflow="auto"
                             sx={{

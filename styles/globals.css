@@ -88,8 +88,7 @@ a {
   left: 30px;
   top: 30px;
   border-radius: 250px;
-  background: rgba(30, 60, 73, 0.3);
-  border: 4px solid #0EA5E9;
+
 
   
 }
@@ -146,15 +145,21 @@ a {
  
   border-radius: 30px;
   
-  border: 2px dashed #84B0A8;
-
- 
+  
 }
+
+.selection-base-dark {
+  border: 2px dashed rgba(231, 255, 229, 1);
+}
+
+.selection-base-white {
+  border: 2px dashed #84B0A8;
+}
+
 
 .wheel-text-box {
   width: 75px;
   height: 37px;
-  background-color: #40515F;
   border-radius: 4.5px;
   margin-top: 5px;
 }

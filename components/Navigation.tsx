@@ -10,25 +10,25 @@ export function Navigation() {
         marginRight="20px"
     >
         <Spacer/>
-        <MenuButton label="live games" url='https://oak.bet/live-casino'>
+        <MenuButton label="live games" withIcon={false} url='https://oak.bet/live-casino'>
             <></>
         </MenuButton>
-        <MenuButton label="slots" url='https://oak.bet/games?category=Slots'>
+        <MenuButton label="slots" withIcon={false} url='https://oak.bet/games?category=Slots'>
             <></>
         </MenuButton>
-        <MenuButton label="sports" url='https://oak.bet/sports'>
+        <MenuButton label="sports" withIcon={false} url='https://oak.bet/sports'>
             <></>
         </MenuButton>
-        <MenuButton label="poker" url='https://oak.bet/games?category=Video%20Poker'>
+        <MenuButton label="poker" withIcon={false} url='https://oak.bet/games?category=Video%20Poker'>
             <></>
         </MenuButton>
-        <MenuButton label="top 30" modal="top">
+        <MenuButton label="top 30" withIcon={true} modal="top">
             <TopImg />
         </MenuButton>
-        <MenuButton label="faq" modal="faq">
+        <MenuButton label="faq" withIcon={true} modal="faq">
             <FaqImg />
         </MenuButton>
-        <MenuButton label="statistics" modal="stats">
+        <MenuButton label="statistics" withIcon={true} modal="stats">
             <StatsImg />
         </MenuButton>
         <ConnectButton>connect wallet</ConnectButton>

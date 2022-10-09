@@ -58,14 +58,14 @@ export function MainBetsInfo() {
 
             <Flex direction='row' marginRight='-15px' gap='5px'>
                 <Box backgroundImage='url(/icons/user-profile.png)' width='20px' height='20px' marginTop='17px'/>
-                <Text lineHeight='53px' fontSize='16px' color='#641E8F'>{game?.players?.length}</Text>
+                <Text lineHeight='53px' fontSize='16px' color={styles.betInfoValue}>{game?.players?.length}</Text>
                 <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Players</Text>
             </Flex>
 
             <Flex direction='row' marginRight='15px' gap='5px'>
                 <Box backgroundImage='url(/icons/online.png)' width='20px' height='20px' marginTop='17px'/>
-                <Text lineHeight='53px' fontSize='16px' color='#641E8F'>128</Text>
-                <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Online</Text>
+                <Text lineHeight='53px' fontSize='16px' color={styles.betInfoValue}>128</Text>
+                <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Watching</Text>
             </Flex>
             
         </Flex>

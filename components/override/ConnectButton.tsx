@@ -21,6 +21,7 @@ const WalletButtonImage = (props: WalletButtonImageProps) => {
     return <MenuButton
         marginLeft="30px"
         label={children}
+        withIcon={true}
         {...rest}
     >
         <WalletImg />

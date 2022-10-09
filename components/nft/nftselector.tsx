@@ -193,9 +193,22 @@ export default function NftsSelector(props: NftsSelectorProps) {
             </Flex>
 
         </Fadeable>
-        <Input placeholder="extra sol" type="number" value={solvalue} onChange={(e: any) => { 
-            setSolvalue(parseFloat(e.target.value))
-        }}/>
+        <Flex dir='row' padding='10px' marginTop='20px' marginBottom='10px'>
+            <Text width='80px' lineHeight='40px' fontWeight='bold'>
+                Bet SOL:
+            </Text>
+
+            <Input type="number" style={{
+                border: `2px solid ${styles.chatSendBtn}`
+            }} 
+            _hover={{
+                border: `2px solid ${styles.chatSendBtn}`
+            }}
+            width='140px' placeholder="bet sol"  value={solvalue} onChange={(e: any) => { 
+                setSolvalue(parseFloat(e.target.value))
+            }}/>
+        </Flex>
+        
         <NftSelectorGrid>
             {items && items.map((it, idx) => {
                 return <NftSelection

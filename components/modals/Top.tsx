@@ -34,27 +34,35 @@ export default function Top() {
 
     const { currentModal, api, setCurrentModal, user, setUser } = useApp();
 
-    const initialRef = React.useRef(null)
+    const initialRef = React.useRef(null);
+    const [data, setData] = useState([]);
+
+    const updateData = async () => {
+        try {
+            let res = await api.topPlayers();
+            setData(res.items);
+        } catch(e) {
+            console.error('Failed to get top players')
+        }
+    }
 
 
     useEffect(() => {
         if (currentModal == "top") {
+            updateData();
             onOpen();
         } else {
             onClose();
         }
     }, [currentModal])
 
-    const data = [
-        
-    ]
 
-    for(let i = 0; i < 30; ++i) {
-        data.push({
-            'wallet': '44KC9xtX2yD8bne2z942VnCPKGJ3cjreTis1BffypWA2',
-            'total': i * 100 + 145
-        })
-    }
+    // for(let i = 0; i < 30; ++i) {
+    //     data.push({
+    //         'wallet': '44KC9xtX2yD8bne2z942VnCPKGJ3cjreTis1BffypWA2',
+    //         'total': i * 100 + 145
+    //     })
+    // }
 
     return (
         <>
@@ -80,6 +88,11 @@ export default function Top() {
                     <ModalBody
                         pb={6}
                         overflow='scroll'
+                        sx={{
+                            "::-webkit-scrollbar": {
+                                display: "none",
+                            },
+                        }}
                     >
 
                         <TableContainer>
@@ -97,8 +110,8 @@ export default function Top() {
                                     return (
                                         <Tr key={index}>
                                             <Td width='15px'>{index + 1}</Td>
-                                            <Td>{item.wallet}</Td>
-                                            <Td isNumeric>{item.total} SOL</Td>
+                                            <Td>{item.winner}</Td>
+                                            <Td isNumeric>{parseFloat(item.total_value.toFixed(2))} SOL</Td>
                                         </Tr>
                                     )
                                 })}

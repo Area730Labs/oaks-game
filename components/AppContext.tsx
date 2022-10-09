@@ -189,7 +189,9 @@ export function AppContextProvider(props: { children: any }) {
                     // token expired or not found
                     if (code == 41 || code == 42 || code == 43) {
                         lsSetAuthToken(publicKey as PublicKey, "");
-                        // setForceAuthCounter(forceAuthCounter + 1)
+                        if (code == 43) {
+                            setForceAuthCounter(forceAuthCounter + 1)
+                        }
                     } else {
                         toast.warn(`auth problem: ${msg}`)
                     }

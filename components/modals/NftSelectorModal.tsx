@@ -67,7 +67,7 @@ export default function NftSelectorModal() {
 
                             if (whitelistedResult.length == 0) {
                                 toast.info('no whitelisted nfts')
-                                setCurrentModal("");
+                                // setCurrentModal("");
                             }
 
                             setNfts(whitelistedResult);
@@ -98,18 +98,18 @@ export default function NftSelectorModal() {
     }, [currentModal])
 
     const nftSelectorContent = useMemo(() => {
-        if (nfts.length > 0) {
+        // if (nfts.length > 0) {
             return <NftsSelector
                 maxChunk={maxSelection}
                 items={nfts}
                 actionHandler={betSelectedItems}
                 actionLabel={<>Make a bet</>}
             />
-        } else {
-            return <Grid gap={4} height="60vh" overflow="auto">
-                <EmptyRow></EmptyRow>
-            </Grid>;
-        }
+        // } else {
+        //     return <Grid gap={4} height="60vh" overflow="auto">
+        //         <EmptyRow></EmptyRow>
+        //     </Grid>;
+        // }
     }, [nfts]);
 
     return (

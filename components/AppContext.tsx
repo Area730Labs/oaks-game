@@ -127,6 +127,15 @@ export function AppContextProvider(props: { children: any }) {
             })
         })
 
+        mainChannel.bind('online', (data) => {
+            const msgData: number = data;
+
+            dispatchGameAction({
+                type: "online",
+                data: msgData
+            })
+        })
+
         mainChannel.bind('game_update', (data) => {
             const msgData: GameType = data;
 

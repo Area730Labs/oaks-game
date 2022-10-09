@@ -10,6 +10,7 @@ export interface GameState {
     players: PlayerType[]
     bets: BetObject[]
     updates: number
+    online?: number
 }
 
 
@@ -23,6 +24,13 @@ export function reduce(state: GameState, action: StateAction): GameState {
     }
 
     switch (action.type) {
+
+        case 'online': {
+
+            newState.online = action.data
+
+            break;
+        }
 
         case 'new_game': {
 

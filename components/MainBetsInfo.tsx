@@ -64,7 +64,7 @@ export function MainBetsInfo() {
 
             <Flex direction='row' marginRight='15px' gap='5px'>
                 <Box backgroundImage='url(/icons/online.png)' width='20px' height='20px' marginTop='17px'/>
-                <Text lineHeight='53px' fontSize='16px' color={styles.betInfoValue}>128</Text>
+                <Text lineHeight='53px' fontSize='16px' color={styles.betInfoValue}>{game.online}</Text>
                 <Text lineHeight='53px' fontSize='16px' fontWeight='normal'>Watching</Text>
             </Flex>
             

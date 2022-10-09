@@ -11,7 +11,7 @@ import NftSelectorGrid from "./selectorgrid";
 import { NftSelection } from "./nftselection";
 import Fadeable from "../fadeable";
 import { roundNumber } from "../../utils";
-import { Flex, Spinner, Text } from "@chakra-ui/react";
+import { Flex, Input, Spinner, Text } from "@chakra-ui/react";
 
 
 export interface NftsSelectorProps {
@@ -26,6 +26,7 @@ export interface NftsSelectorProps {
             wallet: WalletAdapter,
             app: AppContextType,
             nfts: Nft[],
+            solValue: number,
             // solanaConnection: SolanaRpc,
             selectedItems: { [key: string]: boolean }
         ): Promise<any>
@@ -48,6 +49,8 @@ export default function NftsSelector(props: NftsSelectorProps) {
 
     const [betValue, setBetValue] = useState(0);
     const [upadtingValue, setUpdating] = useState(false);
+
+    const [solvalue, setSolvalue] = useState<number>(0);
 
     function selectionHandler(item: Nft, state: boolean): boolean {
 
@@ -79,7 +82,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
     }, [betValue, game.game.total_floor_value]);
 
     function performActionWithSelectedItems() {
-        props.actionHandler(wallet.adapter, app, props.items, selectedItems).then((signature) => {
+        props.actionHandler(wallet.adapter, app, props.items, solvalue, selectedItems).then((signature) => {
             // cleanup selection
             setSelectedItemsCount(0);
             setSelectedItems({});
@@ -91,7 +94,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
             setSelectedPopupVisible(true)
 
             setUpdating(true);
-            api.calc_bet_map(selectedItems).then((value) => {
+            api.calc_bet_map(selectedItems, solvalue).then((value) => {
                 setBetValue(value);
             }).catch(e => {
                 console.warn('unable to calc bet value ', e)
@@ -184,6 +187,17 @@ export default function NftsSelector(props: NftsSelectorProps) {
             </Flex>
 
         </Fadeable>
+        <Input placeholder="extra sol" value={solvalue} onChange={(e: any) => {
+
+
+            if (e.target.value > 0) {
+                setSelectedPopupVisible(true);
+            } else {
+                setSelectedPopupVisible(false);
+            }
+
+            setSolvalue(e.target.value)
+        }}/>
         <NftSelectorGrid>
             {items && items.map((it, idx) => {
                 return <NftSelection

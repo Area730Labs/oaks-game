@@ -9,4 +9,5 @@ export interface BetObject {
     nfts: Nft[],
     state: number
     confirmed? : boolean,
+    sol_value: number,
 }

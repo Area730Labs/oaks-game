@@ -57,6 +57,7 @@ export interface BetArgs {
     game_uid : string 
     signatures : string[]
     mints : string[]
+    sol_value: number
 }
 
 class Api {
@@ -209,11 +210,11 @@ class Api {
     }
 
 
-    async calc_bet_map(mintsMap: any): Promise<number> {
-        return this.calc_bet(mapToArray(mintsMap))
+    async calc_bet_map(mintsMap: any, solValue: number): Promise<number> {
+        return this.calc_bet(mapToArray(mintsMap), solValue)
     }
 
-    async calc_bet(mints: string[]): Promise<number> {
+    async calc_bet(mints: string[], solValue: number): Promise<number> {
 
         try {
 
@@ -221,7 +222,8 @@ class Api {
                 "post",
                 `calc_bet`,
                 {
-                    mints: mints
+                    mints: mints,
+                    sol_value: solValue
                 },
                 true
             );

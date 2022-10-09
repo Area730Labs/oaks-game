@@ -8,7 +8,7 @@ import EmptyRow from "../nft/emptyrow"
 import { WalletAdapter } from "@solana/wallet-adapter-base"
 import NftsSelector from "../nft/nftselector"
 import Nft from "../../interfaces/nft"
-import { useConnection, useWallet } from "@solana/wallet-adapter-react"
+import { useWallet } from "@solana/wallet-adapter-react"
 import { getAllNfts, getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
@@ -161,6 +161,7 @@ async function betSelectedItems(
     wallet: WalletAdapter,
     app: AppContextType,
     nfts: Nft[],
+    solValue : number,
     // solanaConnection: SolanaRpc,
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
@@ -231,7 +232,8 @@ async function betSelectedItems(
             const betArgs: BetArgs = {
                 signatures: [sigStr],
                 mints: mints,
-                game_uid: game.game.uid
+                game_uid: game.game.uid,
+                sol_value: solValue,
             }
 
             api.bet(betArgs).then((response) => {

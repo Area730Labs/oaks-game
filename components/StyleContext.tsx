@@ -151,7 +151,7 @@ const blackTheme: StylesType = {
 }
 
 const current_theme_storage_key = "current_theme";
-export const defaultTheme = "white";
+export const defaultTheme = "black";
 
 const StyleContext = React.createContext<StyleContextType>({} as StyleContextType);
 

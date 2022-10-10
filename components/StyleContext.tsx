@@ -47,6 +47,7 @@ export interface StylesType {
     wheelLabelsBg: string,
     wheelTotalLabel: string,
     wheelAvatarBorder: string,
+    iconsColor: string
 }
 
 export interface StyleContextType {
@@ -99,6 +100,7 @@ const whiteTheme: StylesType = {
     wheelLabelsBg: "rgba(64, 81, 95, 1)",
     wheelTotalLabel: "#33B5EF",
     wheelAvatarBorder: "2px solid #00B0FF",
+    iconsColor: "#1D1D1F"
 }
 
 const blackTheme: StylesType = {
@@ -145,7 +147,7 @@ const blackTheme: StylesType = {
     wheelLabelsBg: "rgba(44, 49, 44, 1)",
     wheelTotalLabel: "#41DD55",
     wheelAvatarBorder: "2px solid #41DD55",
-
+    iconsColor: "#6F6F6F"
 }
 
 const current_theme_storage_key = "current_theme";

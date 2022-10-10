@@ -233,11 +233,16 @@ export function MainPage() {
             top="8px"
                 left="20px"
                 display='flex'
-                onClick={toggleTheme}
+   
             >
                     <Image src='/icons/logo.png' />
                     <Text lineHeight='54px' marginLeft='10px' fontSize='20px' color={styles.logoLeft} fontWeight='bold'>PARADISE</Text>
                     <Text lineHeight='54px' marginLeft='10px' fontSize='20px' color={styles.logoRight} fontWeight='bold'>GAMING</Text>
+
+                    <Box>
+                        {theme == 'white' && <Image onClick={toggleTheme} src='/icons/moon.png' width='30px' marginTop='10px' marginLeft='8px' cursor='pointer' />}
+                        {theme == 'black' &&  <Image onClick={toggleTheme} src='/icons/sun.png' width='25px' marginTop='14px' marginLeft='8px' cursor='pointer' />}
+                    </Box>
             </Box>
             
 

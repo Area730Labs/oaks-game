@@ -190,6 +190,7 @@ export function AppContextProvider(props: { children: any }) {
                     if (code == 41 || code == 42 || code == 43) {
                         lsSetAuthToken(publicKey as PublicKey, "");
                         if (code == 43) {
+                            console.log('code 43');
                             setForceAuthCounter(forceAuthCounter + 1)
                         }
                     } else {

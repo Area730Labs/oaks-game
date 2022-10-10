@@ -75,9 +75,18 @@ export function MainPage() {
         }
 
         if (index < players.length) {
+            let avatarUrl = 'url(/icons/avatar.png)';
+
+            bets.map(bet => {
+                if (bet.user.wallet == players[index].pubkey) {
+                    if (bet.user.image) {
+                        avatarUrl = `url(${bet.user.image})`
+                    }
+                }
+            });
+
             return {
-                // backgroundImage: `url(${players[index].img})`,
-                backgroundImage: 'url(/icons/avatar.png)',
+                backgroundImage: avatarUrl,
                 backgroundSize: 'contain',
                 border: styles.wheelAvatarBorder
             }
@@ -195,8 +204,6 @@ export function MainPage() {
         ))
     });
 
-
-
     let allNfts = []
     let counter = 0;
 
@@ -207,13 +214,6 @@ export function MainPage() {
         });
     });
 
-//    for(let i = 0; i < 30; ++i) {
-//     allNfts.push(<BetNftImage key={counter} item={{
-//         address: new PublicKey('FJny4iLNMStjiVG3dY3tFRFUmvUDj5mfMHrA7B6rxW7n'),
-//         name: 'Gloom Punk Club',
-//         image: null
-//     }}/>)
-//    }
 
     const wheelBg = theme == "white" ? '/icons/subtract.png' : '/icons/subtract-dark.png';
 

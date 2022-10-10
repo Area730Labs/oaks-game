@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Img, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Text, Img, Spinner, Image } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { BetObject } from "../interfaces/Bet";
 import Nft from "../interfaces/nft";
@@ -7,6 +7,7 @@ import { useStyle } from "./StyleContext";
 import { Username } from "./Username";
 import { Metaplex } from "@metaplex-foundation/js";
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+import { ReactNode } from "react";
 
 export function BetNftImage(props: { item: Nft, key: any }) {
     const [img, setImg] = useState('/icons/holder.jpeg');
@@ -67,6 +68,55 @@ export function BetNftImage(props: { item: Nft, key: any }) {
     </Box>
 }
 
+export function NftImage(props: { mint: string, key: any, onClick: any }) {
+    const [img, setImg] = useState('/icons/holder.jpeg');
+
+    const { connection, imageCache, setImageCache } = useApp();
+
+    useEffect(() => {
+        const getImg = async () => {
+            const cachedImgUrl = imageCache[props.mint];
+
+            if (cachedImgUrl){
+                setImg(cachedImgUrl);
+                return;
+            } 
+
+            try {
+                const metaplex = new Metaplex(connection);
+
+                const mintAddress = new PublicKey(props.mint);
+                const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+
+                const imgUrl = (await (await fetch(nft.uri)).json()).image;
+
+                if (imgUrl) {
+                    setImg(imgUrl);
+
+                    let newCache = {
+                        ...imageCache
+                    };
+                    newCache[props.mint] = imgUrl;
+                    setImageCache(newCache);
+                }
+
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        getImg();
+    }, [props.mint]);
+
+    const selectImage = async() => {
+        if (img != '/icons/holder.jpeg') {
+            props.onClick(img);
+        }
+    };
+
+    return <Image src={img} borderRadius='10px' cursor='pointer' onClick={selectImage} />
+}
+
 export function Bet(props: { item: BetObject, key: any }) {
 
     const { styles } = useStyle();
@@ -84,8 +134,14 @@ export function Bet(props: { item: BetObject, key: any }) {
         return (Math.floor((props.item.value * 100 / game.game.total_floor_value * 100)) / 100);
     }, [game.game.total_floor_value])
 
+    let imgUrl = 'url(/icons/avatar.png)';
+
+    if (props.item.user.image) {
+        imgUrl = `url(${props.item.user.image})`;
+    }
+
     let avatarStyle = {
-        backgroundImage: 'url(/icons/avatar.png)',
+        backgroundImage: imgUrl,
         backgroundSize: 'contain',
         with: '40px',
         height: '40px'

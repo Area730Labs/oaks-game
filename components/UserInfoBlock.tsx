@@ -4,10 +4,11 @@ import { useStyle } from "./StyleContext";
 import { useApp } from "./AppContext";
 import { PublicKey } from "@solana/web3.js";
 
+
 export function UserInfoBlock(props: { user: UserType }) {
 
     const { styles } = useStyle();
-    const {game: {players, game, bets}, currentWallet} = useApp();
+    const {game: {players, game, bets}, currentWallet, setCurrentModal, } = useApp();
 
     const avatarBorder = "2px solid " + styles.chatSendBtn
 
@@ -28,7 +29,9 @@ export function UserInfoBlock(props: { user: UserType }) {
 
 
     let userImg = props.user.image;
-    userImg = '/icons/avatar.png'
+    if (!userImg) {
+        userImg = '/icons/avatar.png'
+    }
 
     return <Flex
         flexDirection="row"
@@ -42,6 +45,8 @@ export function UserInfoBlock(props: { user: UserType }) {
             overflow="hidden"
             border={avatarBorder}
             boxSizing="border-box"
+            cursor='pointer'
+            onClick={() => setCurrentModal("useredit")}
         >
             <Img src={userImg} />
         </Box>

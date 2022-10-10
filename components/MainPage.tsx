@@ -17,6 +17,7 @@ import Faq from './modals/Faq';
 import Top from './modals/Top';
 import Stats from './modals/Stats';
 import { BetNftImage } from './Bet';
+import LostDialog from './modals/LostDialog';
 
 export function MainPage() {
     //@ts-ignore
@@ -64,7 +65,7 @@ export function MainPage() {
     }, [players]);
 
     useEffect(() => {
-        // setCurrentModal("top");
+        // setCurrentModal("loserdialog");
     }, []);
 
 
@@ -140,9 +141,7 @@ export function MainPage() {
             return;
         }
 
-
         if (gState == 0) {
-            console.log("Reseting anim");
             setAnimation(null);
         }
 
@@ -153,9 +152,9 @@ export function MainPage() {
             setTimeout(() => {
                 if (youWon) {
                     setCurrentModal("winnerdialog");
+                } else {
+                    setCurrentModal("loserdialog");
                 }
-
-                console.log("Winner dialog shown to winner");
             }, 5000);
 
 
@@ -225,6 +224,7 @@ export function MainPage() {
         <Faq/>
         <Top/>
         <Stats/>
+        <LostDialog/>
 
 
         <Box position="relative" backgroundColor={styles.bg}>

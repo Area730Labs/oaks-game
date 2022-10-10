@@ -10,8 +10,12 @@ import { GameType } from "./interfaces/game";
 import { GameState } from "./components/state/game";
 import { BetObject } from "./interfaces/Bet";
 import { Whitelist } from "./interfaces/whitelist";
+import { TopPlayers } from "./interfaces/topPlayer";
+
+
 
 export type Method = "post" | "get";
+
 export interface SdkItem {
 
     mint: string
@@ -152,6 +156,22 @@ class Api {
             );
 
             return result as Whitelist;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async topPlayers(): Promise<TopPlayers> {
+        try {
+
+            let result = await this.sendRequest(
+                "get",
+                `top`,
+                {},
+                false
+            );
+
+            return result as TopPlayers;
         } catch (e) {
             throw e;
         }

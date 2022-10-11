@@ -301,7 +301,8 @@ export function MainPage() {
                                 <Box className='wheel-text-box' backgroundColor={styles.wheelLabelsBg}>
                                     <Text color={styles.wheelLabels} fontSize='18px' lineHeight='37px' fontWeight='normal'>
                                         {isRunning && (
-                                            `${minutes}:${seconds}`
+                                            `${('0'  + minutes).slice(-2)+':'+('0' + seconds).slice(-2)}`
+                                            // `${minutes}:${seconds}`
                                         )}
 
                                         {!isRunning && ("-:-")}

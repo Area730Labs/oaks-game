@@ -129,7 +129,7 @@ export function Bet(props: { item: BetObject, key: any }) {
         currentUser = true;
     }
 
-    const betdepositvalue = `${props.item.nfts.length} NFTs (${parseFloat(props.item.value.toFixed(2))}SOL)`
+    const betdepositvalue = `${props.item.nfts.length} NFTs (${props.item.value.toFixed(2)}SOL)`
     const chance = useMemo(() => {
         return (Math.floor((props.item.value * 100 / game.game.total_floor_value * 100)) / 100);
     }, [game.game.total_floor_value])
@@ -180,7 +180,9 @@ export function Bet(props: { item: BetObject, key: any }) {
                     <Username>{props.item.user.username}</Username>
                     <Flex direction="row" fontSize="10px" gap="5px" fontFamily="GolosUI" fontWeight="400" >
                         <Box>Deposited: <Text display="inline" color={styles.betInfoValue} fontWeight="600">{betdepositvalue}</Text></Box>
-                        <Box>Chance: <Text display="inline" fontWeight="600" color={styles.betInfoValue}>{chance}%</Text></Box>
+                        
+                        {props.item.confirmed && <Box>Chance: <Text display="inline" fontWeight="600" color={styles.betInfoValue}>{chance}%</Text></Box>}
+                        
                     </Flex>
                 </Flex>
             </Flex>

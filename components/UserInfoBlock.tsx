@@ -3,31 +3,46 @@ import { UserType } from "../interfaces/user";
 import { useStyle } from "./StyleContext";
 import { useApp } from "./AppContext";
 import { PublicKey } from "@solana/web3.js";
+import { useEffect, useState } from "react";
 
 
 export function UserInfoBlock(props: { user: UserType }) {
 
     const { styles } = useStyle();
     const {game: {players, game, bets}, currentWallet, setCurrentModal, } = useApp();
+    const [val, setVal] = useState(0);
+    const [chance, setChance] = useState(0);
 
-    const avatarBorder = "2px solid " + styles.chatSendBtn
+    const avatarBorder = "2px solid " + styles.chatSendBtn;
 
-    let betdepositvalue = 0;
-    let chance = 0;
 
-    bets.map((bet) => {
-        if (!currentWallet) {
-            return;
+
+    useEffect(() => {
+        let newVal = 0;
+
+        bets.map((bet) => {
+            if (!currentWallet) {
+                return;
+            }
+    
+            if (bet.user.wallet == currentWallet.toString()) {
+                newVal += bet.value;
+            }
+        });
+    
+        if (newVal > 0 && game.unconfirmed_bets_count == 0 && game.unconfirmed_nfts_count == 0) {
+            let c = (((newVal * 100 / game.total_floor_value * 100)) / 100);
+            setVal(newVal);
+            setChance(c);
         }
 
-        if (bet.user.wallet == currentWallet.toString()) {
-            chance = (Math.floor((bet.value * 100 / game.total_floor_value * 100)) / 100);
-            chance = parseFloat(chance.toFixed(2))
-            betdepositvalue = parseFloat(bet.value.toFixed(2));
+        if (!bets || bets.length == 0){
+            setVal(0);
+            setChance(0);
         }
-    });
+    }, [game, bets])
 
-
+    
     let userImg = props.user.image;
     if (!userImg) {
         userImg = '/icons/avatar.png'
@@ -62,8 +77,8 @@ export function UserInfoBlock(props: { user: UserType }) {
             >{props.user.username}
             </Box>
             <Flex direction="column" fontSize="10px" gap="5px" fontFamily="GolosUI" fontWeight="400">
-                <Box>Deposited: <Text display="inline" color={styles.betInfoValue} fontWeight="600">{betdepositvalue}</Text></Box>
-                <Box>Your chance: <Text display="inline" fontWeight="600" color={styles.betInfoValue}>{chance}%</Text></Box>
+                <Box>Deposited: <Text display="inline" color={styles.betInfoValue} fontWeight="600">{val.toFixed(2)}</Text></Box>
+                <Box>Your chance: <Text display="inline" fontWeight="600" color={styles.betInfoValue}>{chance.toFixed(2)}%</Text></Box>
             </Flex>
         </Flex>
 

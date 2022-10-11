@@ -53,6 +53,7 @@ export function MainPage() {
 
     //@ts-ignore
     const [wheelState, setWheelState] = useState(initialWheelState);
+    const [participants, setParticipants] = useState([]);
 
     const sector = 45;
 
@@ -62,7 +63,7 @@ export function MainPage() {
         forceUpdate();
 
         // start();
-    }, [players]);
+    }, [players, bets]);
 
     useEffect(() => {
         // setCurrentModal("winnerdialog");
@@ -162,7 +163,12 @@ export function MainPage() {
                 if (youWon) {
                     setCurrentModal("winnerdialog");
                 } else {
-                    setCurrentModal("loserdialog");
+                    // if you are player - show that you lost
+                    players.map(p => {
+                        if (p.pubkey == currentWallet.toString()) {
+                            setCurrentModal("loserdialog");
+                        }
+                    })
                 }
             }, 5000);
 
@@ -191,18 +197,54 @@ export function MainPage() {
     }, [game]);
 
 
-    let participants = [];
-    bets.map((bet) => {
-        const chance = (Math.floor((bet.value * 100 / game.total_floor_value * 100)) / 100);
-        const user = bet.user.username;
+    useEffect(() => {
+        let participants = [];
+        let aggregatedBets: { [key: string]: number } = {}
 
-        participants.push((
-            <Flex gap='6px'>
-                <Text fontWeight='normal' fontSize='11px'>{user}</Text>
-                <Text fontWeight='normal' fontSize='11px' color={styles.betInfoValue}>{chance}%</Text>
-            </Flex>
-        ))
-    });
+        if (game.unconfirmed_bets_count == 0 && game.unconfirmed_nfts_count == 0) {
+            // console.log(`${game.unconfirmed_bets_count} : ${game.unconfirmed_nfts_count}`);
+
+            bets.map((bet) => {
+                // console.log('state ' + bet.state);
+
+                // if (bet.state != 4) {
+                //     return;
+                // }
+
+                
+
+                let n = bet.user.wallet;
+                if (bet.user.username) {
+                    n = bet.user.username;
+                }
+        
+                if (!(n in aggregatedBets)){
+                    aggregatedBets[n] = 0;
+                }
+            
+                aggregatedBets[n] += bet.value;
+            });
+        
+        
+            Object.entries(aggregatedBets).forEach(([username,value]) => {
+                const chance = (((value * 100 / game.total_floor_value * 100)) / 100);
+                const user = username;
+        
+                participants.push((
+                    <Flex gap='6px'>
+                        <Text fontWeight='normal' fontSize='11px'>{user}</Text>
+                        <Text fontWeight='normal' fontSize='11px' color={styles.betInfoValue}>{chance.toFixed(2)}%</Text>
+                    </Flex>
+                ))
+            })
+
+            setParticipants(participants);
+        }
+    }, [game, bets, players]);
+
+    
+
+    
 
     let allNfts = []
     let counter = 0;

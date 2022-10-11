@@ -10,5 +10,7 @@ export interface GameType {
     escrow: string,
     winner: string,
     state: number,
-    duration_min: number
+    duration_min: number,
+    unconfirmed_bets_count: number,
+    unconfirmed_nfts_count: number
 }

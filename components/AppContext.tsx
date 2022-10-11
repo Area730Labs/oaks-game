@@ -229,7 +229,7 @@ export function AppContextProvider(props: { children: any }) {
 
                 }).catch((e) => { // user rejected auth
                     console.error(e);
-                    toast.info('auth rejected')
+                    // toast.info('auth rejected')
                     disconnect();
                 })
             }

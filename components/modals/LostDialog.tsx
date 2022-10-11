@@ -107,7 +107,7 @@ export default function LostDialog() {
                     <Text width='100%'  color={styles.lostDialogColor} fontSize='42px'>ANOTHER ONE?</Text>
                     </Box>
                     <Box>
-                    <Text width='100%' color={styles.lostDialogSubColor} fontSize='16px'>Don't give up, one more round</Text>
+                    <Text width='100%' color={styles.lostDialogSubColor} fontSize='16px'>Don&apos;t give up, one more round</Text>
 
                     </Box>
                         

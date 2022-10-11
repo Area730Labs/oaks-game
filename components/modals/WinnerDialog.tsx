@@ -64,7 +64,7 @@ export default function WinnerDialog() {
                     >
                     
                     <Box>
-                    <Text width='100%'  color={styles.winDialogColor} fontSize='42px'>YOU'RE THE WINNER</Text>
+                    <Text width='100%'  color={styles.winDialogColor} fontSize='42px'>YOU&apos;RE THE WINNER</Text>
                     </Box>
                     <Box>
                     <Text width='100%' color={styles.lostDialogSubColor} fontSize='16px'>Congratulations! {nftCount} NFTs <span style={{color: '#32C745'}}>({solAmount} $SOL)</span> are yours now</Text>

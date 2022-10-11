@@ -38,7 +38,7 @@ const ContextValue = React.createContext<AppContextType>({} as AppContextType);
 function getAuthToken(wallet: PublicKey | null): string | null {
 
     if (wallet != null) {
-        return localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX + wallet?.toBase58())
+        return localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY_PREFIX + wallet.toBase58())
     } else {
         return null;
     }

@@ -65,7 +65,7 @@ export function MainPage() {
     }, [players]);
 
     useEffect(() => {
-        // setCurrentModal("loserdialog");
+        // setCurrentModal("winnerdialog");
     }, []);
 
 

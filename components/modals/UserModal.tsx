@@ -1,4 +1,4 @@
-import { FormControl, Divider, FormLabel, Box, Flex, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
+import { FormControl, Divider, Text, FormLabel, Box, Flex, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, useDisclosure } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { useApp } from "../AppContext"
 import { toast } from 'react-toastify'
@@ -25,6 +25,8 @@ export default function UserModal() {
 
     const [username, setUsername] = useState<string>("");
     const [avatarUrl, setAvatarUrl] = useState<string>("");
+    const [loading, setLoading] = useState(false);
+
     const { connected } = useWallet();
 
     const [nfts, setNfts] = useState([]);
@@ -45,6 +47,8 @@ export default function UserModal() {
             setNfts(mints);
         } catch(e) {
 
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,6 +64,7 @@ export default function UserModal() {
                 setAvatarUrl('/icons/avatar.png');
             }
 
+            setLoading(true);
             setNfts([]);
             updateNfts();
 
@@ -138,6 +143,7 @@ export default function UserModal() {
                         display: "none",
                     },
                 }}>
+                    {loading && <Text>Loading...</Text>}
                             <Grid gap={4} templateColumns={['repeat(3, 1fr)', 'repeat(4,1fr)', 'repeat(5, 1fr)']}>
                                 {gridData}
                             </Grid>

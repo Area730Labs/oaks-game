@@ -47,7 +47,12 @@ export interface StylesType {
     wheelLabelsBg: string,
     wheelTotalLabel: string,
     wheelAvatarBorder: string,
-    iconsColor: string
+    iconsColor: string,
+    lostDialogBg: string,
+    losgDialogBorder: string,
+    lostDialogColor: string,
+    lostDialogSubColor: string,
+    winDialogColor: string
 }
 
 export interface StyleContextType {
@@ -100,7 +105,12 @@ const whiteTheme: StylesType = {
     wheelLabelsBg: "rgba(64, 81, 95, 1)",
     wheelTotalLabel: "#33B5EF",
     wheelAvatarBorder: "2px solid #00B0FF",
-    iconsColor: "#1D1D1F"
+    iconsColor: "#1D1D1F",
+    lostDialogBg: '#516372',
+    losgDialogBorder: '#5FC9F9',
+    lostDialogColor: '#79D5FF',
+    lostDialogSubColor: '#FFFFFF',
+    winDialogColor: '#EAE141'
 }
 
 const blackTheme: StylesType = {
@@ -147,7 +157,12 @@ const blackTheme: StylesType = {
     wheelLabelsBg: "rgba(44, 49, 44, 1)",
     wheelTotalLabel: "#41DD55",
     wheelAvatarBorder: "2px solid #41DD55",
-    iconsColor: "#6F6F6F"
+    iconsColor: "#6F6F6F",
+    lostDialogBg: '#151515',
+    losgDialogBorder: '#41DD55',
+    lostDialogColor: '#41DD55',
+    lostDialogSubColor: '#BEBEBE',
+    winDialogColor: '#EAE141'
 }
 
 const current_theme_storage_key = "current_theme";

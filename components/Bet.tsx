@@ -171,7 +171,6 @@ export function Bet(props: { item: BetObject, key: any }) {
                     boxSizing="border-box"
                     flexShrink='0'
                 >
-                    {/* <Img src={props.item.user.image} /> */}
                     <Box style={avatarStyle} />
                 </Box>
                 <Flex

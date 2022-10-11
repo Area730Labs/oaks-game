@@ -92,7 +92,7 @@ export function AppContextProvider(props: { children: any }) {
     const [gameTotalValue, setGameTotalValue] = useState<number>(0);
 
     const { connection } = useConnection();
-    const { signTransaction } = useWallet();
+    const { signTransaction, disconnect, connecting, disconnecting } = useWallet();
 
     const { mainChannel } = useWsContext();
 
@@ -189,8 +189,9 @@ export function AppContextProvider(props: { children: any }) {
                     // token expired or not found
                     if (code == 41 || code == 42 || code == 43) {
                         lsSetAuthToken(publicKey as PublicKey, "");
+                        console.log('code ' + code);
+
                         if (code == 43) {
-                            console.log('code 43');
                             setForceAuthCounter(forceAuthCounter + 1)
                         }
                     } else {
@@ -206,13 +207,16 @@ export function AppContextProvider(props: { children: any }) {
     useEffect(() => {
 
         if (connected) {
+            if (!publicKey || connecting || disconnecting) {
+                return;
+            }
 
             const atoken = getAuthToken(publicKey);
+
             if (atoken != null && atoken != "") {
                 setAuthToken(atoken);
             } else {
                 generateAuthArgs(wctx).then((args) => {
-
                     const localApi = new Api(publicKey, null);
 
                     localApi.auth(args).then((authResponse) => {
@@ -224,14 +228,16 @@ export function AppContextProvider(props: { children: any }) {
                     });
 
                 }).catch((e) => { // user rejected auth
+                    console.error(e);
                     toast.info('auth rejected')
+                    disconnect();
                 })
             }
         } else {
             setAuthToken("")
         }
 
-    }, [connected, publicKey, forceAuthCounter, wctx])
+    }, [connected, publicKey, forceAuthCounter, wctx, connecting, disconnecting])
 
     useEffect(() => {
 

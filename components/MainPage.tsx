@@ -202,17 +202,7 @@ export function MainPage() {
         let aggregatedBets: { [key: string]: number } = {}
 
         if (game.unconfirmed_bets_count == 0 && game.unconfirmed_nfts_count == 0) {
-            // console.log(`${game.unconfirmed_bets_count} : ${game.unconfirmed_nfts_count}`);
-
             bets.map((bet) => {
-                // console.log('state ' + bet.state);
-
-                // if (bet.state != 4) {
-                //     return;
-                // }
-
-                
-
                 let n = bet.user.wallet;
                 if (bet.user.username) {
                     n = bet.user.username;
@@ -224,7 +214,6 @@ export function MainPage() {
             
                 aggregatedBets[n] += bet.value;
             });
-        
         
             Object.entries(aggregatedBets).forEach(([username,value]) => {
                 const chance = (((value * 100 / game.total_floor_value * 100)) / 100);
@@ -242,9 +231,6 @@ export function MainPage() {
         }
     }, [game, bets, players]);
 
-    
-
-    
 
     let allNfts = []
     let counter = 0;

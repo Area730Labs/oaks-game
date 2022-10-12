@@ -60,6 +60,7 @@ export function NftSelection(props: NftSelectionProps | any) {
     const borderSize = props.borderSize ?? 4;
 
     const [img, setImg] = useState('/icons/holder.jpeg');
+    const [imgName, setImgName] = useState('');
     const { connection, imageCache, setImageCache } = useApp();
 
     const [ isVisible, currentElement ] = useVisibility<HTMLDivElement>(100);
@@ -77,10 +78,10 @@ export function NftSelection(props: NftSelectionProps | any) {
             const mint = props.item.address.toString();
             const cachedImgUrl = imageCache[mint];
 
-            if (cachedImgUrl){
-                setImg(cachedImgUrl);
-                return;
-            } 
+            // if (cachedImgUrl){
+            //     setImg(cachedImgUrl);
+            //     return;
+            // } 
 
             try {
                 const metaplex = new Metaplex(connection);
@@ -88,7 +89,10 @@ export function NftSelection(props: NftSelectionProps | any) {
                 const mintAddress = new PublicKey(props.item.address);
                 const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
 
-                const imgUrl = (await (await fetch(nft.uri)).json()).image;
+                const meta = (await (await fetch(nft.uri)).json())
+                const imgUrl = meta.image;
+
+                setImgName(meta.name);
 
                 if (imgUrl) {
                     setImg(imgUrl);
@@ -175,7 +179,7 @@ export function NftSelection(props: NftSelectionProps | any) {
             <Box ref={currentElement} overflowY="hidden" borderRadius={brVal} minH={["100px", "150px", "200px"]} minW={["100px", "150px", "200px"]} backgroundColor={styles.chat}>
                 <Image  margin="0 auto" maxH={["100px", "150px", "200px"]} maxW={["100px", "150px", "200px"]} src={img} borderRadius={brVal} />
             </Box>
-            <Text width="100%" marginTop="2" color={styles.username} marginBottom="2" >{nftInfo.name}</Text>
+            <Text width="100%" marginTop="2" color={styles.username} marginBottom="2" >{imgName}</Text>
         </Box>
         {props.children}
     </GridItem>

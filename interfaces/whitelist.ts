@@ -1,3 +1,5 @@
+import  { NftDto } from "./nft";
+
 export interface Whitelist {
-    list: string[]
+    list: NftDto[]
 }

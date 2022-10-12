@@ -99,7 +99,18 @@ export function roundNumber(value: number, decimals: number): number {
 }
 
 
-export async function getNftsByUser(wallet: PublicKey): Promise<Nft[]> {
+export interface NftsByUserResult {
+    partial: boolean,
+    items: Nft[],
+}
+
+
+export async function getNftsByUser(wallet: PublicKey): Promise<NftsByUserResult> {
+
+    let top: NftsByUserResult = {
+        partial: false,
+        items: []
+    };
 
     let result: Nft[] = [];
 
@@ -107,13 +118,24 @@ export async function getNftsByUser(wallet: PublicKey): Promise<Nft[]> {
 
     appendToArray(result, firstPageInfo);
 
-    if (firstPageInfo.pageNumber >= 2) {
+    console.log('pages count :',firstPageInfo.totalPages)
+
+    if (firstPageInfo.totalPages > 2) {
+        top.partial = true;
+        top.items = result;
+        return top;
+    }
+
+    if (firstPageInfo.totalPages >= 2) {
         for (let i = 2; i <= firstPageInfo.totalPages; i++) {
             const nftsChunk = await getNftsPage(wallet, i);
             appendToArray(result, nftsChunk);
         }
-
     }
-    return result;
+
+
+    top.items = result;
+
+    return top;
 
 }

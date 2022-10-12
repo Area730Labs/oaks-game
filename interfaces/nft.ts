@@ -8,3 +8,13 @@ export default interface Nft {
     collectionName? : string
     tokenAcc?: string
 }
+
+export interface NftDto {
+    address: string
+    name: string
+    image: string
+    props?: { [key: string]: any }
+    collectionName? : string
+    tokenAcc?: string
+}
+

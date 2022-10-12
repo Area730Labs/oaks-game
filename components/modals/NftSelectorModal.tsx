@@ -9,7 +9,7 @@ import { WalletAdapter } from "@solana/wallet-adapter-base"
 import NftsSelector from "../nft/nftselector"
 import Nft from "../../interfaces/nft"
 import { useWallet } from "@solana/wallet-adapter-react"
-import { getAllNfts, getNftsByUser } from "../../utils"
+import { getAllNfts, getnftsbyowner, getNftsByUser } from "../../utils"
 import { RepeatIcon } from "@chakra-ui/icons"
 import { BetArgs, handleApiError, mapToArray } from "../../api"
 import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js"
@@ -34,35 +34,53 @@ export default function NftSelectorModal() {
         if (connected) {
             if (isOpen) {
 
-                setLoading(true);
-                getNftsByUser(currentWallet).then((nftList) => {
+                const walletToFetch = currentWallet;
 
-                    getAllNfts(connection, currentWallet).then(function (tokenaccs) {
+                setLoading(true);
+                getNftsByUser(walletToFetch).then((nftsInfo) => {
+
+                    if (nftsInfo.partial) {
+                        toast.info("too much nfts in wallet, images skipped")
+                    }
+
+                    return getAllNfts(connection, walletToFetch).then(function (tokenaccs) {
+
+                        console.log('all nfts oldapi : ', JSON.stringify(tokenaccs))
 
                         let mints = [];
-                        for (let n of nftList) {
-                            mints.push(n.address);
+                        let mintToTokenacc = {};
+                        for (let n of tokenaccs) {
+                            mints.push(n.mint);
+                            mintToTokenacc[n.mint.toBase58()] = n.account
                         }
 
                         api.whitelist({ list: mints }).then(whitelisted => {
 
-                            let whitelistedResult = [];
-                            let whitelistMap: any = {};
-                            for (let x of whitelisted.list) {
-                                whitelistMap[x] = true;
+                            let nftsMap: { [key: string]: Nft } = {}
+
+                            for (let snft of nftsInfo.items) {
+                                nftsMap[snft.address.toBase58()] = snft;
                             }
 
 
-                            for (let toki of tokenaccs) {
-                                if (whitelistMap[toki.mint.toBase58()]) {
-                                    for (let nft of nftList) {
-                                        if (nft.address.equals(toki.mint)) {
-                                            nft.tokenAcc = toki.account.toBase58()
-                                            whitelistedResult.push(nft);
-                                            break;
-                                        }
-                                    }
+                            let whitelistedResult = [];
+
+                            for (let white of whitelisted.list) {
+
+
+                                const nftInfoExtended = nftsMap[white.address]
+
+                                let n: Nft = white as any;
+                                n.address = new PublicKey(white.address);
+                                n.tokenAcc = mintToTokenacc[white.address];
+
+                                if (nftInfoExtended != undefined) {
+                                    n.image = nftInfoExtended.image
+                                    n.name = nftInfoExtended.name
+                                    n.collectionName = nftInfoExtended.collectionName
                                 }
+
+                                whitelistedResult.push(n);
                             }
 
                             if (whitelistedResult.length == 0) {
@@ -72,13 +90,20 @@ export default function NftSelectorModal() {
 
                             setNfts(whitelistedResult);
                         })
+                        // })
+
+                    }).catch(e => {
+                        toast.warn("unable to load your nfts")
                     })
 
-                }).catch(e => {
-                    toast.warn("unable to load your nfts")
                 }).finally(() => {
                     setLoading(false);
                 })
+
+
+                // console.log('nfts by user: ',JSON.stringify(nftList))
+
+
             }
         } else {
             setNfts([]);
@@ -99,12 +124,12 @@ export default function NftSelectorModal() {
 
     const nftSelectorContent = useMemo(() => {
         // if (nfts.length > 0) {
-            return <NftsSelector
-                maxChunk={maxSelection}
-                items={nfts}
-                actionHandler={betSelectedItems}
-                actionLabel={<>Make a bet</>}
-            />
+        return <NftsSelector
+            maxChunk={maxSelection}
+            items={nfts}
+            actionHandler={betSelectedItems}
+            actionLabel={<>Make a bet</>}
+        />
         // } else {
         //     return <Grid gap={4} height="60vh" overflow="auto">
         //         <EmptyRow></EmptyRow>
@@ -161,7 +186,7 @@ async function betSelectedItems(
     wallet: WalletAdapter,
     app: AppContextType,
     nfts: Nft[],
-    solValue : number,
+    solValue: number,
     // solanaConnection: SolanaRpc,
     selectedItems: { [key: string]: boolean }
 ): Promise<any> {
@@ -208,7 +233,7 @@ async function betSelectedItems(
         ixs.push(transferIx);
     }
 
-    let betLamports = solValue * LAMPORTS_PER_SOL; 
+    let betLamports = solValue * LAMPORTS_PER_SOL;
 
     // toast.info('adding extra '+ solValue + " to bet")
 
@@ -261,7 +286,7 @@ async function betSelectedItems(
             })
 
         }).catch(e => {
-            toast.warn('unable to sign a transaction: '+e.message)
+            toast.warn('unable to sign a transaction: ' + e.message)
         })
 
     }).catch(e => {

@@ -54,8 +54,7 @@ export default function NftSelectorModal() {
         if (connected) {
             if (isOpen) {
 
-                // const walletToFetch = currentWallet;
-                const walletToFetch = new PublicKey('HUCVagK86Rtq12uw9b3JqBAv2uRhokh7rhwsMbFjWRr7');
+                const walletToFetch = currentWallet;
 
                 setLoading(true);
                 getNftsByUser(walletToFetch).then((nftsInfo) => {

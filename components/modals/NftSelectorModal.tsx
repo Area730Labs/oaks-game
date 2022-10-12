@@ -16,6 +16,11 @@ import { PublicKey, Transaction, TransactionBlockhashCtor, SystemProgram, Connec
 import { getAssociatedTokenAddressSync, createTransferInstruction, createAssociatedTokenAccountInstruction } from "@solana/spl-token"
 import bs58 from "bs58"
 import GlobalConfig from "../../config"
+import {
+    resolveToWalletAddress,
+    getParsedNftAccountsByOwner,
+  } from "@nfteyez/sol-rayz";
+
 
 export default function NftSelectorModal() {
 
@@ -30,22 +35,38 @@ export default function NftSelectorModal() {
 
     const [loading, setLoading] = useState(false);
 
+    const getNfts = async() => {
+
+        const publicAddress = await resolveToWalletAddress({
+            text: 'HUCVagK86Rtq12uw9b3JqBAv2uRhokh7rhwsMbFjWRr7',
+            connection: new Connection('https://081a13wcbCLI4kHm4dKE0cNFY9RkIu80KYZZy3jMlXSbvzg9Un9HzhhhRWG0J.xyz2.hyperplane.dev')
+        });
+
+        console.log('>>> start nft fetch')
+        const nftArray = await getParsedNftAccountsByOwner({
+            publicAddress,
+        });
+
+        console.log('got mints: ' + nftArray.length);
+    };
+
     const forceReloadNfts = useCallback(() => {
         if (connected) {
             if (isOpen) {
 
-                const walletToFetch = currentWallet;
+                // const walletToFetch = currentWallet;
+                const walletToFetch = new PublicKey('HUCVagK86Rtq12uw9b3JqBAv2uRhokh7rhwsMbFjWRr7');
 
                 setLoading(true);
                 getNftsByUser(walletToFetch).then((nftsInfo) => {
 
-                    if (nftsInfo.partial) {
-                        toast.info("too much nfts in wallet, images skipped")
-                    }
+                    // if (nftsInfo.partial) {
+                    //     toast.info("too much nfts in wallet, images skipped")
+                    // }
 
                     return getAllNfts(connection, walletToFetch).then(function (tokenaccs) {
 
-                        console.log('all nfts oldapi : ', JSON.stringify(tokenaccs))
+                        // console.log('all nfts oldapi : ', JSON.stringify(tokenaccs))
 
                         let mints = [];
                         let mintToTokenacc = {};

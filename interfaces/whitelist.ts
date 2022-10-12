@@ -1,4 +1,4 @@
-import  { NftDto } from "./nft";
+import { NftDto } from "./nft"
 
 export interface Whitelist {
     list: NftDto[]

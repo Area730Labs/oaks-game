@@ -40,7 +40,7 @@ export default function UserModal() {
             const nftList = await getNftsByUser(currentWallet);
 
             let mints = [];
-            for (let n of nftList) {
+            for (let n of nftList.items) {
                 mints.push(n.address);
             }
 

@@ -1,15 +1,51 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Box, GridItem, Text } from "@chakra-ui/layout";
 import { CheckIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import Nft from "../../interfaces/nft";
 import { useApp } from "../AppContext";
 import { useStyle } from "../StyleContext";
+import { Metaplex } from "@metaplex-foundation/js";
+import { PublicKey } from "@solana/web3.js";
+import throttle from "lodash.throttle";
+
+
+/**
+ * Check if an element is in viewport
+
+ * @param {number} offset - Number of pixels up to the observable element from the top
+ * @param {number} throttleMilliseconds - Throttle observable listener, in ms
+ */
+ export default function useVisibility<Element extends HTMLElement>(
+    offset = 0,
+    throttleMilliseconds = 100
+  ): [Boolean, React.RefObject<Element>] {
+    const [isVisible, setIsVisible] = useState(false);
+    const currentElement = useRef<Element>();
+  
+    const onScroll = throttle(() => {
+      if (!currentElement.current) {
+        setIsVisible(false);
+        return;
+      }
+      const top = currentElement.current.getBoundingClientRect().top;
+      setIsVisible(top + offset >= 0 && top - offset <= window.innerHeight);
+    }, throttleMilliseconds);
+  
+    useEffect(() => {
+      document.addEventListener('scroll', onScroll, true);
+      return () => document.removeEventListener('scroll', onScroll, true);
+    });
+  
+    return [isVisible, currentElement];
+  }
+  
 
 export interface NftSelectionProps {
     item: Nft
     borderSize?: number
-    onSelect?: { (pubkey: Nft, state: boolean): boolean }
+    onSelect?: { (pubkey: Nft, state: boolean): boolean },
+    idx: number
 }
 
 export function NftSelection(props: NftSelectionProps | any) {
@@ -22,6 +58,55 @@ export function NftSelection(props: NftSelectionProps | any) {
 
     const nftInfo = props.item;
     const borderSize = props.borderSize ?? 4;
+
+    const [img, setImg] = useState('/icons/holder.jpeg');
+    const { connection, imageCache, setImageCache } = useApp();
+
+    const [ isVisible, currentElement ] = useVisibility<HTMLDivElement>(100);
+
+    useEffect(() => {
+        if (!isVisible && props.idx > 20){
+            return;
+        }
+
+        const getImg = async () => {
+            if (!props || !props.item || !props.item.address) {
+                return;
+            }
+
+            const mint = props.item.address.toString();
+            const cachedImgUrl = imageCache[mint];
+
+            if (cachedImgUrl){
+                setImg(cachedImgUrl);
+                return;
+            } 
+
+            try {
+                const metaplex = new Metaplex(connection);
+
+                const mintAddress = new PublicKey(props.item.address);
+                const nft = await metaplex.nfts().findByMint({ mintAddress }).run();
+
+                const imgUrl = (await (await fetch(nft.uri)).json()).image;
+
+                if (imgUrl) {
+                    setImg(imgUrl);
+
+                    let newCache = {
+                        ...imageCache
+                    };
+                    newCache[mint] = imgUrl;
+                    setImageCache(newCache);
+                }
+
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        getImg();
+    }, [props.item, isVisible]);
 
     function clickHandler() {
 
@@ -87,8 +172,8 @@ export function NftSelection(props: NftSelectionProps | any) {
             overflow="hidden"
             textAlign="left"
         >
-            <Box overflowY="hidden" borderRadius={brVal} minH={["100px", "150px", "200px"]} minW={["100px", "150px", "200px"]} backgroundColor={styles.chat}>
-                <Image margin="0 auto" maxH={["100px", "150px", "200px"]} maxW={["100px", "150px", "200px"]} src={nftInfo.image} borderRadius={brVal} />
+            <Box ref={currentElement} overflowY="hidden" borderRadius={brVal} minH={["100px", "150px", "200px"]} minW={["100px", "150px", "200px"]} backgroundColor={styles.chat}>
+                <Image  margin="0 auto" maxH={["100px", "150px", "200px"]} maxW={["100px", "150px", "200px"]} src={img} borderRadius={brVal} />
             </Box>
             <Text width="100%" marginTop="2" color={styles.username} marginBottom="2" >{nftInfo.name}</Text>
         </Box>

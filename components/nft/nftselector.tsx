@@ -214,6 +214,7 @@ export default function NftsSelector(props: NftsSelectorProps) {
                 return <NftSelection
                     key={idx}
                     item={it}
+                    idx={idx}
                     position="relative"
                     onSelect={selectionHandler}
                 >

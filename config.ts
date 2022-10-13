@@ -7,7 +7,7 @@ const GlobalConfig : Config = {
     chatChannel: "chat",
     selector_max_nft_per_row: 4,
     rpcTx: "https://api.mainnet-beta.solana.com",
-    rpc: "https://fittest-frosty-dawn.solana-mainnet.discover.quiknode.pro/40c04e0341ac0dab520f1cd38b8ec29d0be1c486/",
+    rpc: "https://neat-late-smoke.solana-mainnet.discover.quiknode.pro/70dcb8fe91241dbf8f52de83590377ec5b3f4a71/",
     betFee : 3000000,
     // betFee : 10000
 
